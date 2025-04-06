@@ -17,46 +17,55 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
+import Controller.registerCtrl;
+
 public class registerFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unused")
 	public registerFrame() {
-		super("Đăng kí tài khoản");
+		super("Đăng kí");
 		this.setSize(900, 700);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+		registerCtrl reCtrl = new registerCtrl(this);
 		Font font = new Font("Times New Roman", Font.BOLD, 15);
 		JPanel pnl_register = new JPanel();
 		pnl_register.setLayout(new BoxLayout(pnl_register, BoxLayout.Y_AXIS));
 
 		JLabel lb_cusName = new JLabel("Nhập họ và tên");
 		lb_cusName.setFont(font);
-		lb_cusName.setPreferredSize(new Dimension(110, 15));
+		lb_cusName.setPreferredSize(new Dimension(110, 40));
 		JTextField txt_cusName = new JTextField();
+		txt_cusName.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 		txt_cusName.requestFocusInWindow();
 
 		JLabel lb_email = new JLabel("Nhập email");
 		lb_email.setFont(font);
-		lb_email.setPreferredSize(new Dimension(110, 15));
+		lb_email.setPreferredSize(new Dimension(110, 40));
 		JTextField txt_email = new JTextField();
+		txt_email.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 
 		JLabel lb_pwd = new JLabel("Nhập mật khẩu");
 		lb_pwd.setFont(font);
-		lb_pwd.setPreferredSize(new Dimension(110, 15));
+		lb_pwd.setPreferredSize(new Dimension(110, 40));
 		JPasswordField txt_pwd = new JPasswordField();
+		txt_pwd.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 		txt_pwd.setEchoChar('*');
 
 		JLabel lb_phone = new JLabel("Nhập số liên lạc");
 		lb_phone.setFont(font);
-		lb_phone.setPreferredSize(new Dimension(110, 15));
+		lb_phone.setPreferredSize(new Dimension(110, 40));
 		JTextField txt_phone = new JTextField();
+		txt_phone.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 
 		JLabel lb_address = new JLabel("Nhập địa chỉ");
 		lb_address.setFont(font);
-		lb_address.setPreferredSize(new Dimension(110, 15));
+		lb_address.setPreferredSize(new Dimension(110, 40));
 		JTextField txt_address = new JTextField();
+		txt_address.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+
 
 		txt_cusName.addActionListener(e -> txt_email.requestFocus());
 		txt_email.addActionListener(e -> txt_pwd.requestFocus());
@@ -64,22 +73,27 @@ public class registerFrame extends JFrame {
 		txt_phone.addActionListener(e -> txt_address.requestFocus());
 
 		Box b1 = Box.createHorizontalBox();
+		b1.add(Box.createHorizontalStrut(10));
 		b1.add(lb_cusName);
 		b1.add(txt_cusName);
 
 		Box b2 = Box.createHorizontalBox();
+		b2.add(Box.createHorizontalStrut(10));
 		b2.add(lb_email);
 		b2.add(txt_email);
 
 		Box b3 = Box.createHorizontalBox();
+		b3.add(Box.createHorizontalStrut(10));
 		b3.add(lb_pwd);
 		b3.add(txt_pwd);
 
 		Box b4 = Box.createHorizontalBox();
+		b4.add(Box.createHorizontalStrut(10));
 		b4.add(lb_phone);
 		b4.add(txt_phone);
 
 		Box b5 = Box.createHorizontalBox();
+		b5.add(Box.createHorizontalStrut(10));
 		b5.add(lb_address);
 		b5.add(txt_address);
 
@@ -113,7 +127,7 @@ public class registerFrame extends JFrame {
 		Font fontHD = new Font("Times New Roman", Font.BOLD, 17);
 		Box b9 = Box.createVerticalBox();
 		JLabel lb_hd = new JLabel("HƯỚNG DẪN ĐĂNG KÍ");
-		JLabel lb_emailHD = new JLabel("Email không được bắt đầu bằng . hoặc _");
+		JLabel lb_emailHD = new JLabel("Email không được bắt đầu bằng '.' hoặc '_' ");
 		JLabel lb_pwdHD = new JLabel("Mật khẩu phải có đủ 8 kí tự");
 		JLabel lb_pwdHD2 = new JLabel("   (Gồm ít nhất 1 chữ HOA, 1 kí tự đặc biệt và 1 số)   ");
 		JLabel lb_phoneHD = new JLabel("Số liên lạc phải có 10 chữ số");
@@ -151,6 +165,7 @@ public class registerFrame extends JFrame {
 		emptyBottom.setLayout(new BoxLayout(emptyBottom, BoxLayout.Y_AXIS));
 
 		JButton btn_register = new JButton("Đăng kí");
+		btn_register.addActionListener(reCtrl);
 		btn_register.setForeground(Color.WHITE);
 		btn_register.setBackground(Color.getHSBColor(hsb[0], hsb[1], hsb[2]));
 		btn_register.setBorderPainted(false);
@@ -163,13 +178,13 @@ public class registerFrame extends JFrame {
 		JLabel lb_login = new JLabel("Đã có tài khoản?");
 		lb_login.setFont(font);
 		JButton btn_login = new JButton("Đăng nhập");
+		btn_login.addActionListener(reCtrl);
 		btn_login.setForeground(Color.WHITE);
 		btn_login.setBackground(Color.getHSBColor(hsb[0], hsb[1], hsb[2]));
 		btn_login.setBorderPainted(false);
 		btn_login.setOpaque(true);
 		btn_login.setFont(font);
 		btn_login.setMaximumSize(new Dimension(Integer.MAX_VALUE, btn_login.getPreferredSize().height));
-		btn_login.setAlignmentX(CENTER_ALIGNMENT);
 		b8.add(lb_login);
 		b8.add(Box.createHorizontalStrut(10));
 		b8.add(btn_login);
@@ -180,7 +195,7 @@ public class registerFrame extends JFrame {
 		emptyBottom.add(b8);
 
 		JPanel pnl_empty = new JPanel(new BorderLayout());
-		pnl_empty.setBorder(new EmptyBorder(150, 50, 150, 50));
+		pnl_empty.setBorder(new EmptyBorder(100, 50, 150, 50));
 
 		pnl_empty.add(split, BorderLayout.CENTER);
 		pnl_empty.add(emptyBottom, BorderLayout.SOUTH);
