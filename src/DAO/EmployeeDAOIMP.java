@@ -1,12 +1,15 @@
 package DAO;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
+import Database.DatabaseConnection;
 import Models.Customers;
 import Models.Orders;
 import Models.Products;
 
 public class EmployeeDAOIMP implements EmployeeDAO {
+	private Connection con = DatabaseConnection.getConnection();
 
 	@Override
 	public void addProduct(Products product) {
