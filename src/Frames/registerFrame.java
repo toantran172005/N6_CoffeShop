@@ -20,6 +20,7 @@ import javax.swing.border.EmptyBorder;
 public class registerFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
+	@SuppressWarnings("unused")
 	public registerFrame() {
 		super("Đăng kí tài khoản");
 		this.setSize(900, 700);
@@ -108,7 +109,7 @@ public class registerFrame extends JFrame {
 		lb_n6.setFont(new Font("Times New Roman", Font.BOLD, 30));
 		b7.add(new JPanel().add(lb_n6));
 
-		// Thêm dòng chữ hướng dẫn đăng ký
+
 		Font fontHD = new Font("Times New Roman", Font.BOLD, 17);
 		Box b9 = Box.createVerticalBox();
 		JLabel lb_hd = new JLabel("HƯỚNG DẪN ĐĂNG KÍ");
