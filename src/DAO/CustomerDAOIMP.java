@@ -10,7 +10,7 @@ public class CustomerDAOIMP implements CustomerDAO {
 	@Override
 	public void addProductToCart(int customerId, Products product, int quantity) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class CustomerDAOIMP implements CustomerDAO {
 	@Override
 	public void logoutCustomer(int customerId) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

@@ -19,6 +19,6 @@ public interface CustomerDAO {
 	boolean updateCustomerInfo(Customers customer); // Cập nhật thông tin khách hàng
 
 	boolean deleteCustomer(int customerId); // Xóa tài khoản khách hàng
-	
-	boolean payOrder(int customerId); // Thanh toán hóa đơn 
+
+	boolean payOrder(int customerId); // Thanh toán hóa đơn
 }

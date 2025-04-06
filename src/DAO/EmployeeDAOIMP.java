@@ -11,19 +11,19 @@ public class EmployeeDAOIMP implements EmployeeDAO {
 	@Override
 	public void addProduct(Products product) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void updateProduct(Products product) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteProduct(int productId) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class EmployeeDAOIMP implements EmployeeDAO {
 	@Override
 	public void updateOrderStatus(int orderId, String status) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

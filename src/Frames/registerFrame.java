@@ -22,7 +22,7 @@ public class registerFrame extends JFrame {
 
 	public registerFrame() {
 		super("Đăng kí tài khoản");
-		this.setSize(850, 600);
+		this.setSize(900, 700);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -109,41 +109,40 @@ public class registerFrame extends JFrame {
 		b7.add(new JPanel().add(lb_n6));
 
 		// Thêm dòng chữ hướng dẫn đăng ký
-		Font fontHD = new Font("Times New Roman",Font.BOLD,17);
-        Box b9 = Box.createVerticalBox();
-        JLabel lb_hd = new JLabel("HƯỚNG DẪN ĐĂNG KÍ");
-        JLabel lb_emailHD = new JLabel("Email không được bắt đầu bằng . hoặc _");
-        JLabel lb_pwdHD = new JLabel("Mật khẩu phải có đủ 8 kí tự");
-        JLabel lb_pwdHD2 = new JLabel("(Gồm ít nhất 1 chữ HOA, 1 kí tự đặc biệt và 1 số)");
-        JLabel lb_phoneHD= new JLabel("Số liên lạc phải có 10 chữ số");
-        lb_hd.setFont(fontHD);
-        lb_emailHD.setFont(fontHD);
-        lb_pwdHD.setFont(fontHD);
-        lb_pwdHD2.setFont(new Font("Times New Roman",Font.BOLD,15));
-        lb_phoneHD.setFont(fontHD);
-        Box b90 = Box.createHorizontalBox();
-        b90.add(lb_hd);
-        Box b91 = Box.createHorizontalBox();
-        b91.add(lb_emailHD);
-        Box b92 = Box.createHorizontalBox();
-        b92.add(lb_pwdHD);
-        Box b93 = Box.createHorizontalBox();
-        b93.add(lb_pwdHD2);
-        Box b94 = Box.createHorizontalBox();
-        b94.add(lb_phoneHD);
-        b9.add(b90);
-        b9.add(Box.createVerticalStrut(10));
-        b9.add(b91);
-        b9.add(b92);
-        b9.add(b93);
-        b9.add(b94);
-        
+		Font fontHD = new Font("Times New Roman", Font.BOLD, 17);
+		Box b9 = Box.createVerticalBox();
+		JLabel lb_hd = new JLabel("HƯỚNG DẪN ĐĂNG KÍ");
+		JLabel lb_emailHD = new JLabel("Email không được bắt đầu bằng . hoặc _");
+		JLabel lb_pwdHD = new JLabel("Mật khẩu phải có đủ 8 kí tự");
+		JLabel lb_pwdHD2 = new JLabel("   (Gồm ít nhất 1 chữ HOA, 1 kí tự đặc biệt và 1 số)   ");
+		JLabel lb_phoneHD = new JLabel("Số liên lạc phải có 10 chữ số");
+		lb_hd.setFont(fontHD);
+		lb_emailHD.setFont(fontHD);
+		lb_pwdHD.setFont(fontHD);
+		lb_pwdHD2.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		lb_phoneHD.setFont(fontHD);
+		Box b90 = Box.createHorizontalBox();
+		b90.add(lb_hd);
+		Box b91 = Box.createHorizontalBox();
+		b91.add(lb_emailHD);
+		Box b92 = Box.createHorizontalBox();
+		b92.add(lb_pwdHD);
+		Box b93 = Box.createHorizontalBox();
+		b93.add(lb_pwdHD2);
+		Box b94 = Box.createHorizontalBox();
+		b94.add(lb_phoneHD);
+		b9.add(b90);
+		b9.add(Box.createVerticalStrut(10));
+		b9.add(b91);
+		b9.add(b92);
+		b9.add(b93);
+		b9.add(b94);
 
-        Box b_dk = Box.createVerticalBox();
-        b_dk.add(b6);
-        b_dk.add(b7);
-        b_dk.add(Box.createVerticalStrut(10));
-        b_dk.add(b9);
+		Box b_dk = Box.createVerticalBox();
+		b_dk.add(b6);
+		b_dk.add(b7);
+		b_dk.add(Box.createVerticalStrut(10));
+		b_dk.add(b9);
 
 		JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, b_dk, pnl_register);
 
@@ -180,7 +179,7 @@ public class registerFrame extends JFrame {
 		emptyBottom.add(b8);
 
 		JPanel pnl_empty = new JPanel(new BorderLayout());
-		pnl_empty.setBorder(new EmptyBorder(100, 50, 100, 50));
+		pnl_empty.setBorder(new EmptyBorder(150, 50, 150, 50));
 
 		pnl_empty.add(split, BorderLayout.CENTER);
 		pnl_empty.add(emptyBottom, BorderLayout.SOUTH);
