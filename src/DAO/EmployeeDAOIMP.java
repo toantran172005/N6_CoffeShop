@@ -11,6 +11,14 @@ import Models.Products;
 public class EmployeeDAOIMP implements EmployeeDAO {
 	private Connection con = DatabaseConnection.getConnection();
 
+	public EmployeeDAOIMP() {
+		try {
+			con = DatabaseConnection.getConnection();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+
 	@Override
 	public void addProduct(Products product) {
 		// TODO Auto-generated method stub
@@ -45,6 +53,11 @@ public class EmployeeDAOIMP implements EmployeeDAO {
 	public ArrayList<Customers> getAllCustomers() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void closeDatabase() {
+		DatabaseConnection.closeConnection(con);
+		System.out.println("Closed the connection to database!");
 	}
 
 }

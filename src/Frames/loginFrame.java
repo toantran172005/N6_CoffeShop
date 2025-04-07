@@ -36,10 +36,10 @@ public class loginFrame extends JFrame {
         Box b0, b1, b2, b3, b4;
         
         b0 = Box.createHorizontalBox();
-        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/Img/user.png"));
+        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/Img/login.png"));
         Image image = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-        JLabel user = new JLabel(new ImageIcon(image));
-        b0.add(user);
+        JLabel login = new JLabel(new ImageIcon(image));
+        b0.add(login);
         
         
         b1 = Box.createHorizontalBox();
@@ -52,7 +52,7 @@ public class loginFrame extends JFrame {
         b1.add(txt_email);
 
         b2 = Box.createHorizontalBox();
-        JLabel lb_pwd = new JLabel("Nhập password");
+        JLabel lb_pwd = new JLabel("Nhập mật khẩu");
         lb_pwd.setFont(font);
         lb_pwd.setPreferredSize(new Dimension(120, 30)); 
         JPasswordField txt_pwd = new JPasswordField();
@@ -82,6 +82,7 @@ public class loginFrame extends JFrame {
         JButton btn_dk = new JButton("Đăng kí");
         btn_dk.addActionListener(logCtrl);
         btn_dk.setFont(font);
+        lb_dk.setPreferredSize(new Dimension(140, btn_dk.getPreferredSize().height));
         btn_dk.setMaximumSize(new Dimension(Integer.MAX_VALUE, btn_dk.getPreferredSize().height));
         btn_dk.setForeground(Color.WHITE);
         btn_dk.setBackground(Color.getHSBColor(hsb[0], hsb[1], hsb[2]));

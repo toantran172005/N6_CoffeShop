@@ -2,17 +2,16 @@ package Database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DatabaseConnection {
-	private static Connection con = null;
 
 	public static Connection getConnection() {
-		String url = "jdbc:sqlserver://localhost:1433;databaseName=N6_COFFESHOP;encrypt=true;trustServerCertificate=true";
+		String url = "jdbc:sqlserver://localhost:1433;databaseName=N6_COFFEESHOP;encrypt=true;trustServerCertificate=true";
 		String username = "sa";
 		String password = "T111375t";
 		try {
-			con = DriverManager.getConnection(url, username, password);
-			return con;
+			return DriverManager.getConnection(url, username, password);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -23,7 +22,7 @@ public class DatabaseConnection {
 		try {
 			if (con != null && !con.isClosed())
 				con.close();
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}

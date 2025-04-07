@@ -10,7 +10,7 @@ public interface CustomerDAO {
 
 	ArrayList<Products> searchProducts(String productName); // Tìm kiếm sản phẩm theo tên
 
-	boolean registerCustomer(Customers customer); // Đăng ký tài khoản khách hàng
+	int registerCustomer(String cusName, String email, String pwd, String phone, String address); // Đăng ký tài khoản khách hàng
 
 	Customers loginCustomer(String email, String password); // Đăng nhập tài khoản khách hàng
 
