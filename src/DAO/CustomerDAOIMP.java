@@ -42,29 +42,45 @@ public class CustomerDAOIMP implements CustomerDAO {
 	}
 
 	@Override
-	public int loginCustomer(String email, String password) {
-		try {
-//			Kiểm tra email tồn tại chưa?
-			String checkEmail = "SELECT * FROM Customers WHERE Email = ?";
-			PreparedStatement preEmail = con.prepareStatement(checkEmail);
-			preEmail.setString(1, email);
-			ResultSet re = preEmail.executeQuery();
-			if (re.next()) {
-//				Kiểm tra mật khẩu
-				String pwd = re.getString("Password");
-				if (pwd.equals(password))
-					return 0; // Đăng nhập thành công
-				else
-					return 2; // Sai mật khẩu
-			} else
-				return 1; // sai email
+	public int loginCustomer(String email, String input) {
+	    try {
+//	    	Đăng nhập với Customer
+	        String sqlCus = "SELECT * FROM Customers WHERE Email = ?";
+	        PreparedStatement preCus = con.prepareStatement(sqlCus);
+	        preCus.setString(1, email);
+	        ResultSet rsCus = preCus.executeQuery();
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return -1;
-		}
+	        if (rsCus.next()) {
+	            String pwd = rsCus.getString("Password");
+	            if (pwd.equals(input))
+	                return 0; // Customer đăng nhập thành công
+	            else
+	                return 404; // Sai mật khẩu
+	        }
 
+//	        Đăng nhập với Employee nếu không có email trong Customers
+	        String sqlEmp = "SELECT * FROM Employees WHERE Email = ?";
+	        PreparedStatement preEmp = con.prepareStatement(sqlEmp);
+	        preEmp.setString(1, email);
+	        ResultSet rsEmp = preEmp.executeQuery();
+
+	        if (rsEmp.next()) {
+	            int empID = rsEmp.getInt("EmployeeID");
+	            // So sánh input với ID
+	            if (String.valueOf(empID).equals(input))
+	                return 0; // Employee đăng nhập thành công
+	            else
+	                return 404; // Sai mã nhân viên
+	        }
+
+	        return 1; // Email không tồn tại trong cả 2 bảng
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return -1; 
+	    }
 	}
+
 
 	@Override
 	public int registerCustomer(String cusName, String email, String pwd, String phone, String address) {

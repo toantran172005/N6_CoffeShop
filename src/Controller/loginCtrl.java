@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import DAO.CustomerDAOIMP;
+import Frames.customerFrame;
 import Frames.loginFrame;
 import Frames.registerFrame;
 
@@ -34,13 +35,13 @@ public class loginCtrl implements ActionListener, WindowListener, MouseListener 
 			if (checkLogin == 0) {
 				JOptionPane.showMessageDialog(login, "Đăng nhập thành công!");
 				this.login.dispose();
-				new registerFrame();
+				new customerFrame();
 			} else if (checkLogin == 1) {
 				JOptionPane.showMessageDialog(login, "Vui lòng nhập đúng email!", "Sai email",
 						JOptionPane.ERROR_MESSAGE);
 				this.login.txt_email.requestFocusInWindow();
 				this.login.txt_email.selectAll();
-			} else if (checkLogin == 2) {
+			} else if (checkLogin == 404) {
 				JOptionPane.showMessageDialog(login, "Vui lòng nhập đúng mật khẩu!", "Sai mật khẩu",
 						JOptionPane.ERROR_MESSAGE);
 				this.login.txt_pwd.requestFocusInWindow();

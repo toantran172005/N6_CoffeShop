@@ -203,7 +203,7 @@ public class registerFrame extends JFrame {
 		btn_register.setOpaque(true);
 		btn_register.setFont(font);
 		btn_register.setMaximumSize(new Dimension(Integer.MAX_VALUE, btn_register.getPreferredSize().height));
-		btn_register.setAlignmentX(CENTER_ALIGNMENT);
+		btn_register.setAlignmentX(CENTER_ALIGNMENT); 
 
 		Box b8 = Box.createHorizontalBox();
 		JLabel lb_login = new JLabel("Đã có tài khoản?");

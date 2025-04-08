@@ -12,7 +12,7 @@ public class DatabaseConnection {
 		String password = "T111375t";
 		try {
 			return DriverManager.getConnection(url, username, password);
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -23,7 +23,6 @@ public class DatabaseConnection {
 			if (con != null && !con.isClosed())
 				con.close();
 		} catch (SQLException e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 	}
