@@ -14,14 +14,12 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -31,9 +29,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-
 import Controller.customerCtrl;
 import Database.DatabaseConnection;
 import Models.Products;
@@ -48,14 +43,14 @@ public class customerFrame extends JFrame {
 	public JButton btnTimKiem;
 	public JLabel lbMenu;
 	public JLabel lbCart;
-	public Map<JButton, JLabel> mapPlus = new HashMap<>(); 
-	public Map<JButton, JLabel> mapMinus = new HashMap<>();
+	public JButton btnTatCa;
+	public JButton btnDrink;
+	public JButton btnFood;
 	public customerCtrl cusCtrl = new customerCtrl(this);
-	Map<JButton, Products> mapAddToCart = new HashMap<>(); // thêm vào giỏ hàng
-	Map<Products, Integer> productQuantities = new HashMap<>(); // Chứa product và số lượng mua
-
-
-
+	public Map<JButton, JLabel> mapPlus = new HashMap<>();
+	public Map<JButton, JLabel> mapMinus = new HashMap<>();
+//	Map<JButton, Products> mapAddToCart = new HashMap<>(); // thêm vào giỏ hàng
+//	Map<Products, Integer> productQuantities = new HashMap<>(); // Chứa product và số lượng mua
 
 	public customerFrame(int CustomerID) {
 		super("Nhóm 6 - CoffeeShop");
@@ -116,17 +111,18 @@ public class customerFrame extends JFrame {
 		pnlNavBar.add(bWest, BorderLayout.WEST);
 		pnlNavBar.add(bEast, BorderLayout.EAST);
 		JPanel pnlEmptyNavbar = new JPanel(new BorderLayout());
-		pnlEmptyNavbar.setBorder(BorderFactory.createEmptyBorder(0,0,10,0));
+		pnlEmptyNavbar.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 		pnlEmptyNavbar.add(pnlNavBar);
 
 //		Panel content
-		JPanel pnlContent = this.listProduct();
+		JPanel pnlContent = this.loadProduct();
 		JScrollPane scrollProduct = new JScrollPane(pnlContent);
 
+//		Frame chính
 		JPanel pnlEmpty = new JPanel(new BorderLayout());
 		pnlEmpty.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		pnlEmpty.add(pnlEmptyNavbar, BorderLayout.NORTH); // Thêm thanh navbar
-		pnlEmpty.add(scrollProduct, BorderLayout.CENTER); // Thêm thanh navbar
+		pnlEmpty.add(scrollProduct, BorderLayout.CENTER); // Hiển thị sản phẩm
 		this.add(pnlEmpty, BorderLayout.CENTER);
 		this.setVisible(true);
 	}
@@ -174,12 +170,13 @@ public class customerFrame extends JFrame {
 		}
 	}
 
-	public JPanel listProduct() {
+	public JPanel loadProduct() {
 		ArrayList<Products> list = new ArrayList<>();
 		JPanel pnlGridBag = new JPanel(new GridBagLayout());
+
 		try {
 			Connection con = DatabaseConnection.getConnection();
-			String sql = "Select Top 9 ProductID, ProductName, ProductType, Price, Quantity, Description, Size, ProductIMG from Products";
+			String sql = "SELECT TOP 9 ProductID, ProductName, ProductType, Price, Quantity, Description, Size, ProductIMG FROM Products";
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
 			while (rs.next()) {
@@ -197,22 +194,45 @@ public class customerFrame extends JFrame {
 			sta.close();
 			rs.close();
 			DatabaseConnection.closeConnection(con);
-			
-			GridBagConstraints gbc = new GridBagConstraints();
-			int gridx = 0, gridy = 0;
 
-			for (int i = 0; i < 9; i++) {
-//				lấy tên sản phẩm
+			GridBagConstraints gbc = new GridBagConstraints();
+			gbc.gridx = 0;
+			gbc.gridy = 0;
+			gbc.gridwidth = 3; 
+			gbc.anchor = GridBagConstraints.WEST;
+			gbc.insets = new Insets(10, 10, 10, 10);
+
+			JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			btnTatCa = new JButton("Tất cả");
+			btnDrink = new JButton("Nước uống");
+			btnFood = new JButton("Đồ ăn");
+			btnTatCa.setFont(new Font("Times New Roman", Font.BOLD, 18));
+			btnDrink.setFont(new Font("Times New Roman", Font.BOLD, 18));
+			btnFood.setFont(new Font("Times New Roman", Font.BOLD, 18));
+			btnTatCa.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			btnDrink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			btnFood.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			filterPanel.add(btnTatCa);
+			filterPanel.add(btnDrink);
+			filterPanel.add(btnFood);
+
+			pnlGridBag.add(filterPanel, gbc);
+
+			// Reset gridwidth và gridy cho sản phẩm
+			gbc.gridwidth = 1;
+			gbc.gridy = 1;
+
+			int gridx = 0, gridy = 1;
+
+			for (int i = 0; i < list.size(); i++) {
 				Products p = list.get(i);
-				productQuantities.put(p, 1);
-				
+
 				JLabel proTitle = new JLabel(p.getProductName());
-				proTitle.setFont(new Font("Times New Roman",Font.BOLD,25));
+				proTitle.setFont(new Font("Times New Roman", Font.BOLD, 25));
 				JPanel pnlTitle = new JPanel(new FlowLayout(FlowLayout.CENTER));
 				pnlTitle.add(proTitle);
-				
-//				button tăng giảm số lượng, thêm vào giỏ hàng
-				Font btnFont = new Font("Times New Roman",Font.BOLD,18);
+
+				Font btnFont = new Font("Times New Roman", Font.BOLD, 18);
 				JButton btnPlus = new JButton("+");
 				btnPlus.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 				btnPlus.setFont(btnFont);
@@ -222,15 +242,14 @@ public class customerFrame extends JFrame {
 				JLabel quantity = new JLabel("1");
 				quantity.setFont(btnFont);
 				JButton btnAddtoCart = new JButton("Thêm vào giỏ hàng");
-				mapAddToCart.put(btnAddtoCart, p); 
 				btnAddtoCart.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 				btnAddtoCart.setFont(btnFont);
+
 				mapPlus.put(btnPlus, quantity);
 				mapMinus.put(btnMinus, quantity);
-				btnPlus.addActionListener(cusCtrl); 
+				btnPlus.addActionListener(cusCtrl);
 				btnMinus.addActionListener(cusCtrl);
 
-				
 				Box box = Box.createHorizontalBox();
 				box.add(btnMinus);
 				box.add(Box.createHorizontalStrut(5));
@@ -239,13 +258,12 @@ public class customerFrame extends JFrame {
 				box.add(btnPlus);
 				box.add(Box.createHorizontalStrut(20));
 				box.add(btnAddtoCart);
-				
+
 				Box south = Box.createVerticalBox();
 				south.add(pnlTitle);
 				south.add(Box.createVerticalStrut(10));
 				south.add(box);
-				
-//				Ảnh sản phẩm
+
 				ImageIcon itemIcon = new ImageIcon(getClass().getResource(p.getProductImg()));
 				Image itemImg = itemIcon.getImage();
 				ImagePanel imagePanel = new ImagePanel(itemImg);
@@ -254,18 +272,21 @@ public class customerFrame extends JFrame {
 				item.add(imagePanel, BorderLayout.CENTER);
 				item.add(south, BorderLayout.SOUTH);
 				item.setPreferredSize(new Dimension(330, 250));
+				item.setBorder(BorderFactory.createCompoundBorder(
+					BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
+					BorderFactory.createEmptyBorder(0, 0, 10, 0)
+				));
 
-				
-				
 				gbc.gridx = gridx;
 				gbc.gridy = gridy;
-				gbc.weightx = 1.0; 
-				gbc.weighty = 1.0; 
+				gbc.weightx = 1.0;
+				gbc.weighty = 1.0;
 				gbc.fill = GridBagConstraints.BOTH;
-				gbc.insets = new Insets(10, 10, 10, 10); // khoảng cách item
-				pnlGridBag.add(item,gbc);			
+				gbc.insets = new Insets(10, 10, 10, 10);
+				pnlGridBag.add(item, gbc);
+
 				gridx++;
-				if (gridx == 3 || gridx == 6) {
+				if (gridx == 3) {
 					gridx = 0;
 					gridy++;
 				}
@@ -274,29 +295,29 @@ public class customerFrame extends JFrame {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		return pnlGridBag;
 	}
-	
+
+
 	public class ImagePanel extends JPanel {
-	    /**
+		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 		private Image image;
 
-	    public ImagePanel(Image image) {
-	        this.image = image;
-	        this.setPreferredSize(new Dimension(350, 250)); // size ban đầu
-	    }
+		public ImagePanel(Image image) {
+			this.image = image;
+			this.setPreferredSize(new Dimension(350, 250)); // size ban đầu
+		}
 
-	    @Override
-	    protected void paintComponent(Graphics g) {
-	        super.paintComponent(g);
-	        // Vẽ ảnh scale theo kích thước hiện tại của panel
-	        g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
-	    }
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			// Vẽ ảnh scale theo kích thước hiện tại của panel
+			g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+		}
 	}
-	
-
 
 }
