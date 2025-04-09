@@ -53,9 +53,9 @@ public class CustomerDAOIMP implements CustomerDAO {
 	        if (rsCus.next()) {
 	            String pwd = rsCus.getString("Password");
 	            if (pwd.equals(input))
-	                return 0; // Customer đăng nhập thành công
+	                return rsCus.getInt(1); // Customer đăng nhập thành công, trả về mã Customer để lấy Cart
 	            else
-	                return 404; // Sai mật khẩu
+	                return -404; // Sai mật khẩu
 	        }
 
 //	        Đăng nhập với Employee nếu không có email trong Customers
@@ -70,14 +70,14 @@ public class CustomerDAOIMP implements CustomerDAO {
 	            if (String.valueOf(empID).equals(input))
 	                return 0; // Employee đăng nhập thành công
 	            else
-	                return 404; // Sai mã nhân viên
+	                return -404; // Sai mã nhân viên
 	        }
 
-	        return 1; // Email không tồn tại trong cả 2 bảng
+	        return -1; // Email không tồn tại trong cả 2 bảng
 
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	        return -1; 
+	        return -101; // Lỗi SQL Server
 	    }
 	}
 

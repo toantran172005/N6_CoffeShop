@@ -32,16 +32,16 @@ public class loginCtrl implements ActionListener, WindowListener, MouseListener 
 			String email = this.login.txt_email.getText().trim();
 			String pwd = new String(this.login.txt_pwd.getPassword());
 			int checkLogin = cusDAO.loginCustomer(email, pwd);
-			if (checkLogin == 0) {
+			if (checkLogin > 0) {
 				JOptionPane.showMessageDialog(login, "Đăng nhập thành công!");
 				this.login.dispose();
-				new customerFrame();
-			} else if (checkLogin == 1) {
+				new customerFrame(checkLogin);
+			} else if (checkLogin == -1) {
 				JOptionPane.showMessageDialog(login, "Vui lòng nhập đúng email!", "Sai email",
 						JOptionPane.ERROR_MESSAGE);
 				this.login.txt_email.requestFocusInWindow();
 				this.login.txt_email.selectAll();
-			} else if (checkLogin == 404) {
+			} else if (checkLogin == -404) {
 				JOptionPane.showMessageDialog(login, "Vui lòng nhập đúng mật khẩu!", "Sai mật khẩu",
 						JOptionPane.ERROR_MESSAGE);
 				this.login.txt_pwd.requestFocusInWindow();
