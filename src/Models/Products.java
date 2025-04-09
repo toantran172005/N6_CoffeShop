@@ -8,6 +8,7 @@ public class Products {
 	private int quantity;
 	private String description;
 	private String size;
+	private String productImg;
 
 	public Products() {
 		super();
@@ -15,7 +16,7 @@ public class Products {
 	}
 
 	public Products(int productID, String productName, String productType, double price, int quantity,
-			String description, String size) {
+			String description, String size, String productImg) {
 		super();
 		this.productID = productID;
 		this.productName = productName;
@@ -24,6 +25,7 @@ public class Products {
 		this.quantity = quantity;
 		this.description = description;
 		this.size = size;
+		this.productImg = productImg;
 	}
 
 	public int getProductID() {
@@ -80,6 +82,14 @@ public class Products {
 
 	public void setSize(String size) {
 		this.size = size;
+	}
+
+	public String getProductImg() {
+		return productImg;
+	}
+
+	public void setProductImg(String productImg) {
+		this.productImg = productImg;
 	}
 
 }

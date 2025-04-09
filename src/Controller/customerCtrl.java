@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import DAO.CustomerDAOIMP;
@@ -20,9 +21,24 @@ public class customerCtrl implements ActionListener, MouseListener {
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+	    Object obj = e.getSource();
+
+	    if (obj instanceof JButton) {
+	        JButton btn = (JButton) obj;
+
+	        if (this.cusframe.mapPlus.containsKey(btn)) {
+	            JLabel quantity = cusframe.mapPlus.get(btn);
+	            int qty = Integer.parseInt(quantity.getText());
+	            quantity.setText(String.valueOf(qty + 1));
+	        } else if (cusframe.mapMinus.containsKey(btn)) {
+	            JLabel quantity = cusframe.mapMinus.get(btn);
+	            int qty = Integer.parseInt(quantity.getText());
+	            if (qty > 1)
+	            	quantity.setText(String.valueOf(qty - 1));
+	        }
+	    }
 	}
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 	}
