@@ -8,8 +8,6 @@ import Models.Products;
 public interface CustomerDAO {
 	void addProductToCart(int customerId, Products product, int quantity); // Thêm sản phẩm vào giỏ hàng
 
-	ArrayList<Products> searchProducts(String productName); // Tìm kiếm sản phẩm theo tên
-
 	int registerCustomer(String cusName, String email, String pwd, String phone, String address); // Đăng ký tài khoản
 
 	int loginCustomer(String email, String password); // Đăng nhập tài khoản khách hàng
@@ -23,4 +21,8 @@ public interface CustomerDAO {
 	boolean deleteCustomer(int customerId); // Xóa tài khoản khách hàng
 
 	boolean payOrder(int customerId); // Thanh toán hóa đơn
+	
+	ArrayList<Products> getListProductFromDb(); // Lấy sản phẩm từ database
+	
+	boolean isCustomer(int id);
 }

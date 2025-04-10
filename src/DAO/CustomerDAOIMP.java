@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
@@ -30,57 +31,72 @@ public class CustomerDAOIMP implements CustomerDAO {
 	}
 
 	@Override
-	public void addProductToCart(int customerId, Products product, int quantity) {
-		// TODO Auto-generated method stub
+	public ArrayList<Products> getListProductFromDb() {
+		ArrayList<Products> listProduct = new ArrayList<>();
+		String sql = "SELECT TOP 15 ProductID, ProductName, ProductType, Price, Quantity, Description, Size, ProductIMG FROM Products ORDER BY NEWID();";
+		try {
+			Statement sta = con.createStatement();
+			ResultSet rs = sta.executeQuery(sql);
+			while (rs.next()) {
+				Products pro = new Products();
+				pro.setProductID(rs.getInt(1));
+				pro.setProductName(rs.getString(2));
+				pro.setProductType(rs.getString(3));
+				pro.setPrice(rs.getBigDecimal(4).doubleValue());
+				pro.setQuantity(rs.getInt(5));
+				pro.setDescription(rs.getString(6));
+				pro.setSize(rs.getString(7));
+				pro.setProductImg(rs.getString(8));
+				listProduct.add(pro);
+			}
+			sta.close();
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listProduct;
 
-	}
-
-	@Override
-	public ArrayList<Products> searchProducts(String productName) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
 	public int loginCustomer(String email, String input) {
-	    try {
+		try {
 //	    	Đăng nhập với Customer
-	        String sqlCus = "SELECT * FROM Customers WHERE Email = ?";
-	        PreparedStatement preCus = con.prepareStatement(sqlCus);
-	        preCus.setString(1, email);
-	        ResultSet rsCus = preCus.executeQuery();
+			String sqlCus = "SELECT * FROM Customers WHERE Email = ?";
+			PreparedStatement preCus = con.prepareStatement(sqlCus);
+			preCus.setString(1, email);
+			ResultSet rsCus = preCus.executeQuery();
 
-	        if (rsCus.next()) {
-	            String pwd = rsCus.getString("Password");
-	            if (pwd.equals(input))
-	                return rsCus.getInt(1); // Customer đăng nhập thành công, trả về mã Customer để lấy Cart
-	            else
-	                return -404; // Sai mật khẩu
-	        }
+			if (rsCus.next()) {
+				String pwd = rsCus.getString("Password");
+				if (pwd.equals(input))
+					return rsCus.getInt(1); // Customer đăng nhập thành công, trả về mã Customer để lấy Cart
+				else
+					return -404; // Sai mật khẩu
+			}
 
 //	        Đăng nhập với Employee nếu không có email trong Customers
-	        String sqlEmp = "SELECT * FROM Employees WHERE Email = ?";
-	        PreparedStatement preEmp = con.prepareStatement(sqlEmp);
-	        preEmp.setString(1, email);
-	        ResultSet rsEmp = preEmp.executeQuery();
+			String sqlEmp = "SELECT * FROM Employees WHERE Email = ?";
+			PreparedStatement preEmp = con.prepareStatement(sqlEmp);
+			preEmp.setString(1, email);
+			ResultSet rsEmp = preEmp.executeQuery();
 
-	        if (rsEmp.next()) {
-	            int empID = rsEmp.getInt("EmployeeID");
-	            // So sánh input với ID
-	            if (String.valueOf(empID).equals(input))
-	                return 0; // Employee đăng nhập thành công
-	            else
-	                return -404; // Sai mã nhân viên
-	        }
+			if (rsEmp.next()) {
+				int empID = rsEmp.getInt("EmployeeID");
+				// So sánh input với ID
+				if (String.valueOf(empID).equals(input))
+					return 0; // Employee đăng nhập thành công
+				else
+					return -404; // Sai mã nhân viên
+			}
 
-	        return -1; // Email không tồn tại trong cả 2 bảng
+			return -1; // Email không tồn tại trong cả 2 bảng
 
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        return -101; // Lỗi SQL Server
-	    }
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -101; // Lỗi SQL Server
+		}
 	}
-
 
 	@Override
 	public int registerCustomer(String cusName, String email, String pwd, String phone, String address) {
@@ -146,6 +162,12 @@ public class CustomerDAOIMP implements CustomerDAO {
 	}
 
 	@Override
+	public void addProductToCart(int customerId, Products product, int quantity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
 	public void logoutCustomer(int customerId) {
 		// TODO Auto-generated method stub
 
@@ -167,6 +189,26 @@ public class CustomerDAOIMP implements CustomerDAO {
 	public boolean payOrder(int customerId) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public boolean isCustomer(int id) {
+		try {
+//	    	Đăng nhập với Customer
+			String sqlCus = "SELECT * FROM Customers WHERE CustomerID = ?";
+			PreparedStatement preCus = con.prepareStatement(sqlCus);
+			preCus.setInt(1, id);
+			ResultSet rsCus = preCus.executeQuery();
+
+			if (rsCus.next())
+				return true;
+			else
+				return false;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 }

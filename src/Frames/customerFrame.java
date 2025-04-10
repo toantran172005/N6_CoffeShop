@@ -10,18 +10,16 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.RenderingHints;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -29,8 +27,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import Controller.customerCtrl;
-import Database.DatabaseConnection;
+import DAO.CustomerDAOIMP;
 import Models.Products;
 
 public class customerFrame extends JFrame {
@@ -38,7 +37,8 @@ public class customerFrame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int customerID;
+	public int customerID;
+	public CustomerDAOIMP cusDAO;
 	public JLabel lbCoffee;
 	public JButton btnTimKiem;
 	public JLabel lbMenu;
@@ -46,15 +46,31 @@ public class customerFrame extends JFrame {
 	public JButton btnTatCa;
 	public JButton btnDrink;
 	public JButton btnFood;
-	public customerCtrl cusCtrl = new customerCtrl(this);
-	public Map<JButton, JLabel> mapPlus = new HashMap<>();
-	public Map<JButton, JLabel> mapMinus = new HashMap<>();
+	public customerCtrl cusCtrl;
+	public Map<JButton, JLabel> mapPlus;
+	public Map<JButton, JLabel> mapMinus;
+	public ArrayList<Products> listProduct;
+	public JPanel pnlContent;
 //	Map<JButton, Products> mapAddToCart = new HashMap<>(); // thêm vào giỏ hàng
 //	Map<Products, Integer> productQuantities = new HashMap<>(); // Chứa product và số lượng mua
+	public JScrollPane scrollProduct;
+	public RoundedTextField txtTimKiem;
+	public JPanel pnlMenu;
+	public boolean isMenuAppear = false;
+	public JLabel lblInfo;
+	public JLabel lblLogout;
 
-	public customerFrame(int CustomerID) {
+	public customerFrame(int customerID) {
 		super("Nhóm 6 - CoffeeShop");
-		this.customerID = CustomerID;
+		this.customerID = customerID;
+		this.cusDAO = new CustomerDAOIMP();
+		this.cusCtrl = new customerCtrl(this);
+		this.mapPlus = new HashMap<>();
+		this.mapMinus = new HashMap<>();
+		this.listProduct = new ArrayList<>();
+		this.setListProduct(cusDAO.getListProductFromDb());
+		this.addWindowListener(cusCtrl);
+
 		if (customerID != 0)
 			loadCusInfor();
 		else
@@ -66,12 +82,30 @@ public class customerFrame extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+//		Panel content
+		JPanel pnlContent = this.loadProduct(listProduct);
+		scrollProduct = new JScrollPane(pnlContent);
+		scrollProduct.getVerticalScrollBar().setUnitIncrement(20);
+
+//		Frame chính
+		JPanel pnlEmpty = new JPanel(new BorderLayout());
+		pnlEmpty.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		pnlEmpty.add(this.loadNavBar(), BorderLayout.NORTH); // Thêm thanh navbar
+		pnlEmpty.add(scrollProduct, BorderLayout.CENTER); // Hiển thị sản phẩm
+		pnlMenu = createMenu();
+		pnlEmpty.add(pnlMenu, BorderLayout.EAST); // Thanh menu
+
+		this.add(pnlEmpty, BorderLayout.CENTER);
+		this.setVisible(true);
+
+	}
+
+	public JPanel loadNavBar() {
 //		Thanh navbar
 //		Phần west
 		ImageIcon coffeeIcon = new ImageIcon(getClass().getResource("/Img/coffee.png"));
 		Image coffeeImg = coffeeIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 		lbCoffee = new JLabel(new ImageIcon(coffeeImg));
-		lbCoffee.addMouseListener(cusCtrl);
 		lbCoffee.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		JLabel lbN6 = new JLabel("Nhóm 6 - Coffee shop");
 		lbN6.setFont(new Font("Times New Roman", Font.BOLD, 30));
@@ -81,7 +115,7 @@ public class customerFrame extends JFrame {
 		bWest.add(lbN6);
 //		Phần east
 //		Tìm kiếm
-		RoundedTextField txtTimKiem = new RoundedTextField(25);
+		txtTimKiem = new RoundedTextField(25);
 		txtTimKiem.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		ImageIcon searchIcon = new ImageIcon(getClass().getResource("/Img/search.png"));
 		Image searchImg = searchIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
@@ -107,6 +141,11 @@ public class customerFrame extends JFrame {
 		bEast.add(Box.createHorizontalStrut(10));
 		bEast.add(lbMenu);
 
+		lbCoffee.addMouseListener(cusCtrl);
+		btnTimKiem.addActionListener(cusCtrl);
+		lbCart.addMouseListener(cusCtrl);
+		lbMenu.addMouseListener(cusCtrl);
+
 		JPanel pnlNavBar = new JPanel(new BorderLayout());
 		pnlNavBar.add(bWest, BorderLayout.WEST);
 		pnlNavBar.add(bEast, BorderLayout.EAST);
@@ -114,22 +153,249 @@ public class customerFrame extends JFrame {
 		pnlEmptyNavbar.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 		pnlEmptyNavbar.add(pnlNavBar);
 
+		return pnlEmptyNavbar;
+	}
+
+	private void loadCusNoInfor() {
+		this.setSize(1200, 900);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
 //		Panel content
-		JPanel pnlContent = this.loadProduct();
+		JPanel pnlContent = this.loadProduct(listProduct);
 		JScrollPane scrollProduct = new JScrollPane(pnlContent);
 
 //		Frame chính
 		JPanel pnlEmpty = new JPanel(new BorderLayout());
 		pnlEmpty.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		pnlEmpty.add(pnlEmptyNavbar, BorderLayout.NORTH); // Thêm thanh navbar
+		pnlEmpty.add(this.loadNavBar(), BorderLayout.NORTH); // Thêm thanh navbar
 		pnlEmpty.add(scrollProduct, BorderLayout.CENTER); // Hiển thị sản phẩm
+		pnlMenu = createMenu();
+		pnlEmpty.add(pnlMenu, BorderLayout.WEST); // Thanh menu
+
 		this.add(pnlEmpty, BorderLayout.CENTER);
 		this.setVisible(true);
 	}
 
-	private void loadCusNoInfor() {
-		// TODO Auto-generated method stub
+	public JPanel loadProduct(ArrayList<Products> listProduct) {
+		JPanel pnlGridBag = new JPanel(new GridBagLayout());
 
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.gridwidth = 3;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.insets = new Insets(10, 10, 10, 10);
+
+		JPanel filterPanel = new JPanel(new FlowLayout());
+		btnTatCa = new JButton("Tất cả");
+		btnDrink = new JButton("Nước uống");
+		btnFood = new JButton("Đồ ăn");
+		btnTatCa.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		btnDrink.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		btnFood.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		btnTatCa.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnDrink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnFood.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		filterPanel.add(btnTatCa);
+		filterPanel.add(btnDrink);
+		filterPanel.add(btnFood);
+
+		btnTatCa.addActionListener(cusCtrl);
+		btnDrink.addActionListener(cusCtrl);
+		btnFood.addActionListener(cusCtrl);
+
+		pnlGridBag.add(filterPanel, gbc);
+
+		gbc.gridwidth = 1;
+		gbc.gridy = 1;
+
+		int gridx = 0, gridy = 1;
+
+		for (int i = 0; i < listProduct.size(); i++) {
+			Products p = listProduct.get(i);
+
+			JLabel proTitle = new JLabel(p.getProductName());
+			proTitle.setFont(new Font("Times New Roman", Font.BOLD, 25));
+			JPanel pnlTitle = new JPanel(new FlowLayout(FlowLayout.CENTER));
+			pnlTitle.add(proTitle);
+
+			Font btnFont = new Font("Times New Roman", Font.BOLD, 18);
+			JButton btnPlus = new JButton("+");
+			btnPlus.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			btnPlus.setFont(btnFont);
+			JButton btnMinus = new JButton("-");
+			btnMinus.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			btnMinus.setFont(btnFont);
+			JLabel quantity = new JLabel("1");
+			quantity.setFont(btnFont);
+			JButton btnAddtoCart = new JButton("Thêm vào giỏ hàng");
+			btnAddtoCart.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			btnAddtoCart.setFont(btnFont);
+
+			mapPlus.put(btnPlus, quantity);
+			mapMinus.put(btnMinus, quantity);
+			btnPlus.addActionListener(cusCtrl);
+			btnMinus.addActionListener(cusCtrl);
+
+			Box box = Box.createHorizontalBox();
+			box.add(btnMinus);
+			box.add(Box.createHorizontalStrut(5));
+			box.add(quantity);
+			box.add(Box.createHorizontalStrut(5));
+			box.add(btnPlus);
+			box.add(Box.createHorizontalStrut(20));
+			box.add(btnAddtoCart);
+
+			Box south = Box.createVerticalBox();
+			south.add(pnlTitle);
+			south.add(Box.createVerticalStrut(10));
+			south.add(box);
+
+			ImageIcon itemIcon = new ImageIcon(getClass().getResource(p.getProductImg()));
+			Image itemImg = itemIcon.getImage();
+			ImagePanel imagePanel = new ImagePanel(itemImg);
+
+			JPanel item = new JPanel(new BorderLayout());
+			item.add(imagePanel, BorderLayout.CENTER);
+			item.add(south, BorderLayout.SOUTH);
+			item.setPreferredSize(new Dimension(330, 250));
+			item.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
+					BorderFactory.createEmptyBorder(0, 0, 10, 0)));
+
+			gbc.gridx = gridx;
+			gbc.gridy = gridy;
+			gbc.weightx = 1.0;
+			gbc.weighty = 1.0;
+			gbc.fill = GridBagConstraints.BOTH;
+			gbc.insets = new Insets(10, 10, 10, 10);
+			pnlGridBag.add(item, gbc);
+
+			gridx++;
+			if (gridx == 3) {
+				gridx = 0;
+				gridy++;
+			}
+		}
+
+		JPanel footerPanel = new JPanel(new GridLayout(1, 3, 0, 0));
+		footerPanel.setPreferredSize(new Dimension(0, 120));
+
+		int r = 221;
+		int g = 220;
+		int b = 215;
+		float[] hsb = Color.RGBtoHSB(r, g, b, null);
+		Color backgroundColor = Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
+		footerPanel.setBackground(backgroundColor);
+
+//			Thông tin cửa hàng
+		JPanel infoSection = new JPanel(new BorderLayout());
+		infoSection.setBackground(backgroundColor);
+		JLabel infoTitle = new JLabel("Nhóm 6 - Coffee Shop", SwingConstants.CENTER);
+		infoTitle.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		JLabel infoContent = new JLabel("<html>Đem đến trải nghiệm tốt nhất<br>"
+				+ "Thưởng thức hương vị cà phê đậm đà<br>" + "Hãy đến trải nghiệm ngay hôm nay!</html>",
+				SwingConstants.CENTER);
+		infoContent.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		infoSection.add(infoTitle, BorderLayout.NORTH);
+		infoSection.add(infoContent, BorderLayout.CENTER);
+		footerPanel.add(infoSection);
+
+//			Liên hệ
+		JPanel contactSection = new JPanel(new BorderLayout());
+		contactSection.setBackground(backgroundColor);
+		JLabel contactTitle = new JLabel("Liên Hệ", SwingConstants.CENTER);
+		contactTitle.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		JLabel contactContent = new JLabel("<html>Địa chỉ: Trường Đại Học Công Nghiệp TP.HCM<br>"
+				+ "Email: Nhom6CoffeeShop@gmail.com<br>" + "Số Liên Lạc: (+84) 123-456-789</html>",
+				SwingConstants.CENTER);
+		contactContent.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		contactSection.add(contactTitle, BorderLayout.NORTH);
+		contactSection.add(contactContent, BorderLayout.CENTER);
+		footerPanel.add(contactSection);
+
+//			Thành viên
+		JPanel memberSection = new JPanel(new BorderLayout());
+		memberSection.setBackground(backgroundColor);
+		JLabel memberTitle = new JLabel("Thành Viên", SwingConstants.CENTER);
+		memberTitle.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		JLabel memberContent = new JLabel("<html>Trần Thanh Toàn - 23722181<br>Nguyễn Thành Tài - 23715171</html>",
+				SwingConstants.CENTER);
+		memberContent.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		memberSection.add(memberTitle, BorderLayout.NORTH);
+		memberSection.add(memberContent, BorderLayout.CENTER);
+		footerPanel.add(memberSection);
+
+		gbc.gridx = 0;
+		gbc.gridy = gridy;
+		gbc.gridwidth = 3;
+		gbc.weighty = 1.0;
+		gbc.fill = GridBagConstraints.BOTH;
+		JPanel filler = new JPanel();
+		filler.setOpaque(false);
+		pnlGridBag.add(filler, gbc);
+
+		gridy++;
+
+		gbc.gridx = 0;
+		gbc.gridy = gridy;
+		gbc.gridwidth = 3;
+		gbc.weightx = 1.0;
+		gbc.weighty = 0.0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(5, 0, 0, 0);
+		pnlGridBag.add(footerPanel, gbc);
+
+		return pnlGridBag;
+	}
+
+	public void updateProductPanel(ArrayList<Products> searchList) {
+		pnlContent = loadProduct(searchList);
+		scrollProduct.setViewportView(pnlContent);
+		scrollProduct.revalidate();
+		scrollProduct.repaint();
+	}
+
+	private JPanel createMenu() {
+		pnlMenu = new JPanel();
+		this.pnlMenu.setLayout(new BoxLayout(this.pnlMenu, BoxLayout.Y_AXIS));
+		this.pnlMenu.setPreferredSize(new Dimension(200, getHeight()));
+
+//	     Các mục  menu
+		lblInfo = new JLabel("Thông tin cá nhân");
+		lblLogout = new JLabel("Đăng xuất");
+		lblInfo.addMouseListener(cusCtrl);
+		lblLogout.addMouseListener(cusCtrl);
+
+		for (JLabel label : new JLabel[] { lblInfo, lblLogout }) {
+			label.setFont(new Font("Times New Roman", Font.BOLD, 18));
+			label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
+			label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			this.pnlMenu.add(label);
+		}
+
+		this.pnlMenu.setVisible(false);
+		return pnlMenu;
+	}
+
+	public void changeToInfor() {
+		pnlContent = this.loadCusProfile();
+		scrollProduct.setViewportView(pnlContent);
+		scrollProduct.revalidate();
+		scrollProduct.repaint();
+	}
+
+//	Thông tin khách hàng
+	public JPanel loadCusProfile() {
+		return new JPanel();
+	}
+
+	public ArrayList<Products> getListProduct() {
+		return listProduct;
+	}
+
+	public void setListProduct(ArrayList<Products> listProduct) {
+		this.listProduct = listProduct;
 	}
 
 	public int getCustomerID() {
@@ -140,7 +406,7 @@ public class customerFrame extends JFrame {
 		this.customerID = customerID;
 	}
 
-	class RoundedTextField extends JTextField {
+	public class RoundedTextField extends JTextField {
 		/**
 		 * 
 		 */
@@ -170,136 +436,6 @@ public class customerFrame extends JFrame {
 		}
 	}
 
-	public JPanel loadProduct() {
-		ArrayList<Products> list = new ArrayList<>();
-		JPanel pnlGridBag = new JPanel(new GridBagLayout());
-
-		try {
-			Connection con = DatabaseConnection.getConnection();
-			String sql = "SELECT TOP 9 ProductID, ProductName, ProductType, Price, Quantity, Description, Size, ProductIMG FROM Products";
-			Statement sta = con.createStatement();
-			ResultSet rs = sta.executeQuery(sql);
-			while (rs.next()) {
-				Products pro = new Products();
-				pro.setProductID(rs.getInt(1));
-				pro.setProductName(rs.getString(2));
-				pro.setProductType(rs.getString(3));
-				pro.setPrice(rs.getBigDecimal(4).doubleValue());
-				pro.setQuantity(rs.getInt(5));
-				pro.setDescription(rs.getString(6));
-				pro.setSize(rs.getString(7));
-				pro.setProductImg(rs.getString(8));
-				list.add(pro);
-			}
-			sta.close();
-			rs.close();
-			DatabaseConnection.closeConnection(con);
-
-			GridBagConstraints gbc = new GridBagConstraints();
-			gbc.gridx = 0;
-			gbc.gridy = 0;
-			gbc.gridwidth = 3; 
-			gbc.anchor = GridBagConstraints.WEST;
-			gbc.insets = new Insets(10, 10, 10, 10);
-
-			JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-			btnTatCa = new JButton("Tất cả");
-			btnDrink = new JButton("Nước uống");
-			btnFood = new JButton("Đồ ăn");
-			btnTatCa.setFont(new Font("Times New Roman", Font.BOLD, 18));
-			btnDrink.setFont(new Font("Times New Roman", Font.BOLD, 18));
-			btnFood.setFont(new Font("Times New Roman", Font.BOLD, 18));
-			btnTatCa.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			btnDrink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			btnFood.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			filterPanel.add(btnTatCa);
-			filterPanel.add(btnDrink);
-			filterPanel.add(btnFood);
-
-			pnlGridBag.add(filterPanel, gbc);
-
-			// Reset gridwidth và gridy cho sản phẩm
-			gbc.gridwidth = 1;
-			gbc.gridy = 1;
-
-			int gridx = 0, gridy = 1;
-
-			for (int i = 0; i < list.size(); i++) {
-				Products p = list.get(i);
-
-				JLabel proTitle = new JLabel(p.getProductName());
-				proTitle.setFont(new Font("Times New Roman", Font.BOLD, 25));
-				JPanel pnlTitle = new JPanel(new FlowLayout(FlowLayout.CENTER));
-				pnlTitle.add(proTitle);
-
-				Font btnFont = new Font("Times New Roman", Font.BOLD, 18);
-				JButton btnPlus = new JButton("+");
-				btnPlus.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				btnPlus.setFont(btnFont);
-				JButton btnMinus = new JButton("-");
-				btnMinus.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				btnMinus.setFont(btnFont);
-				JLabel quantity = new JLabel("1");
-				quantity.setFont(btnFont);
-				JButton btnAddtoCart = new JButton("Thêm vào giỏ hàng");
-				btnAddtoCart.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				btnAddtoCart.setFont(btnFont);
-
-				mapPlus.put(btnPlus, quantity);
-				mapMinus.put(btnMinus, quantity);
-				btnPlus.addActionListener(cusCtrl);
-				btnMinus.addActionListener(cusCtrl);
-
-				Box box = Box.createHorizontalBox();
-				box.add(btnMinus);
-				box.add(Box.createHorizontalStrut(5));
-				box.add(quantity);
-				box.add(Box.createHorizontalStrut(5));
-				box.add(btnPlus);
-				box.add(Box.createHorizontalStrut(20));
-				box.add(btnAddtoCart);
-
-				Box south = Box.createVerticalBox();
-				south.add(pnlTitle);
-				south.add(Box.createVerticalStrut(10));
-				south.add(box);
-
-				ImageIcon itemIcon = new ImageIcon(getClass().getResource(p.getProductImg()));
-				Image itemImg = itemIcon.getImage();
-				ImagePanel imagePanel = new ImagePanel(itemImg);
-
-				JPanel item = new JPanel(new BorderLayout());
-				item.add(imagePanel, BorderLayout.CENTER);
-				item.add(south, BorderLayout.SOUTH);
-				item.setPreferredSize(new Dimension(330, 250));
-				item.setBorder(BorderFactory.createCompoundBorder(
-					BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
-					BorderFactory.createEmptyBorder(0, 0, 10, 0)
-				));
-
-				gbc.gridx = gridx;
-				gbc.gridy = gridy;
-				gbc.weightx = 1.0;
-				gbc.weighty = 1.0;
-				gbc.fill = GridBagConstraints.BOTH;
-				gbc.insets = new Insets(10, 10, 10, 10);
-				pnlGridBag.add(item, gbc);
-
-				gridx++;
-				if (gridx == 3) {
-					gridx = 0;
-					gridy++;
-				}
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return pnlGridBag;
-	}
-
-
 	public class ImagePanel extends JPanel {
 		/**
 		 * 
@@ -309,13 +445,12 @@ public class customerFrame extends JFrame {
 
 		public ImagePanel(Image image) {
 			this.image = image;
-			this.setPreferredSize(new Dimension(350, 250)); // size ban đầu
+			this.setPreferredSize(new Dimension(350, 250));
 		}
 
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			// Vẽ ảnh scale theo kích thước hiện tại của panel
 			g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 		}
 	}
