@@ -2,6 +2,7 @@ package Frames;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -59,6 +60,8 @@ public class customerFrame extends JFrame {
 	public boolean isMenuAppear = false;
 	public JLabel lblInfo;
 	public JLabel lblLogout;
+	public Component lbN6;
+	private JLabel lblLogin;
 
 	public customerFrame(int customerID) {
 		super("Nhóm 6 - CoffeeShop");
@@ -107,7 +110,8 @@ public class customerFrame extends JFrame {
 		Image coffeeImg = coffeeIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 		lbCoffee = new JLabel(new ImageIcon(coffeeImg));
 		lbCoffee.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		JLabel lbN6 = new JLabel("Nhóm 6 - Coffee shop");
+		lbN6 = new JLabel("Nhóm 6 - Coffee shop");
+		lbN6.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lbN6.setFont(new Font("Times New Roman", Font.BOLD, 30));
 		Box bWest = Box.createHorizontalBox();
 		bWest.add(lbCoffee);
@@ -142,6 +146,7 @@ public class customerFrame extends JFrame {
 		bEast.add(lbMenu);
 
 		lbCoffee.addMouseListener(cusCtrl);
+		lbN6.addMouseListener(cusCtrl);
 		btnTimKiem.addActionListener(cusCtrl);
 		lbCart.addMouseListener(cusCtrl);
 		lbMenu.addMouseListener(cusCtrl);
@@ -364,10 +369,12 @@ public class customerFrame extends JFrame {
 //	     Các mục  menu
 		lblInfo = new JLabel("Thông tin cá nhân");
 		lblLogout = new JLabel("Đăng xuất");
+		lblLogin = new JLabel("Đăng nhập");
 		lblInfo.addMouseListener(cusCtrl);
 		lblLogout.addMouseListener(cusCtrl);
+		lblLogin.addMouseListener(cusCtrl);
 
-		for (JLabel label : new JLabel[] { lblInfo, lblLogout }) {
+		for (JLabel label : new JLabel[] { lblInfo, lblLogout, lblLogin }) {
 			label.setFont(new Font("Times New Roman", Font.BOLD, 18));
 			label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
 			label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

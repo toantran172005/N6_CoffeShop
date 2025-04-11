@@ -88,7 +88,7 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 		if (obj instanceof JLabel) {
 			JLabel label = (JLabel) obj;
 
-			if (label == this.cusframe.lbCoffee) {
+			if (label == this.cusframe.lbCoffee || label == this.cusframe.lbN6) {
 				this.cusframe.dispose();
 				new customerFrame(this.cusframe.getCustomerID());
 			} else if (label == this.cusframe.lbMenu) {
