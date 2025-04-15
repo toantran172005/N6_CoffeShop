@@ -1,6 +1,7 @@
 package DAO;
 
 import Models.Customers;
+import Models.Employees;
 import Models.Products;
 import Models.Orders;
 
@@ -18,4 +19,6 @@ public interface EmployeeDAO {
 	void updateOrderStatus(int orderId, String status); // Cập nhật trạng thái đơn hàng
 
 	ArrayList<Customers> getAllCustomers(); // Xem danh sách khách hàng
+	
+	Employees getEmployee(int id); // Lấy 1 nhân viên
 }

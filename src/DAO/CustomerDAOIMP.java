@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
@@ -20,7 +21,7 @@ public class CustomerDAOIMP implements CustomerDAO {
 		try {
 			con = DatabaseConnection.getConnection();
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 
@@ -33,7 +34,9 @@ public class CustomerDAOIMP implements CustomerDAO {
 	@Override
 	public ArrayList<Products> getListProductFromDb() {
 		ArrayList<Products> listProduct = new ArrayList<>();
-		String sql = "SELECT TOP 15 ProductID, ProductName, ProductType, Price, Quantity, Description, Size, ProductIMG FROM Products ORDER BY NEWID();";
+		String sql = "SELECT ProductID, ProductName, ProductType, Price, Quantity, Description, Size, ProductIMG FROM Products "
+				+ "WHERE ProductID % 2 = 0"
+				+ "OR ProductID IN (17,19)";
 		try {
 			Statement sta = con.createStatement();
 			ResultSet rs = sta.executeQuery(sql);
@@ -160,6 +163,26 @@ public class CustomerDAOIMP implements CustomerDAO {
 			return null;
 		}
 	}
+	
+	@Override
+	public boolean isCustomer(int id) {
+		try {
+//	    	Tìm xem phải Cus không
+			String sqlCus = "SELECT * FROM Customers WHERE CustomerID = ?";
+			PreparedStatement preCus = con.prepareStatement(sqlCus);
+			preCus.setInt(1, id);
+			ResultSet rsCus = preCus.executeQuery();
+
+			if (rsCus.next())
+				return true;
+			else
+				return false;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 	@Override
 	public void addProductToCart(int customerId, Products product, int quantity) {
@@ -192,23 +215,26 @@ public class CustomerDAOIMP implements CustomerDAO {
 	}
 
 	@Override
-	public boolean isCustomer(int id) {
+	public Customers getCustomer(int customerID) {
+		Customers cus = new Customers();
 		try {
-//	    	Đăng nhập với Customer
-			String sqlCus = "SELECT * FROM Customers WHERE CustomerID = ?";
-			PreparedStatement preCus = con.prepareStatement(sqlCus);
-			preCus.setInt(1, id);
-			ResultSet rsCus = preCus.executeQuery();
-
-			if (rsCus.next())
-				return true;
-			else
-				return false;
-
+			String sql = "SELECT CustomerName, Phone, Email, Address From Customers WHERE CustomerID = ?";
+			PreparedStatement pre = con.prepareStatement(sql);
+			pre.setInt(1, customerID);
+			ResultSet rs = pre.executeQuery();
+			if(rs.next()) {
+				cus.setCustomerID(customerID);
+				cus.setCustomerName(rs.getString(1));
+				cus.setPhone(rs.getString(2));
+				cus.setEmail(rs.getString(3));
+				cus.setAddress(rs.getString(4));
+				cus.setPassword("");
+				cus.setCreateDate(LocalDate.now());
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
 		}
+		return cus;
 	}
 
 }

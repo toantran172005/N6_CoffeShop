@@ -53,7 +53,6 @@ public class customerFrame extends JFrame {
 	public ArrayList<Products> listProduct;
 	public JPanel pnlContent;
 //	Map<JButton, Products> mapAddToCart = new HashMap<>(); // thêm vào giỏ hàng
-//	Map<Products, Integer> productQuantities = new HashMap<>(); // Chứa product và số lượng mua
 	public JScrollPane scrollProduct;
 	public RoundedTextField txtTimKiem;
 	public JPanel pnlMenu;
@@ -61,7 +60,7 @@ public class customerFrame extends JFrame {
 	public JLabel lblInfo;
 	public JLabel lblLogout;
 	public Component lbN6;
-	private JLabel lblLogin;
+	public JLabel lblLogin;
 
 	public customerFrame(int customerID) {
 		super("Nhóm 6 - CoffeeShop");
@@ -74,10 +73,7 @@ public class customerFrame extends JFrame {
 		this.setListProduct(cusDAO.getListProductFromDb());
 		this.addWindowListener(cusCtrl);
 
-		if (customerID != 0)
-			loadCusInfor();
-		else
-			loadCusNoInfor();
+		this.loadCusInfor();
 	}
 
 	public void loadCusInfor() {
@@ -159,27 +155,6 @@ public class customerFrame extends JFrame {
 		pnlEmptyNavbar.add(pnlNavBar);
 
 		return pnlEmptyNavbar;
-	}
-
-	private void loadCusNoInfor() {
-		this.setSize(1200, 900);
-		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-//		Panel content
-		JPanel pnlContent = this.loadProduct(listProduct);
-		JScrollPane scrollProduct = new JScrollPane(pnlContent);
-
-//		Frame chính
-		JPanel pnlEmpty = new JPanel(new BorderLayout());
-		pnlEmpty.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		pnlEmpty.add(this.loadNavBar(), BorderLayout.NORTH); // Thêm thanh navbar
-		pnlEmpty.add(scrollProduct, BorderLayout.CENTER); // Hiển thị sản phẩm
-		pnlMenu = createMenu();
-		pnlEmpty.add(pnlMenu, BorderLayout.WEST); // Thanh menu
-
-		this.add(pnlEmpty, BorderLayout.CENTER);
-		this.setVisible(true);
 	}
 
 	public JPanel loadProduct(ArrayList<Products> listProduct) {
@@ -348,7 +323,7 @@ public class customerFrame extends JFrame {
 		gbc.weightx = 1.0;
 		gbc.weighty = 0.0;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(5, 0, 0, 0);
+		gbc.insets = new Insets(0, 0, 0, 0);
 		pnlGridBag.add(footerPanel, gbc);
 
 		return pnlGridBag;
@@ -366,7 +341,7 @@ public class customerFrame extends JFrame {
 		this.pnlMenu.setLayout(new BoxLayout(this.pnlMenu, BoxLayout.Y_AXIS));
 		this.pnlMenu.setPreferredSize(new Dimension(200, getHeight()));
 
-//	     Các mục  menu
+//	     Các mục menu
 		lblInfo = new JLabel("Thông tin cá nhân");
 		lblLogout = new JLabel("Đăng xuất");
 		lblLogin = new JLabel("Đăng nhập");
@@ -386,16 +361,13 @@ public class customerFrame extends JFrame {
 	}
 
 	public void changeToInfor() {
-		pnlContent = this.loadCusProfile();
+		inforFrame inf = new inforFrame(this.customerID, this);
+		pnlContent = inf.getInfPanel();
 		scrollProduct.setViewportView(pnlContent);
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
 	}
 
-//	Thông tin khách hàng
-	public JPanel loadCusProfile() {
-		return new JPanel();
-	}
 
 	public ArrayList<Products> getListProduct() {
 		return listProduct;

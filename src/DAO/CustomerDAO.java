@@ -24,5 +24,7 @@ public interface CustomerDAO {
 	
 	ArrayList<Products> getListProductFromDb(); // Lấy sản phẩm từ database
 	
-	boolean isCustomer(int id);
+	boolean isCustomer(int id); // Kiểm tra có phải customer
+	
+	Customers getCustomer(int customerID); // lấy 1 khách hàng
 }

@@ -12,9 +12,11 @@ import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import DAO.CustomerDAOIMP;
 import Frames.customerFrame;
+import Frames.loginFrame;
 import Models.Products;
 
 public class customerCtrl implements ActionListener, MouseListener, WindowListener {
@@ -34,18 +36,19 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 
 		if (obj instanceof JButton) {
 			JButton btn = (JButton) obj;
-
+//			Tăng quantity
 			if (this.cusframe.mapPlus.containsKey(btn)) {
 				JLabel quantity = this.cusframe.mapPlus.get(btn);
 				int qty = Integer.parseInt(quantity.getText());
 				quantity.setText(String.valueOf(qty + 1));
+//			Giảm quantity
 			} else if (this.cusframe.mapMinus.containsKey(btn)) {
 				JLabel quantity = this.cusframe.mapMinus.get(btn);
 				int qty = Integer.parseInt(quantity.getText());
 				if (qty > 1)
 					quantity.setText(String.valueOf(qty - 1));
 			} else if (obj == this.cusframe.btnTatCa) {
-				this.cusframe.updateProductPanel(this.cusframe.listProduct); // Hiện tất cả
+				this.cusframe.updateProductPanel(this.cusframe.listProduct); // Hiện tất cả sản phẩm
 			} else if (obj == this.cusframe.btnDrink) {
 				ArrayList<Products> drinks = new ArrayList<>();
 				for (Products p : this.cusframe.listProduct) {
@@ -53,7 +56,7 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 						drinks.add(p);
 					}
 				}
-				this.cusframe.updateProductPanel(drinks);
+				this.cusframe.updateProductPanel(drinks); // Hiện đồ uống
 			} else if (obj == this.cusframe.btnFood) {
 				ArrayList<Products> foods = new ArrayList<>();
 				for (Products p : this.cusframe.listProduct) {
@@ -61,7 +64,7 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 						foods.add(p);
 					}
 				}
-				this.cusframe.updateProductPanel(foods);
+				this.cusframe.updateProductPanel(foods); // Hiện đồ ăn
 			} else if (obj == this.cusframe.btnTimKiem) {
 				String search = this.cusframe.txtTimKiem.getText();
 				if (!search.isBlank()) {
@@ -89,13 +92,24 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 			JLabel label = (JLabel) obj;
 
 			if (label == this.cusframe.lbCoffee || label == this.cusframe.lbN6) {
-				this.cusframe.dispose();
-				new customerFrame(this.cusframe.getCustomerID());
+				this.cusframe.updateProductPanel(this.cusframe.getListProduct());
+				this.cusframe.isMenuAppear = !this.cusframe.isMenuAppear;
+				this.cusframe.pnlMenu.setVisible(this.cusframe.isMenuAppear);
 			} else if (label == this.cusframe.lbMenu) {
 				this.cusframe.isMenuAppear = !this.cusframe.isMenuAppear;
 				this.cusframe.pnlMenu.setVisible(this.cusframe.isMenuAppear);
 			} else if (label == this.cusframe.lblInfo) {
 				this.cusframe.changeToInfor();
+				this.cusframe.isMenuAppear = !this.cusframe.isMenuAppear;
+				this.cusframe.pnlMenu.setVisible(this.cusframe.isMenuAppear);
+			} else if(label == this.cusframe.lblLogin) {
+				this.cusframe.dispose();
+				new loginFrame();
+			} else if(label == this.cusframe.lblLogout) {
+				this.cusframe.setCustomerID(0);
+				JOptionPane.showMessageDialog(this.cusframe, "Đăng xuất thành công!");
+				this.cusframe.isMenuAppear = !this.cusframe.isMenuAppear;
+				this.cusframe.pnlMenu.setVisible(this.cusframe.isMenuAppear);
 			}
 		}
 	}

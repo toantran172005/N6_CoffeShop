@@ -1,10 +1,15 @@
 package DAO;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import Database.DatabaseConnection;
 import Models.Customers;
+import Models.Employees;
 import Models.Orders;
 import Models.Products;
 
@@ -17,6 +22,28 @@ public class EmployeeDAOIMP implements EmployeeDAO {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+	}
+	
+	@Override
+	public Employees getEmployee(int employeeID) {
+		Employees emp = new Employees();
+		try {
+			String sql = "SELECT EmployeeName, Phone, Email, Address From Employees WHERE EmployeeID = ?";
+			PreparedStatement pre = con.prepareStatement(sql);
+			pre.setInt(1, employeeID);
+			ResultSet rs = pre.executeQuery();
+			if(rs.next()) {
+				emp.setEmployeeID(employeeID);
+				emp.setEmployeeName(rs.getString(1));
+				emp.setPhone(rs.getString(2));
+				emp.setEmail(rs.getString(3));
+				emp.setAddress(rs.getString(4));
+				emp.setHiredDate(LocalDate.now());
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return emp;
 	}
 
 	@Override
