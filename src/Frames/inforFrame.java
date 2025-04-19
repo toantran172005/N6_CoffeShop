@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -34,6 +36,7 @@ public class inforFrame {
 	public JButton btnChange;
 	public JButton btnSave;
 	public inforCtrl infctrl;
+	public JTextField txtDate;
 
 	public inforFrame(int id, customerFrame cusFrame) {
 		this.id = id;
@@ -70,7 +73,7 @@ public class inforFrame {
 
 		Box bPhone = Box.createHorizontalBox();
 		JLabel lbPhone = new JLabel("Số liên lạc");
-		lbPhone.setPreferredSize(new Dimension(100, 50));
+		lbPhone.setPreferredSize(new Dimension(150, 50));
 		txtPhone = new JTextField();
 		txtPhone.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 		bPhone.add(lbPhone);
@@ -78,7 +81,7 @@ public class inforFrame {
 
 		Box bName = Box.createHorizontalBox();
 		JLabel lbName = new JLabel("Họ và tên");
-		lbName.setPreferredSize(new Dimension(100, 50));
+		lbName.setPreferredSize(new Dimension(150, 50));
 		txtName = new JTextField();
 		txtName.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 		bName.add(lbName);
@@ -86,7 +89,7 @@ public class inforFrame {
 
 		Box bEmail = Box.createHorizontalBox();
 		JLabel lbEmail = new JLabel("Email");
-		lbEmail.setPreferredSize(new Dimension(100, 50));
+		lbEmail.setPreferredSize(new Dimension(150, 50));
 		txtEmail = new JTextField();
 		txtEmail.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 		bEmail.add(lbEmail);
@@ -94,11 +97,19 @@ public class inforFrame {
 
 		Box bAdd = Box.createHorizontalBox();
 		JLabel lbAdd = new JLabel("Địa chỉ");
-		lbAdd.setPreferredSize(new Dimension(100, 50));
+		lbAdd.setPreferredSize(new Dimension(150, 50));
 		txtAdd = new JTextField();
 		txtAdd.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 		bAdd.add(lbAdd);
 		bAdd.add(txtAdd);
+		
+		Box bDate = Box.createHorizontalBox();
+		JLabel lbDate = new JLabel("Ngày đăng kí");
+		lbDate.setPreferredSize(new Dimension(150, 50));
+		txtDate = new JTextField();
+		txtDate.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+		bDate.add(lbDate);
+		bDate.add(txtDate);
 
 		this.setCusInfor();
 
@@ -112,7 +123,7 @@ public class inforFrame {
 		bBtn.add(Box.createHorizontalStrut(10));
 		bBtn.add(btnBack);
 
-		for (JLabel label : new JLabel[] { lbName, lbPhone, lbEmail, lbAdd }) {
+		for (JLabel label : new JLabel[] { lbName, lbPhone, lbEmail, lbAdd, lbDate }) {
 			label.setFont(new Font("Times New Roman", Font.BOLD, 18));
 		}
 
@@ -123,7 +134,7 @@ public class inforFrame {
 			btn.addActionListener(infctrl);
 		}
 
-		for (JTextField txt : new JTextField[] { txtName, txtPhone, txtEmail, txtAdd }) {
+		for (JTextField txt : new JTextField[] { txtName, txtPhone, txtEmail, txtAdd, txtDate }) {
 			txt.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 			txt.setEditable(false);
 		}
@@ -145,6 +156,8 @@ public class inforFrame {
 		pnlContent.add(bEmail);
 		pnlContent.add(Box.createVerticalStrut(20));
 		pnlContent.add(bAdd);
+		pnlContent.add(Box.createVerticalStrut(20));
+		pnlContent.add(bDate);
 		pnlContent.add(bBtn);
 		pnlContent.add(Box.createVerticalStrut(20));
 
@@ -174,7 +187,7 @@ public class inforFrame {
 
 		Box bPhone = Box.createHorizontalBox();
 		JLabel lbPhone = new JLabel("Số liên lạc");
-		lbPhone.setPreferredSize(new Dimension(100, 50));
+		lbPhone.setPreferredSize(new Dimension(150, 50));
 		txtPhone = new JTextField();
 		txtPhone.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 		bPhone.add(lbPhone);
@@ -182,7 +195,7 @@ public class inforFrame {
 
 		Box bName = Box.createHorizontalBox();
 		JLabel lbName = new JLabel("Họ và tên");
-		lbName.setPreferredSize(new Dimension(100, 50));
+		lbName.setPreferredSize(new Dimension(150, 50));
 		txtName = new JTextField();
 		txtName.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 		bName.add(lbName);
@@ -190,7 +203,7 @@ public class inforFrame {
 
 		Box bEmail = Box.createHorizontalBox();
 		JLabel lbEmail = new JLabel("Email");
-		lbEmail.setPreferredSize(new Dimension(100, 50));
+		lbEmail.setPreferredSize(new Dimension(150, 50));
 		txtEmail = new JTextField();
 		txtEmail.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 		bEmail.add(lbEmail);
@@ -198,11 +211,19 @@ public class inforFrame {
 
 		Box bAdd = Box.createHorizontalBox();
 		JLabel lbAdd = new JLabel("Địa chỉ");
-		lbAdd.setPreferredSize(new Dimension(100, 50));
+		lbAdd.setPreferredSize(new Dimension(150, 50));
 		txtAdd = new JTextField();
 		txtAdd.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 		bAdd.add(lbAdd);
 		bAdd.add(txtAdd);
+		
+		Box bDate = Box.createHorizontalBox();
+		JLabel lbDate = new JLabel("Ngày vào làm");
+		lbDate.setPreferredSize(new Dimension(150, 50));
+		txtDate = new JTextField();
+		txtDate.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+		bDate.add(lbDate);
+		bDate.add(txtDate);
 
 		this.setEmpInfor();
 
@@ -216,7 +237,7 @@ public class inforFrame {
 		bBtn.add(Box.createHorizontalStrut(10));
 		bBtn.add(btnBack);
 
-		for (JLabel label : new JLabel[] { lbName, lbPhone, lbEmail, lbAdd }) {
+		for (JLabel label : new JLabel[] { lbName, lbPhone, lbEmail, lbAdd, lbDate}) {
 			label.setFont(new Font("Times New Roman", Font.BOLD, 18));
 		}
 
@@ -227,7 +248,7 @@ public class inforFrame {
 			btn.addActionListener(infctrl);
 		}
 
-		for (JTextField txt : new JTextField[] { txtName, txtPhone, txtEmail, txtAdd }) {
+		for (JTextField txt : new JTextField[] { txtName, txtPhone, txtEmail, txtAdd, txtDate}) {
 			txt.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 			txt.setEditable(false);
 		}
@@ -249,6 +270,8 @@ public class inforFrame {
 		pnlContent.add(bEmail);
 		pnlContent.add(Box.createVerticalStrut(20));
 		pnlContent.add(bAdd);
+		pnlContent.add(Box.createVerticalStrut(20));
+		pnlContent.add(bDate);
 		pnlContent.add(bBtn);
 		pnlContent.add(Box.createVerticalStrut(20));
 
@@ -271,6 +294,7 @@ public class inforFrame {
 			this.txtPhone.setText("");
 			this.txtEmail.setText("");
 			this.txtAdd.setText("");
+			this.txtDate.setText("");
 			return;
 		} else {
 			Customers cus = cusDAO.getCustomer(id);
@@ -278,6 +302,9 @@ public class inforFrame {
 			this.txtPhone.setText(cus.getPhone());
 			this.txtEmail.setText(cus.getEmail());
 			this.txtAdd.setText(cus.getAddress());
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			String formattedDate = cus.getCreateDate().format(formatter);
+			this.txtDate.setText(formattedDate);
 			return;
 		}
 	}
@@ -288,6 +315,9 @@ public class inforFrame {
 			this.txtPhone.setText(emp.getPhone());
 			this.txtEmail.setText(emp.getEmail());
 			this.txtAdd.setText(emp.getAddress());
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			String formattedDate = emp.getHiredDate().format(formatter);
+			this.txtDate.setText(formattedDate);
 			return;
 		}
 }

@@ -93,8 +93,6 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 
 			if (label == this.cusframe.lbCoffee || label == this.cusframe.lbN6) {
 				this.cusframe.updateProductPanel(this.cusframe.getListProduct());
-				this.cusframe.isMenuAppear = !this.cusframe.isMenuAppear;
-				this.cusframe.pnlMenu.setVisible(this.cusframe.isMenuAppear);
 			} else if (label == this.cusframe.lbMenu) {
 				this.cusframe.isMenuAppear = !this.cusframe.isMenuAppear;
 				this.cusframe.pnlMenu.setVisible(this.cusframe.isMenuAppear);

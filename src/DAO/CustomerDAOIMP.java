@@ -1,6 +1,7 @@
 package DAO;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -218,7 +219,7 @@ public class CustomerDAOIMP implements CustomerDAO {
 	public Customers getCustomer(int customerID) {
 		Customers cus = new Customers();
 		try {
-			String sql = "SELECT CustomerName, Phone, Email, Address From Customers WHERE CustomerID = ?";
+			String sql = "SELECT CustomerName, Phone, Email, Address, CreateDate From Customers WHERE CustomerID = ?";
 			PreparedStatement pre = con.prepareStatement(sql);
 			pre.setInt(1, customerID);
 			ResultSet rs = pre.executeQuery();
@@ -229,7 +230,9 @@ public class CustomerDAOIMP implements CustomerDAO {
 				cus.setEmail(rs.getString(3));
 				cus.setAddress(rs.getString(4));
 				cus.setPassword("");
-				cus.setCreateDate(LocalDate.now());
+				Date creatDate = rs.getDate(5);
+				LocalDate date = creatDate.toLocalDate();
+				cus.setCreateDate(date);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
