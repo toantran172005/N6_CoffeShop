@@ -3,7 +3,7 @@ package Models;
 public class Products {
 	private int productID;
 	private String productName;
-	private String productType;
+	private ProductType productTypeID;
 	private double price;
 	private int quantity;
 	private String description;
@@ -15,12 +15,17 @@ public class Products {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Products(int productID, String productName, String productType, double price, int quantity,
+	public Products(int productID) {
+		super();
+		this.productID = productID;
+	}
+
+	public Products(int productID, String productName, ProductType productTypeID, double price, int quantity,
 			String description, String size, String productImg) {
 		super();
 		this.productID = productID;
 		this.productName = productName;
-		this.productType = productType;
+		this.productTypeID = productTypeID;
 		this.price = price;
 		this.quantity = quantity;
 		this.description = description;
@@ -44,12 +49,12 @@ public class Products {
 		this.productName = productName;
 	}
 
-	public String getProductType() {
-		return productType;
+	public ProductType getProductTypeID() {
+		return productTypeID;
 	}
 
-	public void setProductType(String productType) {
-		this.productType = productType;
+	public void setProductTypeID(ProductType productTypeID) {
+		this.productTypeID = productTypeID;
 	}
 
 	public double getPrice() {

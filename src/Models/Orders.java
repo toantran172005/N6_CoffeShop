@@ -4,8 +4,8 @@ import java.time.LocalDate;
 
 public class Orders {
 	private int orderID;
-	private int customerID;
-	private int employeeID;
+	private Customers customerID;
+	private Employees employeeID;
 	private LocalDate orderDate;
 	private double totalPrice;
 	private String state;
@@ -15,7 +15,13 @@ public class Orders {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Orders(int orderID, int customerID, int employeeID, LocalDate orderDate, double totalPrice, String state) {
+	public Orders(int orderID) {
+		super();
+		this.orderID = orderID;
+	}
+
+	public Orders(int orderID, Customers customerID, Employees employeeID, LocalDate orderDate, double totalPrice,
+			String state) {
 		super();
 		this.orderID = orderID;
 		this.customerID = customerID;
@@ -33,19 +39,19 @@ public class Orders {
 		this.orderID = orderID;
 	}
 
-	public int getCustomerID() {
+	public Customers getCustomerID() {
 		return customerID;
 	}
 
-	public void setCustomerID(int customerID) {
+	public void setCustomerID(Customers customerID) {
 		this.customerID = customerID;
 	}
 
-	public int getEmployeeID() {
+	public Employees getEmployeeID() {
 		return employeeID;
 	}
 
-	public void setEmployeeID(int employeeID) {
+	public void setEmployeeID(Employees employeeID) {
 		this.employeeID = employeeID;
 	}
 

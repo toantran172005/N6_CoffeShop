@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 
 import DAO.CustomerDAOIMP;
 import Frames.customerFrame;
+import Frames.employeeFrame;
 import Frames.loginFrame;
 import Frames.registerFrame;
 
@@ -32,16 +33,20 @@ public class loginCtrl implements ActionListener, WindowListener, MouseListener 
 			String email = this.login.txt_email.getText().trim();
 			String pwd = new String(this.login.txt_pwd.getPassword());
 			int checkLogin = cusDAO.loginCustomer(email, pwd);
-			if (checkLogin > 0) {
+			if (checkLogin > 0) { // trả về > 0 => Customer
 				JOptionPane.showMessageDialog(login, "Đăng nhập thành công!");
 				this.login.dispose();
 				new customerFrame(checkLogin);
-			} else if (checkLogin == -1) {
+			} else if (checkLogin == 0) { // trả về = 0 => Employee
+				JOptionPane.showMessageDialog(login, "Đăng nhập thành công!");
+				this.login.dispose();
+				new employeeFrame();
+			} else if (checkLogin == -1) { // trả về -1, sai Email
 				JOptionPane.showMessageDialog(login, "Vui lòng nhập đúng email!", "Sai email",
 						JOptionPane.ERROR_MESSAGE);
 				this.login.txt_email.requestFocusInWindow();
 				this.login.txt_email.selectAll();
-			} else if (checkLogin == -404) {
+			} else if (checkLogin == -404) { // trả về -404 => sai mật khẩu
 				JOptionPane.showMessageDialog(login, "Vui lòng nhập đúng mật khẩu!", "Sai mật khẩu",
 						JOptionPane.ERROR_MESSAGE);
 				this.login.txt_pwd.requestFocusInWindow();
@@ -51,7 +56,6 @@ public class loginCtrl implements ActionListener, WindowListener, MouseListener 
 			this.login.dispose();
 			new registerFrame();
 		}
-
 	}
 
 	@Override

@@ -2,8 +2,8 @@ package Models;
 
 public class OrderDetails {
 	private int orderDetailID;
-	private int orderID;
-	private int productID;
+	private Orders orderID;
+	private Products productID;
 	private int quantity;
 	private double price;
 
@@ -12,7 +12,7 @@ public class OrderDetails {
 		// TODO Auto-generated constructor stub
 	}
 
-	public OrderDetails(int orderDetailID, int orderID, int productID, int quantity, double price) {
+	public OrderDetails(int orderDetailID, Orders orderID, Products productID, int quantity, double price) {
 		super();
 		this.orderDetailID = orderDetailID;
 		this.orderID = orderID;
@@ -29,19 +29,19 @@ public class OrderDetails {
 		this.orderDetailID = orderDetailID;
 	}
 
-	public int getOrderID() {
+	public Orders getOrderID() {
 		return orderID;
 	}
 
-	public void setOrderID(int orderID) {
+	public void setOrderID(Orders orderID) {
 		this.orderID = orderID;
 	}
 
-	public int getProductID() {
+	public Products getProductID() {
 		return productID;
 	}
 
-	public void setProductID(int productID) {
+	public void setProductID(Products productID) {
 		this.productID = productID;
 	}
 

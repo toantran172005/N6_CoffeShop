@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class Payments {
 	private int paymentID;
-	private int orderID;
+	private Orders orderID;
 	private double paymentTotal;
 	private String paymentMethod;
 	private LocalDate paymentDate;
@@ -14,7 +14,7 @@ public class Payments {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Payments(int paymentID, int orderID, double paymentTotal, String paymentMethod, LocalDate paymentDate) {
+	public Payments(int paymentID, Orders orderID, double paymentTotal, String paymentMethod, LocalDate paymentDate) {
 		super();
 		this.paymentID = paymentID;
 		this.orderID = orderID;
@@ -31,11 +31,11 @@ public class Payments {
 		this.paymentID = paymentID;
 	}
 
-	public int getOrderID() {
+	public Orders getOrderID() {
 		return orderID;
 	}
 
-	public void setOrderID(int orderID) {
+	public void setOrderID(Orders orderID) {
 		this.orderID = orderID;
 	}
 
