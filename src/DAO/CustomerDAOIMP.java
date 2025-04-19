@@ -35,7 +35,7 @@ public class CustomerDAOIMP implements CustomerDAO {
 	@Override
 	public ArrayList<Products> getListProductFromDb() {
 		ArrayList<Products> listProduct = new ArrayList<>();
-		String sql = "SELECT ProductID, ProductName, ProductType, Price, Quantity, Description, Size, ProductIMG FROM Products "
+		String sql = "SELECT ProductID, ProductName, ProductTypeID, Price, Quantity, Description, Size, ProductIMG FROM Products "
 				+ "WHERE ProductID % 2 = 0"
 				+ "OR ProductID IN (17,19)";
 		try {
@@ -45,7 +45,7 @@ public class CustomerDAOIMP implements CustomerDAO {
 				Products pro = new Products();
 				pro.setProductID(rs.getInt(1));
 				pro.setProductName(rs.getString(2));
-				pro.setProductType(rs.getString(3));
+				pro.setProductTypeID(rs.getInt(3));
 				pro.setPrice(rs.getBigDecimal(4).doubleValue());
 				pro.setQuantity(rs.getInt(5));
 				pro.setDescription(rs.getString(6));

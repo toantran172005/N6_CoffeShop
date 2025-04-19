@@ -52,7 +52,7 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 			} else if (obj == this.cusframe.btnDrink) {
 				ArrayList<Products> drinks = new ArrayList<>();
 				for (Products p : this.cusframe.listProduct) {
-					if (p.getProductType().equalsIgnoreCase("Đồ uống")) {
+					if (p.getProductTypeID() == 2) {
 						drinks.add(p);
 					}
 				}
@@ -60,7 +60,7 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 			} else if (obj == this.cusframe.btnFood) {
 				ArrayList<Products> foods = new ArrayList<>();
 				for (Products p : this.cusframe.listProduct) {
-					if (p.getProductType().equalsIgnoreCase("Đồ ăn")) {
+					if (p.getProductTypeID() == 1) {
 						foods.add(p);
 					}
 				}
