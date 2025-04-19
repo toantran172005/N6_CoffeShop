@@ -15,6 +15,11 @@ public class Employees {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Employees(int employeeID) {
+		super();
+		this.employeeID = employeeID;
+	}
+
 	public Employees(int employeeID, String employeeName, String phone, String email, String address,
 			LocalDate hiredDate) {
 		super();

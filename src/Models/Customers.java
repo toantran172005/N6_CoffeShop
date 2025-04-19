@@ -17,6 +17,11 @@ public class Customers {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Customers(int customerID) {
+		super();
+		this.customerID = customerID;
+	}
+
 	public Customers(int customerID, String customerName, String password, String phone, String email, String address,
 			LocalDate createDate) {
 		super();

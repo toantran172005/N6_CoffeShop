@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import Database.DatabaseConnection;
+import Models.CartItems;
+import Models.Carts;
 import Models.Customers;
+import Models.ProductType;
 import Models.Products;
 
 public class CustomerDAOIMP implements CustomerDAO {
@@ -34,18 +37,20 @@ public class CustomerDAOIMP implements CustomerDAO {
 
 	@Override
 	public ArrayList<Products> getListProductFromDb() {
+		Statement sta = null;
+		ResultSet rs = null;
 		ArrayList<Products> listProduct = new ArrayList<>();
 		String sql = "SELECT ProductID, ProductName, ProductTypeID, Price, Quantity, Description, Size, ProductIMG FROM Products "
-				+ "WHERE ProductID % 2 = 0"
-				+ "OR ProductID IN (17,19)";
+				+ "WHERE ProductID % 2 = 0" + "OR ProductID IN (17,19)";
 		try {
-			Statement sta = con.createStatement();
-			ResultSet rs = sta.executeQuery(sql);
+			 sta = con.createStatement();
+			 rs = sta.executeQuery(sql);
 			while (rs.next()) {
 				Products pro = new Products();
 				pro.setProductID(rs.getInt(1));
 				pro.setProductName(rs.getString(2));
-				pro.setProductTypeID(rs.getInt(3));
+				ProductType type = new ProductType(rs.getInt(3));
+				pro.setProductTypeID(type);
 				pro.setPrice(rs.getBigDecimal(4).doubleValue());
 				pro.setQuantity(rs.getInt(5));
 				pro.setDescription(rs.getString(6));
@@ -164,7 +169,7 @@ public class CustomerDAOIMP implements CustomerDAO {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public boolean isCustomer(int id) {
 		try {
@@ -174,10 +179,14 @@ public class CustomerDAOIMP implements CustomerDAO {
 			preCus.setInt(1, id);
 			ResultSet rsCus = preCus.executeQuery();
 
-			if (rsCus.next())
+			if (rsCus.next()) {
+				rsCus.close();
 				return true;
-			else
+			}
+			else {
+				rsCus.close();
 				return false;
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -187,20 +196,92 @@ public class CustomerDAOIMP implements CustomerDAO {
 
 	@Override
 	public void addProductToCart(int customerId, Products product, int quantity) {
-		// TODO Auto-generated method stub
+	    PreparedStatement pre = null;
+	    ResultSet rs = null;
 
+	    try {
+
+	        if(customerId == 0) return; // Chưa đăng nhập thì giỏ hàng trống
+	        int cartId = 0;
+	        String getCartQuery = "SELECT CartID FROM Carts WHERE CustomerID = ?";
+	        pre = con.prepareStatement(getCartQuery);
+	        pre.setInt(1, customerId);
+	        rs = pre.executeQuery();
+
+	        if (rs.next()) {
+	            cartId = rs.getInt("CartID");
+	        }
+
+//	         2. Kiểm tra nếu sản phẩm đã có trong CartItem, thì cập nhật số lượng
+	        String checkItemQuery = "SELECT Quantity FROM CartItems WHERE CartID = ? AND ProductID = ?";
+	        pre = con.prepareStatement(checkItemQuery);
+	        pre.setInt(1, cartId);
+	        pre.setInt(2, product.getProductID());
+	        rs = pre.executeQuery();
+
+	        if (rs.next()) {
+//	             Đã tồn tại thì cập nhật số lượng
+	            int existQuantity = rs.getInt("Quantity");
+	            int newQuantity = existQuantity + quantity;
+
+	            String updateQuery = "UPDATE CartItems SET Quantity = ? WHERE CartID = ? AND ProductID = ?";
+	            pre = con.prepareStatement(updateQuery);
+	            pre.setInt(1, newQuantity);
+	            pre.setInt(2, cartId);
+	            pre.setInt(3, product.getProductID());
+	            pre.executeUpdate();
+
+	        } else {
+	            // Chưa có thì insert mới
+	            String insertQuery = "INSERT INTO CartItems (CartID, ProductID, Quantity) VALUES (?, ?, ?)";
+	            pre = con.prepareStatement(insertQuery);
+	            pre.setInt(1, cartId);
+	            pre.setInt(2, product.getProductID());
+	            pre.setInt(3, quantity);
+	            pre.executeUpdate();
+	        }
+	        
+	        pre.close();
+	        rs.close();
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 	}
 
-	@Override
-	public void logoutCustomer(int customerId) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
-	public boolean updateCustomerInfo(Customers customer) {
-		// TODO Auto-generated method stub
-		return false;
+	public int updateCustomerInfo(Customers customer) {
+
+		String[] regex = { "^[\\p{L} ]{2,}$", "^(?!_|\\.)[\\w.+%-]+@[a-zA-Z0-9.-]{2,}(\\.[a-z]{2,})+$", "^[0-9]{10}$",
+				"^[\\p{L}0-9 /.-]{2,}$" };
+		if (!Pattern.matches(regex[0], customer.getCustomerName()))
+			return 1; // sai tên
+		if (!Pattern.matches(regex[1], customer.getEmail()))
+			return 2; // sai email
+		if (!Pattern.matches(regex[2], customer.getPhone()))
+			return 3; // sai phone
+		if (!Pattern.matches(regex[3], customer.getAddress()))
+			return 4; // sai địa chỉ
+
+		try {
+				String update = "UPDATE Customers set CustomerName = ?, Phone = ?, Email = ?, Address = ?"
+						+ "WHERE CustomerID = ?";
+				PreparedStatement pre = con.prepareStatement(update);
+				pre.setString(1, customer.getCustomerName());
+				pre.setString(2, customer.getPhone());
+				pre.setString(3, customer.getEmail());
+				pre.setString(4, customer.getAddress());
+				pre.setInt(5, customer.getCustomerID());
+				pre.executeUpdate();
+				pre.close();
+				return 0;
+			
+		} catch (SQLException e) {
+			return -2; // Lỗi trả về -2
+		}
+
+		
 	}
 
 	@Override
@@ -223,7 +304,7 @@ public class CustomerDAOIMP implements CustomerDAO {
 			PreparedStatement pre = con.prepareStatement(sql);
 			pre.setInt(1, customerID);
 			ResultSet rs = pre.executeQuery();
-			if(rs.next()) {
+			if (rs.next()) {
 				cus.setCustomerID(customerID);
 				cus.setCustomerName(rs.getString(1));
 				cus.setPhone(rs.getString(2));
@@ -234,10 +315,53 @@ public class CustomerDAOIMP implements CustomerDAO {
 				LocalDate date = creatDate.toLocalDate();
 				cus.setCreateDate(date);
 			}
+			pre.close();
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return cus;
+	}
+
+	@Override
+	public ArrayList<CartItems> getCartItemsByCustomerID(int customerID) {
+		ArrayList<CartItems> cartItems = new ArrayList<>();
+		try {
+			int cartId = 0;
+	        String getCartQuery = "SELECT CartID FROM Carts WHERE CustomerID = ?";
+	        PreparedStatement preCart = con.prepareStatement(getCartQuery);
+	        preCart.setInt(1, customerID);
+	        ResultSet rsCart = preCart.executeQuery();
+
+	        if (rsCart.next()) {
+	            cartId = rsCart.getInt("CartID");
+	            preCart.close();
+	            rsCart.close();
+	        }
+	        
+			String sql = "SELECT p.ProductName, p.ProductIMG, p.Price, ci.Quantity "+
+					"FROM dbo.CartItems ci JOIN dbo.Products p ON ci.ProductID = p.ProductID "+
+					"WHERE ci.CartID = ?";
+			PreparedStatement pre = con.prepareStatement(sql);
+			pre.setInt(1, cartId);
+			ResultSet rs = pre.executeQuery();
+			while(rs.next()) {
+				String productName = rs.getString(1);
+				String img = rs.getString(2);
+				double price = rs.getBigDecimal(3).doubleValue();
+				int quantity = rs.getInt(4);
+				Products p = new Products(0, productName, new ProductType(), price, 0, "", "", img);
+				CartItems item = new CartItems(0, new Carts(), p, quantity);
+				cartItems.add(item);
+			}
+			
+			pre.close();
+			rs.close();
+		} catch (SQLException e) {
+			// TODO: handle exception
+		}
+		
+		return cartItems;
 	}
 
 }

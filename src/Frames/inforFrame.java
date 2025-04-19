@@ -141,7 +141,7 @@ public class inforFrame {
 
 		JPanel pnlContent = new JPanel();
 		pnlContent.setLayout(new BoxLayout(pnlContent, BoxLayout.Y_AXIS));
-		pnlContent.setPreferredSize(new Dimension(750, 748));
+		pnlContent.setPreferredSize(new Dimension(750, 650));
 		pnlContent.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.lightGray, 1),
 				BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 

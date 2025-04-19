@@ -2,7 +2,7 @@ package Models;
 
 public class CartItems {
 	private int cartItemID;
-	private int cartID;
+	private Carts cartID;
 	private Products product;
 	private int quantity;
 
@@ -11,7 +11,7 @@ public class CartItems {
 		// TODO Auto-generated constructor stub
 	}
 
-	public CartItems(int cartItemID, int cartID, Products product, int quantity) {
+	public CartItems(int cartItemID, Carts cartID, Products product, int quantity) {
 		super();
 		this.cartItemID = cartItemID;
 		this.cartID = cartID;
@@ -27,11 +27,11 @@ public class CartItems {
 		this.cartItemID = cartItemID;
 	}
 
-	public int getCartID() {
+	public Carts getCartID() {
 		return cartID;
 	}
 
-	public void setCartID(int cartID) {
+	public void setCartID(Carts cartID) {
 		this.cartID = cartID;
 	}
 

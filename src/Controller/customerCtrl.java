@@ -28,7 +28,6 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 		this.cusframe = cusframe;
 		cusDAO = new CustomerDAOIMP();
 	}
-	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -47,29 +46,34 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 				int qty = Integer.parseInt(quantity.getText());
 				if (qty > 1)
 					quantity.setText(String.valueOf(qty - 1));
-			} else if (obj == this.cusframe.btnTatCa) {
+//				Thêm sản phẩm vào giỏ hàng
+			} else if (this.cusframe.mapAddToCart.containsKey(btn)) {
+				int quantity = Integer.valueOf(this.cusframe.mapQuantity.get(btn).getText());
+				Products p = this.cusframe.mapAddToCart.get(btn);
+				this.cusDAO.addProductToCart(this.cusframe.getCustomerID(), p, quantity);
+			} else if (btn == this.cusframe.btnTatCa) {
 				this.cusframe.updateProductPanel(this.cusframe.listProduct); // Hiện tất cả sản phẩm
-			} else if (obj == this.cusframe.btnDrink) {
+			} else if (btn == this.cusframe.btnDrink) {
 				ArrayList<Products> drinks = new ArrayList<>();
 				for (Products p : this.cusframe.listProduct) {
-					if (p.getProductTypeID() == 2) {
+					if (p.getProductTypeID().getProductTypeID() == 2) {
 						drinks.add(p);
 					}
 				}
 				this.cusframe.updateProductPanel(drinks); // Hiện đồ uống
-			} else if (obj == this.cusframe.btnFood) {
+			} else if (btn == this.cusframe.btnFood) {
 				ArrayList<Products> foods = new ArrayList<>();
 				for (Products p : this.cusframe.listProduct) {
-					if (p.getProductTypeID() == 1) {
+					if (p.getProductTypeID().getProductTypeID() == 1) {
 						foods.add(p);
 					}
 				}
 				this.cusframe.updateProductPanel(foods); // Hiện đồ ăn
 			} else if (obj == this.cusframe.btnTimKiem) {
-				String search = this.cusframe.txtTimKiem.getText();
+				String search = this.cusframe.txtTimKiem.getText().trim();
 				if (!search.isBlank()) {
 					ArrayList<Products> listSearch = new ArrayList<>();
-					Pattern pa = Pattern.compile(search, Pattern.CASE_INSENSITIVE);
+					Pattern pa = Pattern.compile(search.trim(), Pattern.CASE_INSENSITIVE);
 
 					for (Products p : this.cusframe.getListProduct()) {
 						Matcher m = pa.matcher(p.getProductName());
@@ -90,24 +94,36 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 		Object obj = e.getSource();
 		if (obj instanceof JLabel) {
 			JLabel label = (JLabel) obj;
-
+//			Label cà phê
 			if (label == this.cusframe.lbCoffee || label == this.cusframe.lbN6) {
 				this.cusframe.updateProductPanel(this.cusframe.getListProduct());
+//				label trang chủ
+			} else if (label == this.cusframe.lblHome) {
+				this.cusframe.updateProductPanel(this.cusframe.getListProduct());
+				this.cusframe.isMenuAppear = !this.cusframe.isMenuAppear;
+				this.cusframe.pnlMenu.setVisible(this.cusframe.isMenuAppear);
+//				label menu
 			} else if (label == this.cusframe.lbMenu) {
 				this.cusframe.isMenuAppear = !this.cusframe.isMenuAppear;
 				this.cusframe.pnlMenu.setVisible(this.cusframe.isMenuAppear);
+//				label thông tin cá nhân
 			} else if (label == this.cusframe.lblInfo) {
 				this.cusframe.changeToInfor();
 				this.cusframe.isMenuAppear = !this.cusframe.isMenuAppear;
 				this.cusframe.pnlMenu.setVisible(this.cusframe.isMenuAppear);
-			} else if(label == this.cusframe.lblLogin) {
+//				label đăng nhâp
+			} else if (label == this.cusframe.lblLogin) {
 				this.cusframe.dispose();
 				new loginFrame();
-			} else if(label == this.cusframe.lblLogout) {
+//				label đăng xuất
+			} else if (label == this.cusframe.lblLogout) {
 				this.cusframe.setCustomerID(0);
 				JOptionPane.showMessageDialog(this.cusframe, "Đăng xuất thành công!");
 				this.cusframe.isMenuAppear = !this.cusframe.isMenuAppear;
 				this.cusframe.pnlMenu.setVisible(this.cusframe.isMenuAppear);
+//				label giỏ hàng
+			} else if(label == this.cusframe.lbCart) {
+				this.cusframe.changToCart();
 			}
 		}
 	}

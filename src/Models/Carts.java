@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Carts {
 	private int cartID;
-	private int customerID;
+	private Customers customerID;
 	private ArrayList<CartItems> listCartItem;
 
 	public Carts() {
@@ -12,7 +12,12 @@ public class Carts {
 		listCartItem = new ArrayList<CartItems>();
 	}
 
-	public Carts(int cartID, int customerID, ArrayList<CartItems> listCartItem) {
+	public Carts(int cartID) {
+		super();
+		this.cartID = cartID;
+	}
+
+	public Carts(int cartID, Customers customerID, ArrayList<CartItems> listCartItem) {
 		super();
 		this.cartID = cartID;
 		this.customerID = customerID;
@@ -27,11 +32,11 @@ public class Carts {
 		this.cartID = cartID;
 	}
 
-	public int getCustomerID() {
+	public Customers getCustomerID() {
 		return customerID;
 	}
 
-	public void setCustomerID(int customerID) {
+	public void setCustomerID(Customers customerID) {
 		this.customerID = customerID;
 	}
 

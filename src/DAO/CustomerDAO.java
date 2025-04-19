@@ -2,6 +2,7 @@ package DAO;
 
 import java.util.ArrayList;
 
+import Models.CartItems;
 import Models.Customers;
 import Models.Products;
 
@@ -14,9 +15,7 @@ public interface CustomerDAO {
 
 	String forgotPassword(String email); // Quên mật khẩu
 
-	void logoutCustomer(int customerId); // Đăng xuất tài khoản
-
-	boolean updateCustomerInfo(Customers customer); // Cập nhật thông tin khách hàng
+	int updateCustomerInfo(Customers customer); // Cập nhật thông tin khách hàng
 
 	boolean deleteCustomer(int customerId); // Xóa tài khoản khách hàng
 
@@ -27,4 +26,6 @@ public interface CustomerDAO {
 	boolean isCustomer(int id); // Kiểm tra có phải customer
 	
 	Customers getCustomer(int customerID); // lấy 1 khách hàng
+	
+	ArrayList<CartItems> getCartItemsByCustomerID(int customerID); // Lấy sản phẩm
 }

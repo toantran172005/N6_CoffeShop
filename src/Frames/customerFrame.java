@@ -52,7 +52,8 @@ public class customerFrame extends JFrame {
 	public Map<JButton, JLabel> mapMinus;
 	public ArrayList<Products> listProduct;
 	public JPanel pnlContent;
-//	Map<JButton, Products> mapAddToCart = new HashMap<>(); // thêm vào giỏ hàng
+	public Map<JButton, Products> mapAddToCart;
+	public Map<JButton, JLabel> mapQuantity;
 	public JScrollPane scrollProduct;
 	public RoundedTextField txtTimKiem;
 	public JPanel pnlMenu;
@@ -61,6 +62,7 @@ public class customerFrame extends JFrame {
 	public JLabel lblLogout;
 	public Component lbN6;
 	public JLabel lblLogin;
+	public JLabel lblHome;
 
 	public customerFrame(int customerID) {
 		super("Nhóm 6 - CoffeeShop");
@@ -69,6 +71,8 @@ public class customerFrame extends JFrame {
 		this.cusCtrl = new customerCtrl(this);
 		this.mapPlus = new HashMap<>();
 		this.mapMinus = new HashMap<>();
+		this.mapAddToCart = new HashMap<>();
+		this.mapQuantity= new HashMap<>();
 		this.listProduct = new ArrayList<>();
 		this.setListProduct(cusDAO.getListProductFromDb());
 		this.addWindowListener(cusCtrl);
@@ -77,7 +81,7 @@ public class customerFrame extends JFrame {
 	}
 
 	public void loadCusInfor() {
-		this.setSize(1200, 900);
+		this.setSize(1200, 800);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -215,8 +219,11 @@ public class customerFrame extends JFrame {
 
 			mapPlus.put(btnPlus, quantity);
 			mapMinus.put(btnMinus, quantity);
+			mapAddToCart.put(btnAddtoCart, p);
+			mapQuantity.put(btnAddtoCart, quantity);
 			btnPlus.addActionListener(cusCtrl);
 			btnMinus.addActionListener(cusCtrl);
+			btnAddtoCart.addActionListener(cusCtrl);
 
 			Box box = Box.createHorizontalBox();
 			box.add(btnMinus);
@@ -342,17 +349,16 @@ public class customerFrame extends JFrame {
 		this.pnlMenu.setPreferredSize(new Dimension(200, getHeight()));
 
 //	     Các mục menu
+		lblHome = new JLabel("Trang chủ");
 		lblInfo = new JLabel("Thông tin cá nhân");
 		lblLogout = new JLabel("Đăng xuất");
 		lblLogin = new JLabel("Đăng nhập");
-		lblInfo.addMouseListener(cusCtrl);
-		lblLogout.addMouseListener(cusCtrl);
-		lblLogin.addMouseListener(cusCtrl);
 
-		for (JLabel label : new JLabel[] { lblInfo, lblLogout, lblLogin }) {
+		for (JLabel label : new JLabel[] { lblHome, lblInfo, lblLogout, lblLogin }) {
 			label.setFont(new Font("Times New Roman", Font.BOLD, 18));
 			label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
 			label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			label.addMouseListener(cusCtrl);
 			this.pnlMenu.add(label);
 		}
 
@@ -363,6 +369,14 @@ public class customerFrame extends JFrame {
 	public void changeToInfor() {
 		inforFrame inf = new inforFrame(this.customerID, this);
 		pnlContent = inf.getInfPanel();
+		scrollProduct.setViewportView(pnlContent);
+		scrollProduct.revalidate();
+		scrollProduct.repaint();
+	}
+	
+	public void changToCart() {
+		cartFrame cart = new cartFrame(this.customerID, this);
+		pnlContent = cart.getCartPanel();
 		scrollProduct.setViewportView(pnlContent);
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
