@@ -9,7 +9,6 @@ import java.awt.Font;
 import java.awt.Image;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Flow;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -31,10 +30,11 @@ public class cartFrame {
 	private customerFrame cusFrame;
 	private CustomerDAOIMP cusDAO;
 	private cartCtrl ctrl;
-	public Map<JCheckBox, Products> mapCheckBox;
-	public Map<JButton, JLabel> mapPlus;
-	public Map<JButton, JLabel> mapMinus;
-	public Map<JLabel, JLabel> mapDelete;
+	public Map<JCheckBox, CartItems> mapCheckBox;
+	public Map<Products, JLabel> mapQuantity;
+	public Map<JButton, CartItems> mapPlus;
+	public Map<JButton, CartItems> mapMinus;
+	public Map<JButton, Products> mapDelete;
 	public JCheckBox checkAll;
 	public JLabel lblTotal;
 	public JButton btnCheckout;
@@ -45,7 +45,11 @@ public class cartFrame {
 		this.cusFrame = cusFrame;
 		this.cusDAO = new CustomerDAOIMP();
 		this.ctrl = new cartCtrl(this, cusFrame);
-		this.mapCheckBox = new HashMap<>(); // Khởi tạo Map
+		this.mapCheckBox = new HashMap<>(); 
+		this.mapQuantity = new HashMap<>();
+		this.mapPlus = new HashMap<>();
+		this.mapMinus = new HashMap<>();
+		this.mapDelete = new HashMap<>();
 	}
 
 	public JPanel getCartPanel() {
@@ -71,9 +75,8 @@ public class cartFrame {
 			JCheckBox checkBox = new JCheckBox();
 			checkBox.setBackground(Color.white);
 			checkBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-//             Ánh xạ JCheckBox với CartItems
-			mapCheckBox.put(checkBox, p);
+			checkBox.addActionListener(ctrl);
+			checkBox.addItemListener(ctrl);
 
 //             Ảnh sản phẩm
 			ImageIcon imgIcon = new ImageIcon(getClass().getResource(p.getProductImg()));
@@ -105,6 +108,9 @@ public class cartFrame {
 			btnDelete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			btnMinus.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			btnPlus.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			btnPlus.addActionListener(ctrl);
+			btnMinus.addActionListener(ctrl);
+			btnDelete.addActionListener(ctrl);
 
 			Box quantityBox = Box.createHorizontalBox();
 			quantityBox.add(btnMinus);
@@ -114,6 +120,15 @@ public class cartFrame {
 			quantityBox.add(btnPlus);
 			quantityBox.add(Box.createHorizontalStrut(10));
 			quantityBox.add(btnDelete);
+			
+//          Ánh xạ JCheckBox với CartItems để tính tiền khi chọn
+			mapCheckBox.put(checkBox, item);
+            mapQuantity.put(p, lblQuantity);
+			
+//			Ánh xạ tăng giảm, xóa sản phẩm
+            mapPlus.put(btnPlus, item);
+            mapMinus.put(btnMinus, item);
+            mapDelete.put(btnDelete, p);
 
 			JPanel itemPanel = new JPanel(new BorderLayout());
 			itemPanel.setBorder(
@@ -141,7 +156,7 @@ public class cartFrame {
 
 //         Footer 
 		JPanel footer = new JPanel(new BorderLayout());
-		footer.setPreferredSize(new Dimension(0, 130));
+		footer.setPreferredSize(new Dimension(0, 100));
 		footer.setBackground(Color.white);
 		footer.setBorder(
 				BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, Color.LIGHT_GRAY),
@@ -152,6 +167,7 @@ public class cartFrame {
 		checkAll.setBackground(Color.white);
 		checkAll.setFont(new Font("Times New Roman", Font.BOLD, 18));
 		checkAll.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		checkAll.addActionListener(ctrl);
 
 //        Label tổng tiền
 		lblTotal = new JLabel("Tổng thanh toán: ₫0");
@@ -177,6 +193,7 @@ public class cartFrame {
 		btnCheckout.setBackground(new Color(255, 77, 77));
 		btnCheckout.setForeground(Color.black);
 		btnCheckout.setBorderPainted(false);
+		btnCheckout.addActionListener(ctrl);
 
 		pnl.setBackground(Color.white);
 		footer.add(pnl, BorderLayout.EAST);

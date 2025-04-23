@@ -31,6 +31,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import Controller.customerCtrl;
 import DAO.CustomerDAOIMP;
+import Models.CartItems;
 import Models.Products;
 
 public class customerFrame extends JFrame {
@@ -181,6 +182,14 @@ public class customerFrame extends JFrame {
 		btnTatCa.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnDrink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnFood.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
+		btnFood.setBackground(new Color(245, 222, 180));
+		btnDrink.setBackground(new Color(178, 235, 242));
+		btnTatCa.setBackground(new Color(255, 192, 203)); 
+		
+		btnDrink.setBorderPainted(false);
+		btnFood.setBorderPainted(false);
+		btnTatCa.setBorderPainted(false);
 		filterPanel.add(btnTatCa);
 		filterPanel.add(btnDrink);
 		filterPanel.add(btnFood);
@@ -377,6 +386,22 @@ public class customerFrame extends JFrame {
 	public void changToCart() {
 		cartFrame cart = new cartFrame(this.customerID, this);
 		pnlContent = cart.getCartPanel();
+		scrollProduct.setViewportView(pnlContent);
+		scrollProduct.revalidate();
+		scrollProduct.repaint();
+	}
+	
+	public void changToOrder(ArrayList<CartItems> list) {
+		orderFrame order = new orderFrame(this, list);
+		pnlContent = order.getOrderPanel();
+		scrollProduct.setViewportView(pnlContent);
+		scrollProduct.revalidate();
+		scrollProduct.repaint();
+	}
+	
+	public void changToQRPay(ArrayList<CartItems> list) {
+		orderFrame order = new orderFrame(this, list);
+		pnlContent = order.getQRPay();
 		scrollProduct.setViewportView(pnlContent);
 		scrollProduct.revalidate();
 		scrollProduct.repaint();

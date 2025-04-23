@@ -1,12 +1,12 @@
 package Models;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 public class Orders {
 	private int orderID;
 	private Customers customerID;
 	private Employees employeeID;
-	private LocalDate orderDate;
+	private Date orderDate;
 	private double totalPrice;
 	private String state;
 
@@ -20,15 +20,11 @@ public class Orders {
 		this.orderID = orderID;
 	}
 
-	public Orders(int orderID, Customers customerID, Employees employeeID, LocalDate orderDate, double totalPrice,
-			String state) {
+	public Orders(Customers customerID, Employees employeeID, double totalPrice) {
 		super();
-		this.orderID = orderID;
 		this.customerID = customerID;
 		this.employeeID = employeeID;
-		this.orderDate = orderDate;
 		this.totalPrice = totalPrice;
-		this.state = state;
 	}
 
 	public int getOrderID() {
@@ -55,11 +51,11 @@ public class Orders {
 		this.employeeID = employeeID;
 	}
 
-	public LocalDate getOrderDate() {
+	public Date getOrderDate() {
 		return orderDate;
 	}
 
-	public void setOrderDate(LocalDate orderDate) {
+	public void setOrderDate(Date orderDate) {
 		this.orderDate = orderDate;
 	}
 
