@@ -14,6 +14,7 @@ import Database.DatabaseConnection;
 import Models.CartItems;
 import Models.Carts;
 import Models.Customers;
+import Models.Orders;
 import Models.ProductType;
 import Models.Products;
 
@@ -43,8 +44,8 @@ public class CustomerDAOIMP implements CustomerDAO {
 		String sql = "SELECT ProductID, ProductName, ProductTypeID, Price, Quantity, Description, Size, ProductIMG FROM Products "
 				+ "WHERE ProductID % 2 = 0" + "OR ProductID IN (17,19)";
 		try {
-			 sta = con.createStatement();
-			 rs = sta.executeQuery(sql);
+			sta = con.createStatement();
+			rs = sta.executeQuery(sql);
 			while (rs.next()) {
 				Products pro = new Products();
 				pro.setProductID(rs.getInt(1));
@@ -182,8 +183,7 @@ public class CustomerDAOIMP implements CustomerDAO {
 			if (rsCus.next()) {
 				rsCus.close();
 				return true;
-			}
-			else {
+			} else {
 				rsCus.close();
 				return false;
 			}
@@ -196,59 +196,59 @@ public class CustomerDAOIMP implements CustomerDAO {
 
 	@Override
 	public void addProductToCart(int customerId, Products product, int quantity) {
-	    PreparedStatement pre = null;
-	    ResultSet rs = null;
+		PreparedStatement pre = null;
+		ResultSet rs = null;
 
-	    try {
+		try {
 
-	        if(customerId == 0) return; // Chưa đăng nhập thì giỏ hàng trống
-	        int cartId = 0;
-	        String getCartQuery = "SELECT CartID FROM Carts WHERE CustomerID = ?";
-	        pre = con.prepareStatement(getCartQuery);
-	        pre.setInt(1, customerId);
-	        rs = pre.executeQuery();
+			if (customerId == 0)
+				return; // Chưa đăng nhập thì giỏ hàng trống
+			int cartId = 0;
+			String getCartQuery = "SELECT CartID FROM Carts WHERE CustomerID = ?";
+			pre = con.prepareStatement(getCartQuery);
+			pre.setInt(1, customerId);
+			rs = pre.executeQuery();
 
-	        if (rs.next()) {
-	            cartId = rs.getInt("CartID");
-	        }
+			if (rs.next()) {
+				cartId = rs.getInt("CartID");
+			}
 
 //	         2. Kiểm tra nếu sản phẩm đã có trong CartItem, thì cập nhật số lượng
-	        String checkItemQuery = "SELECT Quantity FROM CartItems WHERE CartID = ? AND ProductID = ?";
-	        pre = con.prepareStatement(checkItemQuery);
-	        pre.setInt(1, cartId);
-	        pre.setInt(2, product.getProductID());
-	        rs = pre.executeQuery();
+			String checkItemQuery = "SELECT Quantity FROM CartItems WHERE CartID = ? AND ProductID = ?";
+			pre = con.prepareStatement(checkItemQuery);
+			pre.setInt(1, cartId);
+			pre.setInt(2, product.getProductID());
+			rs = pre.executeQuery();
 
-	        if (rs.next()) {
+			if (rs.next()) {
 //	             Đã tồn tại thì cập nhật số lượng
-	            int existQuantity = rs.getInt("Quantity");
-	            int newQuantity = existQuantity + quantity;
+				int existQuantity = rs.getInt("Quantity");
+				int newQuantity = existQuantity + quantity;
 
-	            String updateQuery = "UPDATE CartItems SET Quantity = ? WHERE CartID = ? AND ProductID = ?";
-	            pre = con.prepareStatement(updateQuery);
-	            pre.setInt(1, newQuantity);
-	            pre.setInt(2, cartId);
-	            pre.setInt(3, product.getProductID());
-	            pre.executeUpdate();
+				String updateQuery = "UPDATE CartItems SET Quantity = ? WHERE CartID = ? AND ProductID = ?";
+				pre = con.prepareStatement(updateQuery);
+				pre.setInt(1, newQuantity);
+				pre.setInt(2, cartId);
+				pre.setInt(3, product.getProductID());
+				pre.executeUpdate();
 
-	        } else {
-	            // Chưa có thì insert mới
-	            String insertQuery = "INSERT INTO CartItems (CartID, ProductID, Quantity) VALUES (?, ?, ?)";
-	            pre = con.prepareStatement(insertQuery);
-	            pre.setInt(1, cartId);
-	            pre.setInt(2, product.getProductID());
-	            pre.setInt(3, quantity);
-	            pre.executeUpdate();
-	        }
-	        
-	        pre.close();
-	        rs.close();
+			} else {
+				// Chưa có thì insert mới
+				String insertQuery = "INSERT INTO CartItems (CartID, ProductID, Quantity) VALUES (?, ?, ?)";
+				pre = con.prepareStatement(insertQuery);
+				pre.setInt(1, cartId);
+				pre.setInt(2, product.getProductID());
+				pre.setInt(3, quantity);
+				pre.executeUpdate();
+			}
 
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+			pre.close();
+			rs.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
-
 
 	@Override
 	public int updateCustomerInfo(Customers customer) {
@@ -265,35 +265,22 @@ public class CustomerDAOIMP implements CustomerDAO {
 			return 4; // sai địa chỉ
 
 		try {
-				String update = "UPDATE Customers set CustomerName = ?, Phone = ?, Email = ?, Address = ?"
-						+ "WHERE CustomerID = ?";
-				PreparedStatement pre = con.prepareStatement(update);
-				pre.setString(1, customer.getCustomerName());
-				pre.setString(2, customer.getPhone());
-				pre.setString(3, customer.getEmail());
-				pre.setString(4, customer.getAddress());
-				pre.setInt(5, customer.getCustomerID());
-				pre.executeUpdate();
-				pre.close();
-				return 0;
-			
+			String update = "UPDATE Customers set CustomerName = ?, Phone = ?, Email = ?, Address = ?"
+					+ "WHERE CustomerID = ?";
+			PreparedStatement pre = con.prepareStatement(update);
+			pre.setString(1, customer.getCustomerName());
+			pre.setString(2, customer.getPhone());
+			pre.setString(3, customer.getEmail());
+			pre.setString(4, customer.getAddress());
+			pre.setInt(5, customer.getCustomerID());
+			pre.executeUpdate();
+			pre.close();
+			return 0;
+
 		} catch (SQLException e) {
 			return -2; // Lỗi trả về -2
 		}
 
-		
-	}
-
-	@Override
-	public boolean deleteCustomer(int customerId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean payOrder(int customerId) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
@@ -328,40 +315,192 @@ public class CustomerDAOIMP implements CustomerDAO {
 		ArrayList<CartItems> cartItems = new ArrayList<>();
 		try {
 			int cartId = 0;
-	        String getCartQuery = "SELECT CartID FROM Carts WHERE CustomerID = ?";
-	        PreparedStatement preCart = con.prepareStatement(getCartQuery);
-	        preCart.setInt(1, customerID);
-	        ResultSet rsCart = preCart.executeQuery();
+			String getCartQuery = "SELECT CartID FROM Carts WHERE CustomerID = ?";
+			PreparedStatement preCart = con.prepareStatement(getCartQuery);
+			preCart.setInt(1, customerID);
+			ResultSet rsCart = preCart.executeQuery();
 
-	        if (rsCart.next()) {
-	            cartId = rsCart.getInt("CartID");
-	            preCart.close();
-	            rsCart.close();
-	        }
-	        
-			String sql = "SELECT p.ProductName, p.ProductIMG, p.Price, ci.Quantity "+
-					"FROM dbo.CartItems ci JOIN dbo.Products p ON ci.ProductID = p.ProductID "+
-					"WHERE ci.CartID = ?";
+			if (rsCart.next()) {
+				cartId = rsCart.getInt("CartID");
+				preCart.close();
+				rsCart.close();
+			}
+
+			String sql = "SELECT p.ProductID, p.ProductName, p.ProductIMG, p.Price, ci.Quantity "
+					+ "FROM dbo.CartItems ci JOIN dbo.Products p ON ci.ProductID = p.ProductID "
+					+ "WHERE ci.CartID = ?";
 			PreparedStatement pre = con.prepareStatement(sql);
 			pre.setInt(1, cartId);
 			ResultSet rs = pre.executeQuery();
-			while(rs.next()) {
-				String productName = rs.getString(1);
-				String img = rs.getString(2);
-				double price = rs.getBigDecimal(3).doubleValue();
-				int quantity = rs.getInt(4);
-				Products p = new Products(0, productName, new ProductType(), price, 0, "", "", img);
+			while (rs.next()) {
+				int productID = rs.getInt(1);
+				String productName = rs.getString(2);
+				String img = rs.getString(3);
+				double price = rs.getBigDecimal(4).doubleValue();
+				int quantity = rs.getInt(5);
+				Products p = new Products(productID, productName, new ProductType(), price, 0, "", "", img);
 				CartItems item = new CartItems(0, new Carts(), p, quantity);
 				cartItems.add(item);
 			}
-			
+
 			pre.close();
 			rs.close();
 		} catch (SQLException e) {
 			// TODO: handle exception
 		}
-		
+
 		return cartItems;
 	}
 
+	@Override
+	public void updateCartItem(int customerID, Products product, int quantity) {
+		PreparedStatement preCart = null;
+		ResultSet rsCart = null;
+		PreparedStatement preUpdate = null;
+
+		try {
+			int cartId = 0;
+			String getCartQuery = "SELECT CartID FROM Carts WHERE CustomerID = ?";
+			preCart = con.prepareStatement(getCartQuery);
+			preCart.setInt(1, customerID);
+			rsCart = preCart.executeQuery();
+
+			if (rsCart.next()) {
+				cartId = rsCart.getInt("CartID");
+				preCart.close();
+				rsCart.close();
+			}
+
+			String updateQuery = "UPDATE CartItems SET Quantity = ? WHERE CartID = ? AND ProductID = ?";
+			preUpdate = con.prepareStatement(updateQuery);
+			preUpdate.setInt(1, quantity);
+			preUpdate.setInt(2, cartId);
+			preUpdate.setInt(3, product.getProductID());
+
+			preUpdate.executeUpdate();
+
+			preCart.close();
+			rsCart.close();
+			preUpdate.close();
+
+		} catch (SQLException e) {
+
+		}
+	}
+
+	@Override
+	public void deleteCartItem(int customerID, Products product) {
+		PreparedStatement preCart = null;
+		PreparedStatement preUpdate = null;
+		ResultSet rsCart = null;
+
+		try {
+			int cartId = 0;
+			String getCartQuery = "SELECT CartID FROM Carts WHERE CustomerID = ?";
+			preCart = con.prepareStatement(getCartQuery);
+			preCart.setInt(1, customerID);
+			rsCart = preCart.executeQuery();
+
+			if (rsCart.next()) {
+				cartId = rsCart.getInt("CartID");
+				preCart.close();
+				rsCart.close();
+			}
+
+			String deleteQuery = " DELETE FROM CartItems WHERE CartID = ? AND ProductID = ?";
+			preUpdate = con.prepareStatement(deleteQuery);
+			preUpdate.setInt(1, cartId);
+			preUpdate.setInt(2, product.getProductID());
+
+			preUpdate.executeUpdate();
+
+			preCart.close();
+			rsCart.close();
+			preUpdate.close();
+		} catch (SQLException e) {
+			// TODO: handle exception
+		}
+
+	}
+
+	@Override
+	public void createOrder(Orders order, ArrayList<CartItems> list) {
+		PreparedStatement pre = null;
+		PreparedStatement preDetail = null;
+		ResultSet getKey = null;
+		try {
+//			Tạo order
+			String createOrder = "INSERT INTO Orders(CustomerID, TotalPrice) " + "VALUES (?,?)";
+			pre = con.prepareStatement(createOrder, Statement.RETURN_GENERATED_KEYS);
+			pre.setInt(1, order.getCustomerID().getCustomerID());
+			pre.setDouble(2, order.getTotalPrice());
+
+			pre.executeUpdate();
+
+			getKey = pre.getGeneratedKeys();
+
+			int orderId = -1;
+			if (getKey.next()) {
+			    orderId = getKey.getInt(1);
+			}
+
+			pre.close();
+
+//			Tạo orderDetail
+			String createOrderDetail = "INSERT INTO OrderDetails(OrderID, ProductID, Quantity, Price) VALUES (?,?,?,?)";
+			preDetail = con.prepareStatement(createOrderDetail);
+
+			for (CartItems item : list) {
+				preDetail.setInt(1, orderId);
+				preDetail.setInt(2, item.getProduct().getProductID());
+				preDetail.setInt(3, item.getQuantity());
+				preDetail.setDouble(4, item.getProduct().getPrice());
+				preDetail.addBatch();
+			}
+
+			preDetail.executeBatch();
+			preDetail.close();
+
+		} catch (SQLException e) {
+			// TODO: handle exception
+		}
+
+	}
+
+	@Override
+	public void clearCart(int customerID, ArrayList<CartItems> list) {
+		PreparedStatement preCart = null;
+		PreparedStatement preDelete = null;
+		ResultSet rsCart = null;
+
+		try {
+
+			int cartId = 0;
+			String getCartQuery = "SELECT CartID FROM Carts WHERE CustomerID = ?";
+			preCart = con.prepareStatement(getCartQuery);
+			preCart.setInt(1, customerID);
+			rsCart = preCart.executeQuery();
+
+			if (rsCart.next()) {
+				cartId = rsCart.getInt("CartID");
+				preCart.close();
+				rsCart.close();
+			}
+
+			String deleteQuery = "DELETE FROM CartItems WHERE CartID = ? AND ProductID = ?";
+			preDelete = con.prepareStatement(deleteQuery);
+
+			for (CartItems item : list) {
+				preDelete.setInt(1, cartId);
+				preDelete.setInt(2, item.getProduct().getProductID());
+				preDelete.addBatch();
+			}
+			preDelete.executeBatch();
+			preDelete.close();
+
+		} catch (SQLException e) {
+			// TODO: handle exception
+		}
+
+	}
 }
