@@ -15,19 +15,29 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import Controller.employeeCtrl;
 import DAO.EmployeeDAOIMP;
@@ -41,7 +51,6 @@ public class employeeFrame extends JFrame {
 	public JLabel lbCoffee;
 	public JButton btnTimKiem;
 	public JLabel lbMenu;
-	public JLabel lbCart;
 	public JButton btnTatCa;
 	public JButton btnDrink;
 	public JButton btnFood;
@@ -70,7 +79,7 @@ public class employeeFrame extends JFrame {
 		this.mapProduct=new HashMap<JButton, Products>();
 		this.setListProduct(empDAO.getListProductFromDb());
 		this.addWindowListener(EmpCtrl);
-
+		KeyboardShortcuts();
 		this.loadEmpInfor();
 	}
 
@@ -124,25 +133,17 @@ public class employeeFrame extends JFrame {
 		Image menuImg = menuIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 		lbMenu = new JLabel(new ImageIcon(menuImg));
 		lbMenu.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-//		Giỏ hàng
-		ImageIcon carrIcon = new ImageIcon(getClass().getResource("/Img/cart.png"));
-		Image cartImg = carrIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-		lbCart = new JLabel(new ImageIcon(cartImg));
-		lbCart.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		Box bEast = Box.createHorizontalBox();
 		bEast.add(txtTimKiem);
 		bEast.add(Box.createHorizontalStrut(10));
 		bEast.add(btnTimKiem);
 		bEast.add(Box.createHorizontalStrut(10));
-		bEast.add(lbCart);
-		bEast.add(Box.createHorizontalStrut(10));
 		bEast.add(lbMenu);
 
 		lbCoffee.addMouseListener(EmpCtrl);
 		lbN6.addMouseListener(EmpCtrl);
 		btnTimKiem.addActionListener(EmpCtrl);
-		lbCart.addMouseListener(EmpCtrl);
 		lbMenu.addMouseListener(EmpCtrl);
 
 		JPanel pnlNavBar = new JPanel(new BorderLayout());
@@ -363,6 +364,83 @@ public class employeeFrame extends JFrame {
 	    scrollProduct.setViewportView(pnlContent);
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
+	}
+	
+	public void KeyboardShortcuts() {
+		InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		ActionMap actionMap = getRootPane().getActionMap();
+
+//	     Ctrl + Shift + H: quay về trang chủ
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"home");
+		actionMap.put("home", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lbCoffee.dispatchEvent(new MouseEvent(lbCoffee, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
+						0, 0, 1, false));
+			}
+		});
+
+//	     Ctrl + F: focus vào ô tìm kiếm
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK), "focusSearch");
+		actionMap.put("focusSearch", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				txtTimKiem.requestFocusInWindow();
+			}
+		});
+
+//	     Ctrl + Shift + M: mở menu
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"menu");
+		actionMap.put("menu", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lbMenu.dispatchEvent(new MouseEvent(lbMenu, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0, 0,
+						0, 1, false));
+			}
+		});
+
+//	 	Ctrl+Shift+I mở thông tin cá nhân
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"infoShortcut");
+		actionMap.put("infoShortcut", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lblInfo.dispatchEvent(new MouseEvent(lblInfo, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
+						0, 0, 1, false));
+			}
+		});
+
+
+//		Button
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"filterAll");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"filterDrink");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"filterFood");
+//		Hiển thị tất cả sản phẩm : Ctrl + Shift + A
+		actionMap.put("filterAll", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnTatCa.doClick(); 
+			}
+		});
+//		Hiển thị đồ uống : Ctrl + Shift + D
+		actionMap.put("filterDrink", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnDrink.doClick(); 
+			}
+		});
+//		Hiển thị đồ ăn : Ctrl + Shift + F
+		actionMap.put("filterFood", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnFood.doClick(); 
+			}
+		});
 	}
 
 

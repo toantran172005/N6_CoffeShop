@@ -15,19 +15,29 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import Controller.customerCtrl;
 import DAO.CustomerDAOIMP;
@@ -73,12 +83,100 @@ public class customerFrame extends JFrame {
 		this.mapPlus = new HashMap<>();
 		this.mapMinus = new HashMap<>();
 		this.mapAddToCart = new HashMap<>();
-		this.mapQuantity= new HashMap<>();
+		this.mapQuantity = new HashMap<>();
 		this.listProduct = new ArrayList<>();
 		this.setListProduct(cusDAO.getListProductFromDb());
 		this.addWindowListener(cusCtrl);
 
+		KeyboardShortcuts();
 		this.loadCusInfor();
+	}
+
+	public void KeyboardShortcuts() {
+		InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		ActionMap actionMap = getRootPane().getActionMap();
+
+//	     Ctrl + Shift + H: quay về trang chủ
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"home");
+		actionMap.put("home", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lbCoffee.dispatchEvent(new MouseEvent(lbCoffee, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
+						0, 0, 1, false));
+			}
+		});
+
+//	     Ctrl + F: focus vào ô tìm kiếm
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK), "focusSearch");
+		actionMap.put("focusSearch", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				txtTimKiem.requestFocusInWindow();
+			}
+		});
+
+//	     Ctrl + Shift + M: mở menu
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"menu");
+		actionMap.put("menu", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lbMenu.dispatchEvent(new MouseEvent(lbMenu, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0, 0,
+						0, 1, false));
+			}
+		});
+
+//	 	Ctrl+Shift+I mở thông tin cá nhân
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"infoShortcut");
+		actionMap.put("infoShortcut", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lblInfo.dispatchEvent(new MouseEvent(lblInfo, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
+						0, 0, 1, false));
+			}
+		});
+
+//		Ctrl+Shift+C mở giỏ hàng
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"cart");
+		actionMap.put("cart", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lbCart.dispatchEvent(new MouseEvent(lbCart, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0, 0,
+						0, 1, false));
+			}
+		});
+
+//		Button
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"filterAll");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"filterDrink");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"filterFood");
+//		Hiển thị tất cả sản phẩm : Ctrl + Shift + A
+		actionMap.put("filterAll", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnTatCa.doClick(); 
+			}
+		});
+//		Hiển thị đồ uống : Ctrl + Shift + D
+		actionMap.put("filterDrink", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnDrink.doClick(); 
+			}
+		});
+//		Hiển thị đồ ăn : Ctrl + Shift + F
+		actionMap.put("filterFood", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnFood.doClick(); 
+			}
+		});
 	}
 
 	public void loadCusInfor() {
@@ -101,6 +199,7 @@ public class customerFrame extends JFrame {
 
 		this.add(pnlEmpty, BorderLayout.CENTER);
 		this.setVisible(true);
+		this.requestFocusInWindow();
 
 	}
 
@@ -182,11 +281,11 @@ public class customerFrame extends JFrame {
 		btnTatCa.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnDrink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnFood.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		
+
 		btnFood.setBackground(new Color(245, 222, 180));
 		btnDrink.setBackground(new Color(178, 235, 242));
-		btnTatCa.setBackground(new Color(255, 192, 203)); 
-		
+		btnTatCa.setBackground(new Color(255, 192, 203));
+
 		btnDrink.setBorderPainted(false);
 		btnFood.setBorderPainted(false);
 		btnTatCa.setBorderPainted(false);
@@ -382,7 +481,7 @@ public class customerFrame extends JFrame {
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
 	}
-	
+
 	public void changToCart() {
 		cartFrame cart = new cartFrame(this.customerID, this);
 		pnlContent = cart.getCartPanel();
@@ -390,7 +489,7 @@ public class customerFrame extends JFrame {
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
 	}
-	
+
 	public void changToOrder(ArrayList<CartItems> list) {
 		orderFrame order = new orderFrame(this, list);
 		pnlContent = order.getOrderPanel();
@@ -398,7 +497,7 @@ public class customerFrame extends JFrame {
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
 	}
-	
+
 	public void changToQRPay(ArrayList<CartItems> list) {
 		orderFrame order = new orderFrame(this, list);
 		pnlContent = order.getQRPay();
@@ -406,7 +505,6 @@ public class customerFrame extends JFrame {
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
 	}
-
 
 	public ArrayList<Products> getListProduct() {
 		return listProduct;
