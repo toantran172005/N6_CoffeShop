@@ -67,52 +67,46 @@ public class productDetailFrame extends JFrame {
 		pnlMain.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
 		pnlMain.setForeground(Color.WHITE);
 
-		// NOUTH: Tiêu đề
+//		 NOUTH: Tiêu đề
 		pnlTitle = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		lblEdit = new JLabel("Chỉnh sửa sản phẩm");
 		lblEdit.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		pnlTitle.add(lblEdit);
 		pnlMain.add(pnlTitle, BorderLayout.NORTH);
 
-		// LEFT PANEL: Ảnh + Form chỉnh sửa
+//		 LEFT PANEL: Ảnh + Form chỉnh sửa
 		JPanel leftPanel = new JPanel();
 		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
-		// Card vuông hiển thị ảnh và tên
+//		 Card vuông hiển thị ảnh và tên
 		JPanel squareCard = new JPanel();
 		squareCard.setLayout(new BoxLayout(squareCard, BoxLayout.Y_AXIS));
 		squareCard.setPreferredSize(new Dimension(350, 240));
 		squareCard.setBorder(BorderFactory.createLineBorder(Color.GRAY, 5, true));
 
-		// Ảnh
+//		 Ảnh
 		ImageIcon imgIcon = new ImageIcon(getClass().getResource(product.getProductImg()));
-		Image img = imgIcon.getImage().getScaledInstance(350, 200, Image.SCALE_SMOOTH);
+		Image img = imgIcon.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
 		JLabel imgLabel = new JLabel(new ImageIcon(img));
 		imgLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Canh giữa ảnh
 
-		// Tên sản phẩm
+//		 Tên sản phẩm
 		lblname = new JLabel(product.getProductName());
 		lblname.setFont(new Font("Times New Roman", Font.BOLD, 22));
 		lblname.setAlignmentX(Component.CENTER_ALIGNMENT); // Canh giữa chữ
 		lblname.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0)); // Cách ảnh 5px
 
-		// Thêm vào card
+//		 Thêm vào card
 		squareCard.add(imgLabel);
 		squareCard.add(lblname);
-		// Form chỉnh sửa (dùng Box layout)
 		Box formBox = Box.createVerticalBox();
-		// Ở đây bạn có thể thêm các hàng như:
 		formBox.add(Box.createVerticalStrut(20));
-		// formBox.add(Box.createHorizontalBox()); // Mỗi dòng chỉnh sửa
-		// ...
-
-		// Gộp ảnh và form lại vào leftPanel
 		leftPanel.add(Box.createVerticalStrut(10));
 		leftPanel.add(squareCard);
 		leftPanel.add(Box.createVerticalStrut(20));
 		leftPanel.add(formBox);
 
-		// RIGHT PANEL: Để trống hoặc thêm sau
+//		 RIGHT PANEL: Để trống hoặc thêm sau
 		JPanel rightPanel = new JPanel();
 		Font fo =new Font("Arial", Font.BOLD, 17);
 		Box nameBox = Box.createHorizontalBox();
@@ -126,7 +120,7 @@ public class productDetailFrame extends JFrame {
 		formBox.add(nameBox);
 		formBox.add(Box.createVerticalStrut(10));
 
-		// Giá
+//		 Giá
 		Box priceBox = Box.createHorizontalBox();
 		JLabel lblpPrice;
 		priceBox.add(lblpPrice=new JLabel("Giá (VNĐ): "));
@@ -138,7 +132,7 @@ public class productDetailFrame extends JFrame {
 		formBox.add(priceBox);
 		formBox.add(Box.createVerticalStrut(10));
 
-		// Mô tả
+//		 Mô tả
 		Box descBox = Box.createHorizontalBox();
 		JLabel lblpDep;
 		descBox.add(lblpDep=new JLabel("Mô tả: "));
@@ -150,7 +144,7 @@ public class productDetailFrame extends JFrame {
 		formBox.add(descBox);
 		formBox.add(Box.createVerticalStrut(10));
 
-		// Size (ComboBox)
+//		 Size (ComboBox)
 		Box sizeBox = Box.createHorizontalBox();
 		JLabel lblpSize;
 		sizeBox.add(lblpSize=new JLabel("Size: "));
@@ -164,7 +158,7 @@ public class productDetailFrame extends JFrame {
 		formBox.add(sizeBox);
 		formBox.add(Box.createVerticalStrut(10));
 
-		// Số lượng tồn
+//		 Số lượng tồn
 		Box quantityBox = Box.createHorizontalBox();
 		JLabel lblpQuan;
 		quantityBox.add(lblpQuan=new JLabel("Số lượng tồn: "));
@@ -175,15 +169,20 @@ public class productDetailFrame extends JFrame {
 		quantityBox.add(txtQuantity);
 		formBox.add(quantityBox);
 		formBox.add(Box.createVerticalStrut(20));
+		
+		lblpPrice.setPreferredSize(lblpName.getPreferredSize());
+		lblpDep.setPreferredSize(lblpName.getPreferredSize());
+		lblpSize.setPreferredSize(lblpName.getPreferredSize());
+		lblpQuan.setPreferredSize(lblpName.getPreferredSize());
 
-		// Nút Sửa
+//		 Nút Sửa
 		btnEdit = new JButton("Sửa");
 		btnEdit.setFont(fo);
 		btnEdit.addActionListener(proCtrl);
 		
 		formBox.add(btnEdit);
 
-		// Nút Lưu
+//		 Nút Lưu
 		btnSave = new JButton("Lưu");
 		btnSave.setFont(fo);
 		btnSave.setEnabled(false); // Ban đầu không cho phép lưu
@@ -191,7 +190,7 @@ public class productDetailFrame extends JFrame {
 		formBox.add(btnSave);
 		formBox.add(Box.createVerticalStrut(10));
 		rightPanel.add(formBox);
-		// SPLIT PANE chia trái-phải
+//		 SPLIT PANE chia trái-phải
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
 		splitPane.setDividerLocation(400); // Khoảng cách giữa hai phần
 		splitPane.setEnabled(false);
@@ -199,7 +198,7 @@ public class productDetailFrame extends JFrame {
 
 		pnlMain.add(splitPane, BorderLayout.CENTER);
 			
-		// Tạo footerPanel
+//		 Tạo footerPanel
 		JPanel footerPanel = new JPanel(new GridLayout(1, 3, 0, 0));
 		footerPanel.setPreferredSize(new Dimension(0, 120));
 
@@ -210,7 +209,7 @@ public class productDetailFrame extends JFrame {
 		Color backgroundColor = Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
 		footerPanel.setBackground(backgroundColor);
 
-		// Thông tin cửa hàng
+//		 Thông tin cửa hàng
 		JPanel infoSection = new JPanel(new BorderLayout());
 		infoSection.setBackground(backgroundColor);
 		JLabel infoTitle = new JLabel("Nhóm 6 - Coffee Shop", SwingConstants.CENTER);
@@ -223,7 +222,7 @@ public class productDetailFrame extends JFrame {
 		infoSection.add(infoContent, BorderLayout.CENTER);
 		footerPanel.add(infoSection);
 
-		// Liên hệ
+//		 Liên hệ
 		JPanel contactSection = new JPanel(new BorderLayout());
 		contactSection.setBackground(backgroundColor);
 		JLabel contactTitle = new JLabel("Liên Hệ", SwingConstants.CENTER);
@@ -236,7 +235,7 @@ public class productDetailFrame extends JFrame {
 		contactSection.add(contactContent, BorderLayout.CENTER);
 		footerPanel.add(contactSection);
 
-		// Thành viên
+//		 Thành viên
 		JPanel memberSection = new JPanel(new BorderLayout());
 		memberSection.setBackground(backgroundColor);
 		JLabel memberTitle = new JLabel("Thành Viên", SwingConstants.CENTER);
@@ -247,7 +246,7 @@ public class productDetailFrame extends JFrame {
 		memberSection.add(memberContent, BorderLayout.CENTER);
 		footerPanel.add(memberSection);
 
-		// Thêm footer vào dưới cùng
+//		 Thêm footer vào dưới cùng
 		pnlMain.add(footerPanel, BorderLayout.SOUTH);
 
 		
