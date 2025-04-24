@@ -40,7 +40,7 @@ public class loginCtrl implements ActionListener, WindowListener, MouseListener 
 			} else if (checkLogin == 0) { // trả về = 0 => Employee
 				JOptionPane.showMessageDialog(login, "Đăng nhập thành công!");
 				this.login.dispose();
-				new employeeFrame();
+				new employeeFrame(Integer.valueOf(pwd));
 			} else if (checkLogin == -1) { // trả về -1, sai Email
 				JOptionPane.showMessageDialog(login, "Vui lòng nhập đúng email!", "Sai email",
 						JOptionPane.ERROR_MESSAGE);

@@ -2,8 +2,6 @@ package Controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.regex.Pattern;
-
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
@@ -38,6 +36,7 @@ public class inforCtrl implements ActionListener {
 				Customers cus = new Customers(this.cusFrame.getCustomerID(), this.infor.txtName.getText().trim(), "",
 						this.infor.txtPhone.getText().trim(), this.infor.txtEmail.getText().trim(),
 						this.infor.txtAdd.getText().trim(), null);
+				this.infor.btnSave.setEnabled(false);
 
 				if (this.cusDAO.updateCustomerInfo(cus) == 0) {
 					JOptionPane.showMessageDialog(this.cusFrame, "Cập nhập thành công!");
@@ -72,7 +71,7 @@ public class inforCtrl implements ActionListener {
 		this.infor.txtName.setEditable(true);
 		this.infor.txtPhone.setEditable(true);
 		this.infor.txtEmail.setEditable(true);
-
+		this.infor.btnSave.setEnabled(true);
 	}
 
 }
