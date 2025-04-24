@@ -38,10 +38,10 @@ public class orderCtrl implements ActionListener {
 				this.cusFrame.changToCart();
 			} else if (btn == this.ordFrame.btnTransfer) {
 				this.cusFrame.changToQRPay(this.ordFrame.getList());
-				this.createOrderForCus();
+				this.createOrderForCus("Chuyển Khoản");
 			} else if( btn == this.ordFrame.btnCash) {
 				JOptionPane.showMessageDialog(this.cusFrame, "Hóa đơn đã được in, vui lòng kiểm tra trước khi thanh toán");
-				this.createOrderForCus();
+				this.createOrderForCus("Tiền mặt");
 				this.cusFrame.changToCart();
 			}
 
@@ -49,14 +49,14 @@ public class orderCtrl implements ActionListener {
 
 	}
 
-	public void createOrderForCus() {
+	public void createOrderForCus(String methodPayment) {
 		Customers cus = new Customers(this.cusFrame.getCustomerID());
 		Employees emp = new Employees(0);
 		double totalPrice = this.ordFrame.orderTotal;
 
 		Orders order = new Orders(cus, emp, totalPrice);
 		
-		this.cusDAO.createOrder(order, this.ordFrame.getList());
+		this.cusDAO.createOrder(order, this.ordFrame.getList(), methodPayment);
 		this.cusDAO.clearCart(this.cusFrame.getCustomerID(), this.ordFrame.getList());
 		
 	}
