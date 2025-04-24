@@ -26,7 +26,7 @@ public class proDetailCtrl implements ActionListener{
 		if (o instanceof JButton) {
 			JButton btn = (JButton) o;
 			if (btn == this.proFrame.btnEdit) {
-	        // Kích hoạt các field khi nhấn "Sửa"
+//	         Kích hoạt các field khi nhấn "Sửa"
 				
 	        this.proFrame.txtName.setEnabled(true);
 	        this.proFrame.txtPrice.setEnabled(true);
@@ -34,7 +34,7 @@ public class proDetailCtrl implements ActionListener{
 	        this.proFrame.cmbSize.setEnabled(true);
 	        this.proFrame.txtQuantity.setEnabled(true);
 
-	        // Kích hoạt nút Lưu và tắt nút Sửa
+//	         Kích hoạt nút Lưu và tắt nút Sửa
 	        this.proFrame.btnSave.setEnabled(true);
 	        this.proFrame.btnEdit.setEnabled(false);
 			}
@@ -54,7 +54,7 @@ public class proDetailCtrl implements ActionListener{
 	    	                proFrame.cmbSize.setEnabled(false);
 	    	                proFrame.txtQuantity.setEnabled(false);
 
-	                // Tắt nút Lưu, kích hoạt nút Sửa lại
+//	                 Tắt nút Lưu, kích hoạt nút Sửa lại
 	    	                proFrame.btnSave.setEnabled(false);
 	    	                proFrame.btnEdit.setEnabled(true);
 	    	                }

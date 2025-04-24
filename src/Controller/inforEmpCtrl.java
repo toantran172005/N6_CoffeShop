@@ -67,6 +67,7 @@ public class inforEmpCtrl implements ActionListener {
 
 	public void canEdit() {
 		this.infor.txtAdd.setEditable(true);
+		this.infor.txtName.requestFocusInWindow();
 		this.infor.txtName.setEditable(true);
 		this.infor.txtPhone.setEditable(true);
 		this.infor.txtEmail.setEditable(true);

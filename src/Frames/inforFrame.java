@@ -7,16 +7,25 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.time.format.DateTimeFormatter;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 
 import Controller.inforCtrl;
 import Controller.inforEmpCtrl;
@@ -39,10 +48,12 @@ public class inforFrame {
 	public inforCtrl infctrl;
 	public JTextField txtDate;
 	public inforEmpCtrl infempctrl;
+	public customerFrame cusFrame;
 
 	public inforFrame(int id, customerFrame cusFrame) {
 		this.id = id;
 		cusDAO = new CustomerDAOIMP();
+		this.cusFrame = cusFrame;
 		empDAO = new EmployeeDAOIMP();
 		infctrl = new inforCtrl(this, cusFrame);
 	}
@@ -61,6 +72,7 @@ public class inforFrame {
 			return this.empInforPanel();
 	}
 
+	@SuppressWarnings("unused")
 	public JPanel cusInforPanel() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
@@ -132,6 +144,10 @@ public class inforFrame {
 		bBtn.add(btnSave);
 		bBtn.add(Box.createHorizontalStrut(10));
 		bBtn.add(btnBack);
+		
+		txtName.addActionListener(e -> txtPhone.requestFocus());
+		txtPhone.addActionListener(e -> txtEmail.requestFocus());
+		txtEmail.addActionListener(e -> txtAdd.requestFocus());
 
 		for (JLabel label : new JLabel[] { lbName, lbPhone, lbEmail, lbAdd, lbDate }) {
 			label.setFont(new Font("Times New Roman", Font.BOLD, 18));
@@ -172,7 +188,7 @@ public class inforFrame {
 		pnlContent.add(Box.createVerticalStrut(20));
 
 		panel.add(pnlContent);
-
+		KeyboardShortcuts(panel);
 		return panel;
 	}
 
@@ -247,6 +263,10 @@ public class inforFrame {
 		bBtn.add(btnSave);
 		bBtn.add(Box.createHorizontalStrut(10));
 		bBtn.add(btnBack);
+		
+		txtName.addActionListener(e -> txtPhone.requestFocus());
+		txtPhone.addActionListener(e -> txtEmail.requestFocus());
+		txtEmail.addActionListener(e -> txtAdd.requestFocus());
 
 		for (JLabel label : new JLabel[] { lbName, lbPhone, lbEmail, lbAdd, lbDate}) {
 			label.setFont(new Font("Times New Roman", Font.BOLD, 18));
@@ -287,9 +307,36 @@ public class inforFrame {
 		pnlContent.add(Box.createVerticalStrut(20));
 
 		panel.add(pnlContent);
-
+		panel.add(pnlContent);
+		KeyboardShortcuts(panel);
 		return panel;
 	}
+	
+	public void KeyboardShortcuts(JPanel panel) {
+        InputMap inputMap = panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = panel.getActionMap();
+
+//         Ctrl + Shift + E: update thông tin
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+                "change");
+        actionMap.put("change", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnChange.doClick();
+            }
+        });
+
+//         Ctrl + S: lưu thông tin
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK),
+                "save");
+        actionMap.put("save", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnSave.doClick();
+            }
+        });
+    }
+	
 
 	public int getId() {
 		return id;
