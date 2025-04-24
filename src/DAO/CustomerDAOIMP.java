@@ -424,27 +424,28 @@ public class CustomerDAOIMP implements CustomerDAO {
 	}
 
 	@Override
-	public void createOrder(Orders order, ArrayList<CartItems> list) {
-		PreparedStatement pre = null;
+	public void createOrder(Orders order, ArrayList<CartItems> list, String methodPayment) {
+		PreparedStatement preOrder = null;
 		PreparedStatement preDetail = null;
+		PreparedStatement prePayment = null;
 		ResultSet getKey = null;
 		try {
 //			Tạo order
 			String createOrder = "INSERT INTO Orders(CustomerID, TotalPrice) " + "VALUES (?,?)";
-			pre = con.prepareStatement(createOrder, Statement.RETURN_GENERATED_KEYS);
-			pre.setInt(1, order.getCustomerID().getCustomerID());
-			pre.setDouble(2, order.getTotalPrice());
+			preOrder = con.prepareStatement(createOrder, Statement.RETURN_GENERATED_KEYS);
+			preOrder.setInt(1, order.getCustomerID().getCustomerID());
+			preOrder.setDouble(2, order.getTotalPrice());
 
-			pre.executeUpdate();
+			preOrder.executeUpdate();
 
-			getKey = pre.getGeneratedKeys();
+			getKey = preOrder.getGeneratedKeys();
 
 			int orderId = -1;
 			if (getKey.next()) {
 			    orderId = getKey.getInt(1);
 			}
 
-			pre.close();
+			preOrder.close();
 
 //			Tạo orderDetail
 			String createOrderDetail = "INSERT INTO OrderDetails(OrderID, ProductID, Quantity, Price) VALUES (?,?,?,?)";
@@ -460,6 +461,17 @@ public class CustomerDAOIMP implements CustomerDAO {
 
 			preDetail.executeBatch();
 			preDetail.close();
+			
+//			Tạo payment
+			String createPayment = "INSERT INTO Payments(OrderID,PaymentTotal,PaymentMethod) "
+					+ "VALUES(?,?,?)";
+			prePayment = con.prepareStatement(createPayment);
+			prePayment.setInt(1, orderId);
+			prePayment.setDouble(2, order.getTotalPrice());
+			prePayment.setString(3, methodPayment);
+			prePayment.executeUpdate();
+			prePayment.close();
+			
 
 		} catch (SQLException e) {
 			// TODO: handle exception

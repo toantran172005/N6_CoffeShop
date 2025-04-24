@@ -30,7 +30,7 @@ public interface CustomerDAO {
 	
 	void deleteCartItem(int customerID, Products product); // Xóa sản phẩm
 	
-	void createOrder(Orders orderm, ArrayList<CartItems> list); // Tạo hóa đơn
+	void createOrder(Orders orderm, ArrayList<CartItems> list, String methodPayment); // Tạo hóa đơn
 	
 	void clearCart(int customerID, ArrayList<CartItems> list); // Xóa hết sản phẩm trong giỏ hàng
 }
