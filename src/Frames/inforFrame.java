@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import Controller.inforCtrl;
+import Controller.inforEmpCtrl;
 import DAO.CustomerDAOIMP;
 import DAO.EmployeeDAOIMP;
 import Models.Customers;
@@ -37,12 +38,20 @@ public class inforFrame {
 	public JButton btnSave;
 	public inforCtrl infctrl;
 	public JTextField txtDate;
+	public inforEmpCtrl infempctrl;
 
 	public inforFrame(int id, customerFrame cusFrame) {
 		this.id = id;
 		cusDAO = new CustomerDAOIMP();
 		empDAO = new EmployeeDAOIMP();
 		infctrl = new inforCtrl(this, cusFrame);
+	}
+	
+	public inforFrame(int id, employeeFrame empFrame) {
+		this.id = id;
+		empDAO = new EmployeeDAOIMP();
+		cusDAO = new CustomerDAOIMP();
+		infempctrl = new inforEmpCtrl(this, empFrame);
 	}
 
 	public JPanel getInfPanel() {
@@ -117,6 +126,7 @@ public class inforFrame {
 		btnBack = new JButton("Quay lại");
 		btnChange = new JButton("Chỉnh sửa");
 		btnSave = new JButton("Lưu");
+		btnSave.setEnabled(false);
 		bBtn.add(btnChange);
 		bBtn.add(Box.createHorizontalStrut(10));
 		bBtn.add(btnSave);
@@ -231,6 +241,7 @@ public class inforFrame {
 		btnBack = new JButton("Quay lại");
 		btnChange = new JButton("Chỉnh sửa");
 		btnSave = new JButton("Lưu");
+		btnSave.setEnabled(false);
 		bBtn.add(btnChange);
 		bBtn.add(Box.createHorizontalStrut(10));
 		bBtn.add(btnSave);
@@ -245,7 +256,7 @@ public class inforFrame {
 			btn.setFont(new Font("Times New Roman", Font.BOLD, 18));
 			btn.setAlignmentX(Component.CENTER_ALIGNMENT);
 			btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			btn.addActionListener(infctrl);
+			btn.addActionListener(infempctrl);
 		}
 
 		for (JTextField txt : new JTextField[] { txtName, txtPhone, txtEmail, txtAdd, txtDate}) {
@@ -255,7 +266,7 @@ public class inforFrame {
 
 		JPanel pnlContent = new JPanel();
 		pnlContent.setLayout(new BoxLayout(pnlContent, BoxLayout.Y_AXIS));
-		pnlContent.setPreferredSize(new Dimension(750, 748));
+		pnlContent.setPreferredSize(new Dimension(750, 650));
 		pnlContent.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.lightGray, 1),
 				BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
