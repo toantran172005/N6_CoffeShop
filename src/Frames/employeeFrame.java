@@ -69,6 +69,7 @@ public class employeeFrame extends JFrame {
 	public int employeeID;
 	public EmployeeDAOIMP empDAO;
 	public Map<JButton, Products> mapProduct;
+	public JLabel lbOrder;
 
 	public employeeFrame(int employeeID) {
 		super("Nhóm 6 - CoffeeShop");
@@ -76,7 +77,7 @@ public class employeeFrame extends JFrame {
 		this.empDAO = new EmployeeDAOIMP();
 		this.EmpCtrl = new employeeCtrl(this);
 		this.listProduct = new ArrayList<>();
-		this.mapProduct=new HashMap<JButton, Products>();
+		this.mapProduct = new HashMap<JButton, Products>();
 		this.setListProduct(empDAO.getListProductFromDb());
 		this.addWindowListener(EmpCtrl);
 		KeyboardShortcuts();
@@ -134,10 +135,18 @@ public class employeeFrame extends JFrame {
 		lbMenu = new JLabel(new ImageIcon(menuImg));
 		lbMenu.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
+//		order
+		ImageIcon ordIcon = new ImageIcon(getClass().getResource("/Img/order.png"));
+		Image ordImg = ordIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		lbOrder = new JLabel(new ImageIcon(ordImg));
+		lbOrder.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
 		Box bEast = Box.createHorizontalBox();
 		bEast.add(txtTimKiem);
 		bEast.add(Box.createHorizontalStrut(10));
 		bEast.add(btnTimKiem);
+		bEast.add(Box.createHorizontalStrut(10));
+		bEast.add(lbOrder);
 		bEast.add(Box.createHorizontalStrut(10));
 		bEast.add(lbMenu);
 
@@ -145,6 +154,7 @@ public class employeeFrame extends JFrame {
 		lbN6.addMouseListener(EmpCtrl);
 		btnTimKiem.addActionListener(EmpCtrl);
 		lbMenu.addMouseListener(EmpCtrl);
+		lbOrder.addMouseListener(EmpCtrl);
 
 		JPanel pnlNavBar = new JPanel(new BorderLayout());
 		pnlNavBar.add(bWest, BorderLayout.WEST);
@@ -179,11 +189,11 @@ public class employeeFrame extends JFrame {
 		filterPanel.add(btnTatCa);
 		filterPanel.add(btnDrink);
 		filterPanel.add(btnFood);
-		
+
 		btnFood.setBackground(new Color(245, 222, 180));
 		btnDrink.setBackground(new Color(178, 235, 242));
-		btnTatCa.setBackground(new Color(255, 192, 203)); 
-		
+		btnTatCa.setBackground(new Color(255, 192, 203));
+
 		btnDrink.setBorderPainted(false);
 		btnFood.setBorderPainted(false);
 		btnTatCa.setBorderPainted(false);
@@ -213,11 +223,10 @@ public class employeeFrame extends JFrame {
 			btnEdit.setFont(btnFont);
 			btnEdit.addActionListener(EmpCtrl);
 			mapProduct.put(btnEdit, p);
-			
+
 			Box box = Box.createHorizontalBox();
 			box.add(Box.createHorizontalStrut(20));
 			box.add(btnEdit);
-
 
 			Box south = Box.createVerticalBox();
 			south.add(pnlTitle);
@@ -358,14 +367,23 @@ public class employeeFrame extends JFrame {
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
 	}
+
 	public void changeToDetail(Products p) {
-	    productDetailFrame proDetailFrame = new productDetailFrame(p,employeeID);
-	    pnlContent = proDetailFrame.LoadProDuct(p);
-	    scrollProduct.setViewportView(pnlContent);
+		productDetailFrame proDetailFrame = new productDetailFrame(p, employeeID);
+		pnlContent = proDetailFrame.LoadProDuct(p);
+		scrollProduct.setViewportView(pnlContent);
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
 	}
-	
+
+	public void changeToOrder() {
+		orderEmpFrame ord = new orderEmpFrame(employeeID);
+		pnlContent = ord.loadOrder(employeeID);
+		scrollProduct.setViewportView(pnlContent);
+		scrollProduct.revalidate();
+		scrollProduct.repaint();
+	}
+
 	public void KeyboardShortcuts() {
 		InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		ActionMap actionMap = getRootPane().getActionMap();
@@ -412,7 +430,6 @@ public class employeeFrame extends JFrame {
 			}
 		});
 
-
 //		Button
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
 				"filterAll");
@@ -424,25 +441,24 @@ public class employeeFrame extends JFrame {
 		actionMap.put("filterAll", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				btnTatCa.doClick(); 
+				btnTatCa.doClick();
 			}
 		});
 //		Hiển thị đồ uống : Ctrl + Shift + D
 		actionMap.put("filterDrink", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				btnDrink.doClick(); 
+				btnDrink.doClick();
 			}
 		});
 //		Hiển thị đồ ăn : Ctrl + Shift + F
 		actionMap.put("filterFood", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				btnFood.doClick(); 
+				btnFood.doClick();
 			}
 		});
 	}
-
 
 	public ArrayList<Products> getListProduct() {
 		return listProduct;

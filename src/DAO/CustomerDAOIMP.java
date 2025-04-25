@@ -424,28 +424,27 @@ public class CustomerDAOIMP implements CustomerDAO {
 	}
 
 	@Override
-	public void createOrder(Orders order, ArrayList<CartItems> list, String methodPayment) {
-		PreparedStatement preOrder = null;
+	public void createOrder(Orders order, ArrayList<CartItems> list) {
+		PreparedStatement pre = null;
 		PreparedStatement preDetail = null;
-		PreparedStatement prePayment = null;
 		ResultSet getKey = null;
 		try {
 //			Tạo order
 			String createOrder = "INSERT INTO Orders(CustomerID, TotalPrice) " + "VALUES (?,?)";
-			preOrder = con.prepareStatement(createOrder, Statement.RETURN_GENERATED_KEYS);
-			preOrder.setInt(1, order.getCustomerID().getCustomerID());
-			preOrder.setDouble(2, order.getTotalPrice());
+			pre = con.prepareStatement(createOrder, Statement.RETURN_GENERATED_KEYS);
+			pre.setInt(1, order.getCustomerID().getCustomerID());
+			pre.setDouble(2, order.getTotalPrice());
 
-			preOrder.executeUpdate();
+			pre.executeUpdate();
 
-			getKey = preOrder.getGeneratedKeys();
+			getKey = pre.getGeneratedKeys();
 
 			int orderId = -1;
 			if (getKey.next()) {
 			    orderId = getKey.getInt(1);
 			}
 
-			preOrder.close();
+			pre.close();
 
 //			Tạo orderDetail
 			String createOrderDetail = "INSERT INTO OrderDetails(OrderID, ProductID, Quantity, Price) VALUES (?,?,?,?)";
@@ -461,17 +460,6 @@ public class CustomerDAOIMP implements CustomerDAO {
 
 			preDetail.executeBatch();
 			preDetail.close();
-			
-//			Tạo payment
-			String createPayment = "INSERT INTO Payments(OrderID,PaymentTotal,PaymentMethod) "
-					+ "VALUES(?,?,?)";
-			prePayment = con.prepareStatement(createPayment);
-			prePayment.setInt(1, orderId);
-			prePayment.setDouble(2, order.getTotalPrice());
-			prePayment.setString(3, methodPayment);
-			prePayment.executeUpdate();
-			prePayment.close();
-			
 
 		} catch (SQLException e) {
 			// TODO: handle exception
@@ -515,4 +503,23 @@ public class CustomerDAOIMP implements CustomerDAO {
 		}
 
 	}
+
+	@Override
+	public Customers getByID(int id) {
+        Customers customer = null;
+        String sql = "SELECT * FROM Customers WHERE CustomerID = ?";
+
+        try(PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                customer = new Customers(
+                    rs.getInt("CustomerID")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return customer;
+    }
 }
