@@ -19,6 +19,7 @@ public class Orders {
 		super();
 		this.orderID = orderID;
 	}
+	
 
 	public Orders(Customers customerID, Employees employeeID, double totalPrice) {
 		super();
@@ -26,6 +27,19 @@ public class Orders {
 		this.employeeID = employeeID;
 		this.totalPrice = totalPrice;
 	}
+
+	public Orders(int orderID, Customers customerID, Employees employeeID, Date orderDate, double totalPrice,
+			String state) {
+		super();
+		this.orderID = orderID;
+		this.customerID = customerID;
+		this.employeeID = employeeID;
+		this.orderDate = orderDate;
+		this.totalPrice = totalPrice;
+		this.state = state;
+	}
+
+
 
 	public int getOrderID() {
 		return orderID;

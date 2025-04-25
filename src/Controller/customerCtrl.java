@@ -109,8 +109,6 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 //				label thông tin cá nhân
 			} else if (label == this.cusframe.lblInfo) {
 				this.cusframe.changeToInfor();
-				this.cusframe.isMenuAppear = !this.cusframe.isMenuAppear;
-				this.cusframe.pnlMenu.setVisible(this.cusframe.isMenuAppear);
 //				label đăng nhâp
 			} else if (label == this.cusframe.lblLogin) {
 				this.cusframe.dispose();
