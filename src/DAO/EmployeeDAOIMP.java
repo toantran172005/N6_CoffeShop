@@ -175,5 +175,26 @@ public class EmployeeDAOIMP implements EmployeeDAO {
 	return -2; // Lỗi trả về -2
 }
 	}
-	
+	public Employees getByID(int id) {
+        Employees employee = null;
+        String sql = "SELECT * FROM Employees WHERE EmployeeID = ?";
+
+        try (
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                employee = new Employees(
+                    rs.getInt("EmployeeID")
+                );
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return employee;
+    }
 }

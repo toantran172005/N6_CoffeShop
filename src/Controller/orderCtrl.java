@@ -22,6 +22,7 @@ public class orderCtrl implements ActionListener {
 	public customerFrame cusFrame;
 	public orderFrame ordFrame;
 
+
 	public orderCtrl(orderFrame ordFrame, customerFrame cusFrame) {
 		this.ordFrame = ordFrame;
 		this.cusFrame = cusFrame;

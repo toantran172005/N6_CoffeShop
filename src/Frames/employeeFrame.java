@@ -31,6 +31,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import Controller.employeeCtrl;
 import DAO.EmployeeDAOIMP;
+import Models.Employees;
 import Models.Products;
 
 public class employeeFrame extends JFrame {
@@ -60,6 +61,7 @@ public class employeeFrame extends JFrame {
 	public int employeeID;
 	public EmployeeDAOIMP empDAO;
 	public Map<JButton, Products> mapProduct;
+	public JLabel lbOrder;
 
 	public employeeFrame(int employeeID) {
 		super("Nhóm 6 - CoffeeShop");
@@ -129,11 +131,18 @@ public class employeeFrame extends JFrame {
 		Image cartImg = carrIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 		lbCart = new JLabel(new ImageIcon(cartImg));
 		lbCart.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		//	order
+		ImageIcon ordIcon = new ImageIcon(getClass().getResource("/Img/order.png"));
+		Image ordImg = ordIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		lbOrder = new JLabel(new ImageIcon(ordImg));
+		lbOrder.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		Box bEast = Box.createHorizontalBox();
 		bEast.add(txtTimKiem);
 		bEast.add(Box.createHorizontalStrut(10));
 		bEast.add(btnTimKiem);
+		bEast.add(Box.createHorizontalStrut(10));
+		bEast.add(lbOrder);
 		bEast.add(Box.createHorizontalStrut(10));
 		bEast.add(lbCart);
 		bEast.add(Box.createHorizontalStrut(10));
@@ -144,7 +153,7 @@ public class employeeFrame extends JFrame {
 		btnTimKiem.addActionListener(EmpCtrl);
 		lbCart.addMouseListener(EmpCtrl);
 		lbMenu.addMouseListener(EmpCtrl);
-
+		lbOrder.addMouseListener(EmpCtrl);
 		JPanel pnlNavBar = new JPanel(new BorderLayout());
 		pnlNavBar.add(bWest, BorderLayout.WEST);
 		pnlNavBar.add(bEast, BorderLayout.EAST);
@@ -364,7 +373,13 @@ public class employeeFrame extends JFrame {
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
 	}
-
+	public void changeToOrder() {
+		orderEmpFrame ord = new orderEmpFrame(employeeID);
+		pnlContent = ord.loadOrder(employeeID);
+		scrollProduct.setViewportView(pnlContent);
+		scrollProduct.revalidate();
+		scrollProduct.repaint();
+	}
 
 	public ArrayList<Products> getListProduct() {
 		return listProduct;

@@ -70,7 +70,6 @@ public class cartFrame {
 		for (CartItems item : this.ctrl.getListItems()) {
 			Products p = item.getProduct();
 			int quantityVal = item.getQuantity();
-
 //          JCheckBox để chọn sản phẩm
 			JCheckBox checkBox = new JCheckBox();
 			checkBox.setBackground(Color.white);

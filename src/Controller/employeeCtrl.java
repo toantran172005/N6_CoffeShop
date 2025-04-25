@@ -94,6 +94,10 @@ public class employeeCtrl implements ActionListener, MouseListener, WindowListen
 			} else if (label == this.empFrame.lbMenu) {
 				this.empFrame.isMenuAppear = !this.empFrame.isMenuAppear;
 				this.empFrame.pnlMenu.setVisible(this.empFrame.isMenuAppear);
+			} else if (label == this.empFrame.lbOrder) {
+				this.empFrame.isMenuAppear = !this.empFrame.isMenuAppear;
+				this.empFrame.pnlMenu.setVisible(this.empFrame.isMenuAppear);
+				this.empFrame.changeToOrder();
 //				label thông tin cá nhân
 			} else if (label == this.empFrame.lblInfo) {
 				this.empFrame.changeToInfor();

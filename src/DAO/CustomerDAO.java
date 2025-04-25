@@ -33,4 +33,7 @@ public interface CustomerDAO {
 	void createOrder(Orders orderm, ArrayList<CartItems> list); // Tạo hóa đơn
 	
 	void clearCart(int customerID, ArrayList<CartItems> list); // Xóa hết sản phẩm trong giỏ hàng
+	
+	public Customers getByID(int id);
+
 }

@@ -503,4 +503,23 @@ public class CustomerDAOIMP implements CustomerDAO {
 		}
 
 	}
+
+	@Override
+	public Customers getByID(int id) {
+        Customers customer = null;
+        String sql = "SELECT * FROM Customers WHERE CustomerID = ?";
+
+        try(PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                customer = new Customers(
+                    rs.getInt("CustomerID")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return customer;
+    }
 }
