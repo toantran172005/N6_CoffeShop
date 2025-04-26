@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
 import DAO.EmployeeDAOIMP;
 import Frames.employeeFrame;
 import Frames.inforFrame;
@@ -39,7 +41,10 @@ public class inforEmpCtrl implements ActionListener {
 				this.infor.btnSave.setEnabled(false);
 				if (this.empDAO.updateEmployeeInfo(emp) == 0) {
 					JOptionPane.showMessageDialog(this.empFrame, "Cập nhập thành công!");
-					this.empFrame.changeToInfor();
+					SwingUtilities.invokeLater(() -> {
+						this.empFrame.changeToInfor();
+		            });
+					
 				} else if (this.empDAO.updateEmployeeInfo(emp) == 1) { // Sai tên
 					JOptionPane.showMessageDialog(this.empFrame, "Vui lòng nhập đúng tên!");
 					this.infor.txtName.selectAll();

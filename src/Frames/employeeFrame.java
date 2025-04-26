@@ -41,6 +41,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import Controller.employeeCtrl;
 import DAO.EmployeeDAOIMP;
+import Models.Orders;
 import Models.Products;
 
 public class employeeFrame extends JFrame {
@@ -377,8 +378,16 @@ public class employeeFrame extends JFrame {
 	}
 
 	public void changeToOrder() {
-		orderEmpFrame ord = new orderEmpFrame(employeeID);
+		orderEmpFrame ord = new orderEmpFrame(employeeID, this);
 		pnlContent = ord.loadOrder(employeeID);
+		scrollProduct.setViewportView(pnlContent);
+		scrollProduct.revalidate();
+		scrollProduct.repaint();
+	}
+
+	public void changeToDetailOrder(Orders o) {
+		orderDetailFrame ord = new orderDetailFrame(this, o);
+		pnlContent = ord.getOrderPanel();
 		scrollProduct.setViewportView(pnlContent);
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
@@ -419,17 +428,6 @@ public class employeeFrame extends JFrame {
 						0, 1, false));
 			}
 		});
-
-//	 	Ctrl+Shift+I mở thông tin cá nhân
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-				"infoShortcut");
-		actionMap.put("infoShortcut", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				lblInfo.dispatchEvent(new MouseEvent(lblInfo, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
-						0, 0, 1, false));
-			}
-		});
 		
 //	 	Ctrl+O mở hóa đơn
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK ),
@@ -438,6 +436,17 @@ public class employeeFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				lbOrder.dispatchEvent(new MouseEvent(lbOrder, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
+						0, 0, 1, false));
+			}
+		});
+
+//	 	Ctrl+Shift+I mở thông tin cá nhân
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"infoShortcut");
+		actionMap.put("infoShortcut", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lblInfo.dispatchEvent(new MouseEvent(lblInfo, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
 						0, 0, 1, false));
 			}
 		});

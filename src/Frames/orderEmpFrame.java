@@ -6,39 +6,37 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-import Controller.orderCtrl;
+import Controller.orderEmpCtrl;
 import DAO.orderDAO;
 import Models.Employees;
 import Models.Orders;
 
-public class orderEmpFrame extends JFrame {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	public Employees employees;
-    public orderCtrl orCtrl;
+
+public class orderEmpFrame {
+    public Employees employees;
+    public orderEmpCtrl orCtrl;
     public int employeeID;
+    public employeeFrame empFrame;
+    public Map<JButton, Orders> btnMap = new HashMap<>();
     @SuppressWarnings("deprecation")
 	NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
-    public orderEmpFrame(int employeeID) {
-        super("Danh sách hóa đơn chưa xử lý");
+    public orderEmpFrame(int employeeID, employeeFrame empFrame) {
         this.employeeID = employeeID;
-        JPanel contentPanel = loadOrder(employeeID);
-        add(contentPanel, BorderLayout.CENTER);
+        this.orCtrl = new orderEmpCtrl(this, empFrame); // Khởi tạo controller trước
     }
 
     public JPanel loadOrder(int employeeID) {
@@ -50,7 +48,7 @@ public class orderEmpFrame extends JFrame {
         orderDAO dao = new orderDAO();
         List<Orders> list = dao.getUnprocessedOrdersByEmp(employeeID);
 
-        Font font = new Font("Times New Roman", Font.BOLD, 14);
+        Font font = new Font("Times New Roman", Font.BOLD, 30);
 
         if (list.isEmpty()) {
             JLabel noDataLabel = new JLabel("Không có hóa đơn nào cần xử lý.");
@@ -81,6 +79,7 @@ public class orderEmpFrame extends JFrame {
                 btnDetail.setFont(new Font("Times New Roman", Font.BOLD, 23));
                 btnDetail.setFocusPainted(false);
                 btnDetail.setBackground(new Color(220, 220, 220));
+                btnMap.put(btnDetail, o);
                 btnDetail.addActionListener(orCtrl);
                 btnDetail.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -108,5 +107,4 @@ public class orderEmpFrame extends JFrame {
 
         return pnlContent;
     }
-    
 }

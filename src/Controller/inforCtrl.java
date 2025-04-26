@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import DAO.CustomerDAOIMP;
 import Frames.customerFrame;
@@ -40,7 +41,10 @@ public class inforCtrl implements ActionListener {
 
 				if (this.cusDAO.updateCustomerInfo(cus) == 0) {
 					JOptionPane.showMessageDialog(this.cusFrame, "Cập nhập thành công!");
-					this.cusFrame.changeToInfor();
+					SwingUtilities.invokeLater(() -> {
+						this.cusFrame.changeToInfor();
+		            });
+					
 				} else if(this.cusDAO.updateCustomerInfo(cus) == 1) { // Sai tên
 					JOptionPane.showMessageDialog(this.cusFrame, "Vui lòng nhập đúng tên!");
 					this.infor.txtName.selectAll();

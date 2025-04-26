@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import DAO.EmployeeDAOIMP;
 import Frames.employeeFrame;
@@ -71,7 +72,11 @@ public class employeeCtrl implements ActionListener, MouseListener, WindowListen
 
 			} else if(this.empFrame.mapProduct.containsKey(btn)) { //chỉnh sửa sản phẩm
 				Products product = this.empFrame.mapProduct.get(btn);
-				this.empFrame.changeToDetail(product);
+				SwingUtilities.invokeLater(() -> {
+					this.empFrame.changeToDetail(product);
+	            });
+				
+				
 				
 			}
 		}
@@ -95,10 +100,17 @@ public class employeeCtrl implements ActionListener, MouseListener, WindowListen
 				this.empFrame.isMenuAppear = !this.empFrame.isMenuAppear;
 				this.empFrame.pnlMenu.setVisible(this.empFrame.isMenuAppear);
 			} else if (label == this.empFrame.lbOrder) {
-				this.empFrame.changeToOrder();
+				SwingUtilities.invokeLater(() -> {
+					this.empFrame.changeToOrder();
+	            });
+				
 //				label thông tin cá nhân
 			} else if (label == this.empFrame.lblInfo) {
-				this.empFrame.changeToInfor();
+				SwingUtilities.invokeLater(() -> {
+					this.empFrame.changeToInfor();
+	            });
+				
+				
 //				label đăng nhâp
 			} else if (label == this.empFrame.lblLogin) {
 				this.empFrame.dispose();

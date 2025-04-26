@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import DAO.CustomerDAOIMP;
 import Frames.cartFrame;
@@ -100,24 +101,29 @@ public class cartCtrl implements ActionListener, ItemListener {
 			} else if (this.cart.mapDelete.containsKey(btn)) {
 				Products p = this.cart.mapDelete.get(btn);
 				this.cusDAO.deleteCartItem(this.cusFrame.getCustomerID(), p);
-				this.cusFrame.changToCart();
+				SwingUtilities.invokeLater(() -> {
+					this.cusFrame.changToCart();
+				});
+
 //				Mua hàng
-			} else if(btn == this.cart.btnCheckout) {
+			} else if (btn == this.cart.btnCheckout) {
 				ArrayList<CartItems> list = new ArrayList<>();
 				for (Map.Entry<JCheckBox, CartItems> entry : this.cart.mapCheckBox.entrySet()) {
-			        JCheckBox cb = entry.getKey();
-			        CartItems item = entry.getValue();
+					JCheckBox cb = entry.getKey();
+					CartItems item = entry.getValue();
 
-			        if (cb.isSelected()) {
-			        	list.add(item);
-			        }
-			    }
-				
-				if(list.isEmpty()) 
+					if (cb.isSelected()) {
+						list.add(item);
+					}
+				}
+
+				if (list.isEmpty())
 					JOptionPane.showMessageDialog(this.cusFrame, "Vui lòng chọn sản phẩm để mua");
-				 else this.cusFrame.changToOrder(list);
-				
-				
+				else
+					SwingUtilities.invokeLater(() -> {
+						this.cusFrame.changToOrder(list);
+		            });
+					
 			}
 		}
 	}
