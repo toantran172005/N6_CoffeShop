@@ -71,6 +71,8 @@ public class employeeFrame extends JFrame {
 	public EmployeeDAOIMP empDAO;
 	public Map<JButton, Products> mapProduct;
 	public JLabel lbOrder;
+	public JLabel lblStatisticDay;
+	public JLabel lblStatisticMonth;
 
 	public employeeFrame(int employeeID) {
 		super("Nhóm 6 - CoffeeShop");
@@ -346,10 +348,11 @@ public class employeeFrame extends JFrame {
 //	     Các mục menu
 		lblHome = new JLabel("Trang chủ");
 		lblInfo = new JLabel("Thông tin cá nhân");
+		lblStatisticDay = new JLabel("Thống kê");
 		lblLogout = new JLabel("Đăng xuất");
 		lblLogin = new JLabel("Đăng nhập");
 
-		for (JLabel label : new JLabel[] { lblHome, lblInfo, lblLogout, lblLogin }) {
+		for (JLabel label : new JLabel[] { lblHome, lblStatisticDay,  lblInfo, lblLogout, lblLogin}) {
 			label.setFont(new Font("Times New Roman", Font.BOLD, 18));
 			label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
 			label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -392,6 +395,15 @@ public class employeeFrame extends JFrame {
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
 	}
+	
+	public void changeToStatistic() {
+		statisticFrame staFrame = new statisticFrame(this);
+		pnlContent = staFrame.getStatisticPanel();
+		scrollProduct.setViewportView(pnlContent);
+		scrollProduct.revalidate();
+		scrollProduct.repaint();
+		
+	}
 
 	@SuppressWarnings("serial")
 	public void KeyboardShortcuts() {
@@ -429,6 +441,19 @@ public class employeeFrame extends JFrame {
 			}
 		});
 		
+//	     Ctrl + Shift + T: mở thống kê
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"statistic");
+		actionMap.put("statistic", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lblStatisticDay.dispatchEvent(new MouseEvent(lblStatisticDay, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0, 0,
+						0, 1, false));
+				isMenuAppear = !isMenuAppear;
+				pnlMenu.setVisible(isMenuAppear);
+			}
+		});
+		
 //	 	Ctrl+O mở hóa đơn
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK ),
 				"orderShortcut");
@@ -448,6 +473,8 @@ public class employeeFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				lblInfo.dispatchEvent(new MouseEvent(lblInfo, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
 						0, 0, 1, false));
+				isMenuAppear = !isMenuAppear;
+				pnlMenu.setVisible(isMenuAppear);
 			}
 		});
 
@@ -545,5 +572,6 @@ public class employeeFrame extends JFrame {
 			g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 		}
 	}
+
 
 }

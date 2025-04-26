@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import Controller.orderDetailCtrl;
 import Controller.orderEmpCtrl;
 import DAO.orderDAO;
+import DAO.orderDAOIMP;
 import Models.OrderDetails;
 import Models.Orders;
 import Models.Products;
@@ -30,7 +31,7 @@ public class orderDetailFrame {
 	public int orderTotal;
 	public orderEmpCtrl orderEmpCtrl;
 	public Orders o;
-	public orderDAO ordDAO;
+	public orderDAOIMP ordDAO;
 	public employeeFrame emp;
 
 	public Orders getO() {
@@ -45,7 +46,7 @@ public class orderDetailFrame {
 
 	public orderDetailFrame(employeeFrame emp, Orders o) {
 	    this.o = o;
-	    this.ordDAO = new orderDAO();
+	    this.ordDAO = new orderDAOIMP();
 	    this.emp=emp;
 	    this.ordCtrl=new orderDetailCtrl(this, emp);
 	    this.list = ordDAO.getOrderDetailsByOrderID(o.getOrderID());

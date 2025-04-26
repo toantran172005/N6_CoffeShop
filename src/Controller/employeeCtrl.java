@@ -70,18 +70,16 @@ public class employeeCtrl implements ActionListener, MouseListener, WindowListen
 					this.empFrame.updateProductPanel(listSearch);
 				}
 
-			} else if(this.empFrame.mapProduct.containsKey(btn)) { //chỉnh sửa sản phẩm
+			} else if (this.empFrame.mapProduct.containsKey(btn)) { // chỉnh sửa sản phẩm
 				Products product = this.empFrame.mapProduct.get(btn);
 				SwingUtilities.invokeLater(() -> {
 					this.empFrame.changeToDetail(product);
-	            });
-				
-				
-				
+				});
+
 			}
 		}
 	}
-	
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Object obj = e.getSource();
@@ -99,18 +97,28 @@ public class employeeCtrl implements ActionListener, MouseListener, WindowListen
 			} else if (label == this.empFrame.lbMenu) {
 				this.empFrame.isMenuAppear = !this.empFrame.isMenuAppear;
 				this.empFrame.pnlMenu.setVisible(this.empFrame.isMenuAppear);
+//				label hóa đơn
 			} else if (label == this.empFrame.lbOrder) {
 				SwingUtilities.invokeLater(() -> {
 					this.empFrame.changeToOrder();
-	            });
-				
+				});
+
+//				label thống kê
+			} else if (label == this.empFrame.lblStatisticDay) {
+				SwingUtilities.invokeLater(() -> {
+					this.empFrame.changeToStatistic();
+				});
+				this.empFrame.isMenuAppear = !this.empFrame.isMenuAppear;
+				this.empFrame.pnlMenu.setVisible(this.empFrame.isMenuAppear);
+
 //				label thông tin cá nhân
 			} else if (label == this.empFrame.lblInfo) {
 				SwingUtilities.invokeLater(() -> {
 					this.empFrame.changeToInfor();
-	            });
-				
-				
+				});
+				this.empFrame.isMenuAppear = !this.empFrame.isMenuAppear;
+				this.empFrame.pnlMenu.setVisible(this.empFrame.isMenuAppear);
+
 //				label đăng nhâp
 			} else if (label == this.empFrame.lblLogin) {
 				this.empFrame.dispose();
@@ -166,8 +174,6 @@ public class employeeCtrl implements ActionListener, MouseListener, WindowListen
 		// TODO Auto-generated method stub
 
 	}
-
-
 
 	@Override
 	public void mousePressed(MouseEvent e) {
