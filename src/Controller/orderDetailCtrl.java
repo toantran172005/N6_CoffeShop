@@ -7,13 +7,13 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import DAO.orderDAO;
+import DAO.orderDAOIMP;
 import Frames.employeeFrame;
 import Frames.orderDetailFrame;
 
 public class orderDetailCtrl implements ActionListener {
 	private orderDetailFrame ordeFrame;
-	private orderDAO ordDao;
+	private orderDAOIMP ordDao;
 	private employeeFrame emp;
 	private InvoiceCtrl Invoice;
 
@@ -21,7 +21,7 @@ public class orderDetailCtrl implements ActionListener {
 		super();
 		this.emp = emp;
 		this.ordeFrame = ordeFrame;
-		this.ordDao = new orderDAO();
+		this.ordDao = new orderDAOIMP();
 		this.Invoice = new InvoiceCtrl();
 	}
 

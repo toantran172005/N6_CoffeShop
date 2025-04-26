@@ -1,11 +1,9 @@
-// === orderEmpCtrl.java ===
+
 package Controller;
 
 import java.awt.event.*;
-
 import javax.swing.*;
-
-import DAO.orderDAO;
+import DAO.orderDAOIMP;
 import Frames.employeeFrame;
 import Frames.orderEmpFrame;
 import Models.Orders;
@@ -13,12 +11,12 @@ import Models.Orders;
 public class orderEmpCtrl implements ActionListener {
     public orderEmpFrame ordFrame;
     public employeeFrame empFrame;
-    public orderDAO ordDao;
+    public orderDAOIMP ordDao;
 
     public orderEmpCtrl(orderEmpFrame ordFrame, employeeFrame empFrame) {
         this.ordFrame = ordFrame;
         this.empFrame = empFrame;
-        this.ordDao = new orderDAO();
+        this.ordDao = new orderDAOIMP();
     }
 
     @Override

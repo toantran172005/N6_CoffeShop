@@ -19,7 +19,14 @@ public class Orders {
 		super();
 		this.orderID = orderID;
 	}
-	
+
+	public Orders(int orderID,Employees employeeID, Date orderDate, double totalPrice) {
+		super();
+		this.orderID = orderID;
+		this.employeeID = employeeID;
+		this.orderDate = orderDate;
+		this.totalPrice = totalPrice;
+	}
 
 	public Orders(Customers customerID, Employees employeeID, double totalPrice) {
 		super();

@@ -80,11 +80,6 @@ public class EmployeeDAOIMP implements EmployeeDAO {
 		
 	}
 
-//	@Override
-//	public ArrayList<Employees> getAllEmployee() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
 
 	@Override
 	public Employees getEmployee(int id) {

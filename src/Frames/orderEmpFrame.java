@@ -21,7 +21,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import Controller.orderEmpCtrl;
-import DAO.orderDAO;
+import DAO.orderDAOIMP;
 import Models.Employees;
 import Models.Orders;
 
@@ -45,7 +45,7 @@ public class orderEmpFrame {
         pMain.setBorder(new EmptyBorder(15, 15, 15, 15));
         pMain.setBackground(new Color(240, 240, 240));
 
-        orderDAO dao = new orderDAO();
+        orderDAOIMP dao = new orderDAOIMP();
         List<Orders> list = dao.getUnprocessedOrdersByEmp(employeeID);
 
         Font font = new Font("Times New Roman", Font.BOLD, 30);

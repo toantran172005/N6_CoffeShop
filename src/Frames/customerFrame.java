@@ -465,6 +465,8 @@ public class customerFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				lblInfo.dispatchEvent(new MouseEvent(lblInfo, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
 						0, 0, 1, false));
+				isMenuAppear = !isMenuAppear;
+				pnlMenu.setVisible(isMenuAppear);
 			}
 		});
 
