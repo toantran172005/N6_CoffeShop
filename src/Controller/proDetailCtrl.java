@@ -6,18 +6,20 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 import DAO.EmployeeDAOIMP;
+import Frames.employeeFrame;
 import Frames.productDetailFrame;
 import Models.Products;
 
 public class proDetailCtrl implements ActionListener{
 	public productDetailFrame proFrame;
 	public Products product;
+	public employeeFrame empFrame;
 
-
-	public proDetailCtrl(productDetailFrame proFrame, Products product) {
+	public proDetailCtrl(productDetailFrame proFrame, Products product,employeeFrame empFrame) {
 		super();
 		this.product = product;
 		this.proFrame = proFrame;
+		this.empFrame=empFrame;
 	}
 
 	@Override
@@ -65,7 +67,18 @@ public class proDetailCtrl implements ActionListener{
 					JOptionPane.showMessageDialog(null, "Dữ liệu không hợp lệ!");
 				}
 				
-			}
+			}else if (btn == this.proFrame.btnDelete) {
+                int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa sản phẩm này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    boolean success = new EmployeeDAOIMP().deleteProduct(product.getProductID());
+                    if (success) {
+                        JOptionPane.showMessageDialog(null, "Xóa sản phẩm thành công!");
+                        this.empFrame.reloadEmployeePage();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Xóa sản phẩm thất bại!");
+                    }
+                }
+            }
 		}
 	}
 }	

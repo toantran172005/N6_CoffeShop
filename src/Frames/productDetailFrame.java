@@ -3,6 +3,7 @@ package Frames;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -55,11 +56,14 @@ public class productDetailFrame extends JFrame {
 	public JTextField txtDesc;
 	public JComboBox<String> cmbSize;
 	public JTextField txtQuantity;
-	public productDetailFrame(Products product, int employeeID) {
+	public JButton btnDelete;
+	public employeeFrame empFrame;
+	public productDetailFrame(Products product, int employeeID, employeeFrame empFrame) {
 			super("Nhóm 6 - CoffeeShop");
 			this.products = product;    // Gán product đúng cách!
 			this.employeeID= employeeID;
-			this.proCtrl = new proDetailCtrl(this, product); // ✅ Gán trước
+			this.empFrame=empFrame;
+			this.proCtrl = new proDetailCtrl(this, product,empFrame); // ✅ Gán trước
 		}
 	
 	public JPanel LoadProDuct(Products product) {
@@ -81,12 +85,12 @@ public class productDetailFrame extends JFrame {
 //		 Card vuông hiển thị ảnh và tên
 		JPanel squareCard = new JPanel();
 		squareCard.setLayout(new BoxLayout(squareCard, BoxLayout.Y_AXIS));
-		squareCard.setPreferredSize(new Dimension(350, 240));
+		squareCard.setPreferredSize(new Dimension(350, 300));
 		squareCard.setBorder(BorderFactory.createLineBorder(Color.GRAY, 5, true));
 
 //		 Ảnh
 		ImageIcon imgIcon = new ImageIcon(getClass().getResource(product.getProductImg()));
-		Image img = imgIcon.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
+		Image img = imgIcon.getImage().getScaledInstance(350, 300, Image.SCALE_SMOOTH);
 		JLabel imgLabel = new JLabel(new ImageIcon(img));
 		imgLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Canh giữa ảnh
 
@@ -113,7 +117,7 @@ public class productDetailFrame extends JFrame {
 		JLabel lblpName;
 		nameBox.add(lblpName=new JLabel("Tên sản phẩm: "));
 		lblpName.setFont(fo);
-		txtName = new JTextField(product.getProductName(), 30);
+		txtName = new JTextField(product.getProductName(), 20);
 		txtName.setFont(fo);
 		txtName.setEnabled(false); // Ban đầu không cho phép chỉnh sửa
 		nameBox.add(txtName);
@@ -125,7 +129,7 @@ public class productDetailFrame extends JFrame {
 		JLabel lblpPrice;
 		priceBox.add(lblpPrice=new JLabel("Giá (VNĐ): "));
 		lblpPrice.setFont(fo);
-		txtPrice = new JTextField(String.valueOf(product.getPrice()), 30);
+		txtPrice = new JTextField(String.valueOf(product.getPrice()), 20);
 		txtPrice.setFont(fo);
 		txtPrice.setEnabled(false);
 		priceBox.add(txtPrice);
@@ -137,7 +141,7 @@ public class productDetailFrame extends JFrame {
 		JLabel lblpDep;
 		descBox.add(lblpDep=new JLabel("Mô tả: "));
 		lblpDep.setFont(fo);
-		txtDesc = new JTextField(product.getDescription(), 30);
+		txtDesc = new JTextField(product.getDescription(), 20);
 		txtDesc.setFont(fo);
 		txtDesc.setEnabled(false);
 		descBox.add(txtDesc);
@@ -163,7 +167,7 @@ public class productDetailFrame extends JFrame {
 		JLabel lblpQuan;
 		quantityBox.add(lblpQuan=new JLabel("Số lượng tồn: "));
 		lblpQuan.setFont(fo);
-		txtQuantity = new JTextField(String.valueOf(product.getQuantity()), 30);
+		txtQuantity = new JTextField(String.valueOf(product.getQuantity()), 20);
 		txtQuantity.setFont(fo);
 		txtQuantity.setEnabled(false);
 		quantityBox.add(txtQuantity);
@@ -175,21 +179,35 @@ public class productDetailFrame extends JFrame {
 		lblpSize.setPreferredSize(lblpName.getPreferredSize());
 		lblpQuan.setPreferredSize(lblpName.getPreferredSize());
 
-//		 Nút Sửa
-		btnEdit = new JButton("Sửa");
-		btnEdit.setFont(fo);
-		btnEdit.addActionListener(proCtrl);
-		
-		formBox.add(btnEdit);
-
-//		 Nút Lưu
-		btnSave = new JButton("Lưu");
-		btnSave.setFont(fo);
-		btnSave.setEnabled(false); // Ban đầu không cho phép lưu
-		btnSave.addActionListener(proCtrl);
-		formBox.add(btnSave);
-		formBox.add(Box.createVerticalStrut(10));
 		rightPanel.add(formBox);
+		
+		JPanel footer = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+		footer.setPreferredSize(new Dimension(0, 60));
+
+
+		btnSave = new JButton("Lưu");
+//		btnSave.setPreferredSize(new Dimension(150, 40));
+		btnSave.setEnabled(false);
+//		btnSave.setBorderPainted(false);
+
+		btnEdit = new JButton("Sửa");
+//		btnEdit.setPreferredSize(new Dimension(350, 40));
+//		btnEdit.setBorderPainted(false);
+
+		btnDelete = new JButton("Xóa");
+//		btnDelete.setPreferredSize(new Dimension(150, 40));
+//		btnDelete.setBorderPainted(false);
+		formBox.add(footer);
+		
+		footer.add(btnEdit);
+		footer.add(btnSave);
+		footer.add(btnDelete);
+		
+		for (JButton btn : new JButton[] { btnEdit, btnSave, btnDelete }) {
+			btn.addActionListener(proCtrl);
+			btn.setFont(new Font("Times New Roman", Font.BOLD, 25));
+			btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		}
 //		 SPLIT PANE chia trái-phải
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
 		splitPane.setDividerLocation(400); // Khoảng cách giữa hai phần

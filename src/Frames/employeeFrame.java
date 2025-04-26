@@ -71,6 +71,7 @@ public class employeeFrame extends JFrame {
 	public EmployeeDAOIMP empDAO;
 	public Map<JButton, Products> mapProduct;
 	public JLabel lbOrder;
+	public JLabel lblAdd;
 
 	public employeeFrame(int employeeID) {
 		super("Nhóm 6 - CoffeeShop");
@@ -348,8 +349,9 @@ public class employeeFrame extends JFrame {
 		lblInfo = new JLabel("Thông tin cá nhân");
 		lblLogout = new JLabel("Đăng xuất");
 		lblLogin = new JLabel("Đăng nhập");
+		lblAdd= new JLabel("Thêm sản phẩm");
 
-		for (JLabel label : new JLabel[] { lblHome, lblInfo, lblLogout, lblLogin }) {
+		for (JLabel label : new JLabel[] { lblHome,lblAdd, lblInfo, lblLogout, lblLogin }) {
 			label.setFont(new Font("Times New Roman", Font.BOLD, 18));
 			label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
 			label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -370,8 +372,15 @@ public class employeeFrame extends JFrame {
 	}
 
 	public void changeToDetail(Products p) {
-		productDetailFrame proDetailFrame = new productDetailFrame(p, employeeID);
+		productDetailFrame proDetailFrame = new productDetailFrame(p, employeeID,this);
 		pnlContent = proDetailFrame.LoadProDuct(p);
+		scrollProduct.setViewportView(pnlContent);
+		scrollProduct.revalidate();
+		scrollProduct.repaint();
+	}
+	public void changeToAdd(){
+		productAddFrame proAddFrame = new productAddFrame(employeeID,this);
+		pnlContent = proAddFrame.loadAddProductPanel();
 		scrollProduct.setViewportView(pnlContent);
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
@@ -391,6 +400,13 @@ public class employeeFrame extends JFrame {
 		scrollProduct.setViewportView(pnlContent);
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
+	}
+	public void reloadEmployeePage() {
+	    this.setListProduct(empDAO.getListProductFromDb());
+	    pnlContent = loadProduct(listProduct);
+	    scrollProduct.setViewportView(pnlContent);
+	    scrollProduct.revalidate();
+	    scrollProduct.repaint();
 	}
 
 	@SuppressWarnings("serial")

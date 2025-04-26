@@ -121,6 +121,10 @@ public class employeeCtrl implements ActionListener, MouseListener, WindowListen
 				JOptionPane.showMessageDialog(this.empFrame, "Đăng xuất thành công!");
 				this.empFrame.isMenuAppear = !this.empFrame.isMenuAppear;
 				this.empFrame.pnlMenu.setVisible(this.empFrame.isMenuAppear);
+			} else if(label==this.empFrame.lblAdd){
+				this.empFrame.changeToAdd();
+				this.empFrame.isMenuAppear = !this.empFrame.isMenuAppear;
+				this.empFrame.pnlMenu.setVisible(this.empFrame.isMenuAppear);
 			}
 		}
 

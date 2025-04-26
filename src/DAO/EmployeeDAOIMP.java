@@ -35,11 +35,6 @@ public class EmployeeDAOIMP implements EmployeeDAO {
 		System.out.println("Closed the connection to database!");
 	}
 
-	@Override
-	public void addProduct(Products product) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public boolean updateProduct(Products product) {
@@ -62,11 +57,6 @@ public class EmployeeDAOIMP implements EmployeeDAO {
 	    }
 	}
 
-	@Override
-	public void deleteProduct(int productId) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public ArrayList<Orders> getAllOrders() {
@@ -117,8 +107,8 @@ public class EmployeeDAOIMP implements EmployeeDAO {
 		Statement sta = null;
 		ResultSet rs = null;
 		ArrayList<Products> listProduct = new ArrayList<>();
-		String sql = "SELECT ProductID, ProductName, ProductTypeID, Price, Quantity, Description, Size, ProductIMG FROM Products "
-				+ "WHERE ProductID % 2 = 0" + "OR ProductID IN (17,19)";
+		String sql = "SELECT ProductID, ProductName, ProductTypeID, Price, Quantity, Description, Size, ProductIMG FROM Products ";
+//				+ "WHERE ProductID % 2 = 0" + "OR ProductID IN (17,19) OR ProductID >19";
 		try {
 			 sta = con.createStatement();
 			 rs = sta.executeQuery(sql);
@@ -142,6 +132,38 @@ public class EmployeeDAOIMP implements EmployeeDAO {
 		}
 		return listProduct;
 
+	}
+	public boolean addProduct(Products product) {
+	    String sql = "INSERT INTO Products (productName, price, description, size, quantity, productImg) VALUES (?, ?, ?, ?, ?, ?)";
+
+	    try (
+	        PreparedStatement ps = con.prepareStatement(sql);
+	    ) {
+	        ps.setString(1, product.getProductName());
+	        ps.setDouble(2, product.getPrice());
+	        ps.setString(3, product.getDescription());
+	        ps.setString(4, product.getSize());
+	        ps.setInt(5, product.getQuantity());
+	        ps.setString(6, product.getProductImg());
+
+	        int result = ps.executeUpdate();
+	        return result > 0; // Nếu thêm thành công thì trả về true
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+	public boolean deleteProduct(int productID) {
+	    try {
+	        String sql = "DELETE FROM Products WHERE productID = ?";
+	        PreparedStatement ps = con.prepareStatement(sql);
+	        ps.setInt(1, productID);
+	        int rowsAffected = ps.executeUpdate();
+	        return rowsAffected > 0;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	        return false;
 	}
 
 	@Override
