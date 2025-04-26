@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
@@ -20,7 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.plaf.FontUIResource;
 
 import Controller.orderCtrl;
 import DAO.orderDAO;
@@ -28,10 +25,15 @@ import Models.Employees;
 import Models.Orders;
 
 public class orderEmpFrame extends JFrame {
-    public Employees employees;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public Employees employees;
     public orderCtrl orCtrl;
     public int employeeID;
-    NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
+    @SuppressWarnings("deprecation")
+	NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
     public orderEmpFrame(int employeeID) {
         super("Danh sách hóa đơn chưa xử lý");
         this.employeeID = employeeID;
@@ -106,4 +108,5 @@ public class orderEmpFrame extends JFrame {
 
         return pnlContent;
     }
+    
 }
