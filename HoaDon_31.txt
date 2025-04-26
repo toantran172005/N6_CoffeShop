@@ -1,0 +1,14 @@
+	   Nhóm 6
+	The Coffee Shop
+	   Store:001
+OrderID:3104 Nguyễn Văn Bảo, phường 4, Gò Vấp
+Date: 2025-04-26
+EmployeeName: Trần Thanh Toàn
+ITEM              QTy           Amount
+---------------------------------------
+Trà đào           3             90,000₫
+Mì Ý sốt bò bằm   4             180,000₫
+---------------------------------------
+TOTAL(+VAT):         270,000₫
+---------------------------------------
+	---Xin Cảm ơn, hẹn gặp lại---

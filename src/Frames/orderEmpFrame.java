@@ -5,11 +5,11 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,21 +20,24 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.plaf.FontUIResource;
 
-import Controller.orderCtrl;
+import Controller.orderEmpCtrl;
 import DAO.orderDAO;
 import Models.Employees;
 import Models.Orders;
 
+
 public class orderEmpFrame extends JFrame {
     public Employees employees;
-    public orderCtrl orCtrl;
+    public orderEmpCtrl orCtrl;
     public int employeeID;
+    public employeeFrame empFrame;
+    public Map<JButton, Orders> btnMap = new HashMap<>();
     NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
-    public orderEmpFrame(int employeeID) {
+    public orderEmpFrame(int employeeID, employeeFrame empFrame) {
         super("Danh sách hóa đơn chưa xử lý");
         this.employeeID = employeeID;
+        this.orCtrl = new orderEmpCtrl(this, empFrame); // Khởi tạo controller trước
         JPanel contentPanel = loadOrder(employeeID);
         add(contentPanel, BorderLayout.CENTER);
     }
@@ -48,7 +51,7 @@ public class orderEmpFrame extends JFrame {
         orderDAO dao = new orderDAO();
         List<Orders> list = dao.getUnprocessedOrdersByEmp(employeeID);
 
-        Font font = new Font("Times New Roman", Font.BOLD, 14);
+        Font font = new Font("Times New Roman", Font.BOLD, 30);
 
         if (list.isEmpty()) {
             JLabel noDataLabel = new JLabel("Không có hóa đơn nào cần xử lý.");
@@ -79,6 +82,7 @@ public class orderEmpFrame extends JFrame {
                 btnDetail.setFont(new Font("Times New Roman", Font.BOLD, 23));
                 btnDetail.setFocusPainted(false);
                 btnDetail.setBackground(new Color(220, 220, 220));
+                btnMap.put(btnDetail, o);
                 btnDetail.addActionListener(orCtrl);
                 btnDetail.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 

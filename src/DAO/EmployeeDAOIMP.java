@@ -176,7 +176,7 @@ public class EmployeeDAOIMP implements EmployeeDAO {
 }
 	}
 	public Employees getByID(int id) {
-        Employees employee = null;
+        Employees emp = null;
         String sql = "SELECT * FROM Employees WHERE EmployeeID = ?";
 
         try (
@@ -186,15 +186,15 @@ public class EmployeeDAOIMP implements EmployeeDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                employee = new Employees(
-                    rs.getInt("EmployeeID")
-                );
+            	emp = new Employees();
+                emp.setEmployeeID(rs.getInt("employeeID"));
+                emp.setEmployeeName(rs.getString("employeeName"));
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return employee;
+        return emp;
     }
 }
