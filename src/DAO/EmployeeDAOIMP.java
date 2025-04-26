@@ -36,9 +36,26 @@ public class EmployeeDAOIMP implements EmployeeDAO {
 	}
 
 	@Override
-	public void addProduct(Products product) {
-		// TODO Auto-generated method stub
-		
+	public boolean addProduct(Products product) {
+		String sql = "INSERT INTO Products (productName, price, description, size, quantity, productImg, productTypeID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+	    try (
+	        PreparedStatement ps = con.prepareStatement(sql);
+	    ) {
+	    	ps.setString(1, product.getProductName());
+	    	ps.setDouble(2, product.getPrice());
+	    	ps.setString(3, product.getDescription());
+	    	ps.setString(4, product.getSize());
+	    	ps.setInt(5, product.getQuantity());
+	    	ps.setString(6, product.getProductImg());
+	    	ps.setInt(7, product.getProductTypeID().getProductTypeID()); 
+
+	        int result = ps.executeUpdate();
+	        return result > 0; // Nếu thêm thành công thì trả về true
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
 
 	@Override
@@ -63,9 +80,17 @@ public class EmployeeDAOIMP implements EmployeeDAO {
 	}
 
 	@Override
-	public void deleteProduct(int productId) {
-		// TODO Auto-generated method stub
-		
+	public boolean deleteProduct(int productID) {
+	    try {
+	        String sql = "DELETE FROM Products WHERE productID = ?";
+	        PreparedStatement ps = con.prepareStatement(sql);
+	        ps.setInt(1, productID);
+	        int rowsAffected = ps.executeUpdate();
+	        return rowsAffected > 0;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	        return false;
 	}
 
 	@Override

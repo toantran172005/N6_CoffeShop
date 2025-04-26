@@ -267,11 +267,13 @@ public class customerFrame extends JFrame {
 			ImagePanel imagePanel = new ImagePanel(itemImg);
 
 			JPanel item = new JPanel(new BorderLayout());
+			item.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			item.add(imagePanel, BorderLayout.CENTER);
 			item.add(south, BorderLayout.SOUTH);
 			item.setPreferredSize(new Dimension(330, 250));
 			item.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
 					BorderFactory.createEmptyBorder(0, 0, 10, 0)));
+			item.addMouseListener(cusCtrl);
 
 			gbc.gridx = gridx;
 			gbc.gridy = gridy;

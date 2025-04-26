@@ -7,11 +7,11 @@ import Models.Orders;
 import java.util.ArrayList;
 
 public interface EmployeeDAO {
-	void addProduct(Products product); // Thêm sản phẩm
+	boolean addProduct(Products product); // Thêm sản phẩm
 
-	public boolean updateProduct(Products product); // Sửa sản phẩm
+	 boolean updateProduct(Products product); // Sửa sản phẩm
 
-	void deleteProduct(int productId); // Xóa sản phẩm
+	 boolean deleteProduct(int productId); // Xóa sản phẩm
 
 	ArrayList<Orders> getAllOrders(); // Xem danh sách đơn hàng
 
@@ -21,5 +21,5 @@ public interface EmployeeDAO {
 	
 	 ArrayList<Products> getListProductFromDb();
 	 
-	 int updateEmployeeInfo(Employees employees);//sua thong tin nhan vien
+	 int updateEmployeeInfo(Employees employees); //sua thong tin nhan vien
 }
