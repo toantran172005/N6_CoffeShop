@@ -31,14 +31,23 @@ public class orderDetailFrame {
 	public orderDetailCtrl ordCtrl;
 	public List<OrderDetails> list;
 	public JButton btnBack;
-	public JButton btnCash;
+	public JButton btnAccept;
 	public JButton btnPrint;
 	public int orderTotal;
 	public orderEmpCtrl orderEmpCtrl;
 	public Orders o;
 	public orderDAO ordDAO;
 	public employeeFrame emp;
-	
+
+	public Orders getO() {
+		return o;
+	}
+
+
+	public void setO(Orders o) {
+		this.o = o;
+	}
+
 
 	public orderDetailFrame(employeeFrame emp, Orders o) {
 	    this.o = o;
@@ -182,11 +191,11 @@ public class orderDetailFrame {
 		btnBack.setBackground(new Color(200, 200, 200));
 		btnBack.setBorderPainted(false);
 
-		btnCash = new JButton("Xác nhận thanh toán thành công");
-		btnCash.setPreferredSize(new Dimension(350, 40));
-		btnCash.setBackground(new Color(50, 150, 50));
-		btnCash.setForeground(Color.WHITE);
-		btnCash.setBorderPainted(false);
+		btnAccept = new JButton("Xác nhận thanh toán thành công");
+		btnAccept.setPreferredSize(new Dimension(350, 40));
+		btnAccept.setBackground(new Color(50, 150, 50));
+		btnAccept.setForeground(Color.WHITE);
+		btnAccept.setBorderPainted(false);
 
 		btnPrint = new JButton("In hóa đơn");
 		btnPrint.setPreferredSize(new Dimension(150, 40));
@@ -194,17 +203,14 @@ public class orderDetailFrame {
 		btnPrint.setForeground(Color.WHITE);
 		btnPrint.setBorderPainted(false);
 
-		for (JButton btn : new JButton[] { btnBack, btnCash, btnPrint }) {
+		for (JButton btn : new JButton[] { btnBack, btnAccept, btnPrint }) {
 			btn.addActionListener(ordCtrl);
 			btn.setFont(new Font("Times New Roman", Font.BOLD, 18));
 			btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
-		btnBack.addActionListener(ordCtrl);
-		btnCash.addActionListener(ordCtrl); 
-		btnPrint.addActionListener(ordCtrl);
 
 		footer.add(btnBack);
-		footer.add(btnCash);
+		footer.add(btnAccept);
 		footer.add(btnPrint);
 
 		mainPanel.add(footer, BorderLayout.SOUTH);

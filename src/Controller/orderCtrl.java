@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import DAO.CustomerDAOIMP;
 import Frames.customerFrame;
@@ -36,14 +37,19 @@ public class orderCtrl implements ActionListener {
 		if (obj instanceof JButton) {
 			JButton btn = (JButton) obj;
 			if (btn == this.ordFrame.btnBack) {
-				this.cusFrame.changToCart();
+				SwingUtilities.invokeLater(() -> {
+					this.cusFrame.changToCart();
+	            });
+				
 			} else if (btn == this.ordFrame.btnTransfer) {
 				this.cusFrame.changToQRPay(this.ordFrame.getList());
 				this.createOrderForCus();
 			} else if( btn == this.ordFrame.btnCash) {
 				JOptionPane.showMessageDialog(this.cusFrame, "Hóa đơn đã được in, vui lòng kiểm tra trước khi thanh toán");
 				this.createOrderForCus();
-				this.cusFrame.changToCart();
+				SwingUtilities.invokeLater(() -> {
+					this.cusFrame.changToCart();
+	            });
 			}
 
 		}

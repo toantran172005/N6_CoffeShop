@@ -3,41 +3,63 @@ package Controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import DAO.orderDAO;
 import Frames.employeeFrame;
 import Frames.orderDetailFrame;
 
-public class orderDetailCtrl implements ActionListener{
+public class orderDetailCtrl implements ActionListener {
 	private orderDetailFrame ordeFrame;
 	private orderDAO ordDao;
 	private employeeFrame emp;
 	private InvoiceCtrl Invoice;
-	public orderDetailCtrl(orderDetailFrame ordeFrame,employeeFrame emp) {
+
+	public orderDetailCtrl(orderDetailFrame ordeFrame, employeeFrame emp) {
 		super();
-		this.emp=emp;
-		this.ordeFrame=ordeFrame;
+		this.emp = emp;
+		this.ordeFrame = ordeFrame;
 		this.ordDao = new orderDAO();
 		this.Invoice = new InvoiceCtrl();
 	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Object o =e.getSource();
-		if(o.equals(ordeFrame.btnBack)) {
-			this.emp.changeToOrder();
-		}else if(o.equals(ordeFrame.btnCash)){
-			int ID=ordeFrame.o.getOrderID();
-			int IDemp=emp.employeeID;
-			boolean check=ordDao.updateOrderState(ID,IDemp, "Dã xử lí");
-			if(check) {
-				JOptionPane.showMessageDialog(null, "Đã xác nhận");
+		Object obj = e.getSource();
+
+		if (obj instanceof JButton) {
+
+			JButton btn = (JButton) obj;
+//			Quay lại
+			if (btn.equals(ordeFrame.btnBack)) {
+				this.emp.changeToOrder();
+//			Xác nhận thanh toán
+			} else if (btn.equals(ordeFrame.btnAccept)) {
+				int ID = ordeFrame.getO().getOrderID();
+				int IDemp = emp.getEmployeeID();
+				boolean check = ordDao.updateOrderState(ID, IDemp, "Đã xử lí");
+				if (check) {
+					JOptionPane.showMessageDialog(this.emp, "Đã xác nhận");
+					SwingUtilities.invokeLater(() -> {
+						this.emp.changeToOrder();
+		            });
+					
+				} else {
+					JOptionPane.showMessageDialog(this.emp, "Lỗi");
+				}
+				return;
+//			In hóa đơn
+			} else if (btn.equals(ordeFrame.btnPrint)) {
+				Invoice.exportInvoiceToFile(ordeFrame.getO(), ordeFrame, emp); // Xóa hóa đơn đã in
+				SwingUtilities.invokeLater(() -> {
+					this.emp.changeToOrder();
+	            });
+				return;
 			}
-			else {
-				JOptionPane.showMessageDialog(null, "Lỗi");
-			}
-		}else if(o.equals(ordeFrame.btnPrint)){
-			Invoice.exportInvoiceToFile(ordeFrame.o, ordeFrame, emp);
+
 		}
+
 	}
 }

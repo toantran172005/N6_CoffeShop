@@ -38,10 +38,8 @@ public class InvoiceCtrl {
 	       System.out.println(empl.getEmployeeID());
 	        writer.write("Date: " + order.getOrderDate() + "\n");
 	        writer.write("EmployeeName: " +empName + "\n");
-//	        writer.write("CustomerName: "+""  + "\n");
-
-	        writer.write("ITEM              QTy           Amount\n");
-	        writer.write("---------------------------------------\n");
+	        writer.write("Sản phẩm              Số lượng           Đơn giá\n");
+	        writer.write("-------------------------------------------------\n");
 
 	        int total = 0;
 	        for (OrderDetails detail : list) {
@@ -51,20 +49,20 @@ public class InvoiceCtrl {
 	            int amount = price * quantity;
 	            total += amount;
 
-	            writer.write(String.format("%-17s %-13d %,d₫\n", itemName, quantity, amount));
+	            writer.write(String.format("%-21s %-18d %,d₫\n", itemName, quantity, amount));
 	        }
 
-	        writer.write("---------------------------------------\n");
-	        writer.write(String.format("TOTAL(+VAT):         %,d₫\n", total));
-	        writer.write("---------------------------------------\n");
-	        writer.write("\t---Xin Cảm ơn, hẹn gặp lại---\n");
+	        writer.write("-------------------------------------------------\n");
+	        writer.write(String.format("TOTAL(+VAT):                             %,d₫\n", total));
+	        writer.write("-------------------------------------------------\n");
+	        writer.write("-------Xin cảm ơn vì đã sử dụng dịch vụ----------\n");
 
 	        writer.close();
 
-	        JOptionPane.showMessageDialog(null, "Hóa đơn đã được in ra file");
+	        JOptionPane.showMessageDialog(emp, "Hóa đơn đã được in ra file");
 	    } catch (IOException e) {
 	        e.printStackTrace();
-	        JOptionPane.showMessageDialog(null, "Lỗi khi ghi file hóa đơn!");
+	        JOptionPane.showMessageDialog(emp, "Lỗi khi ghi file hóa đơn!");
 	    }
 	}
 

@@ -27,7 +27,7 @@ import Models.Employees;
 import Models.Orders;
 
 
-public class orderEmpFrame extends JFrame {
+public class orderEmpFrame {
     public Employees employees;
     public orderEmpCtrl orCtrl;
     public int employeeID;
@@ -35,11 +35,8 @@ public class orderEmpFrame extends JFrame {
     public Map<JButton, Orders> btnMap = new HashMap<>();
     NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
     public orderEmpFrame(int employeeID, employeeFrame empFrame) {
-        super("Danh sách hóa đơn chưa xử lý");
         this.employeeID = employeeID;
         this.orCtrl = new orderEmpCtrl(this, empFrame); // Khởi tạo controller trước
-        JPanel contentPanel = loadOrder(employeeID);
-        add(contentPanel, BorderLayout.CENTER);
     }
 
     public JPanel loadOrder(int employeeID) {

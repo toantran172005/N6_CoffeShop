@@ -28,7 +28,10 @@ public class orderEmpCtrl implements ActionListener {
 
             if (ordFrame != null && ordFrame.btnMap.containsKey(btn)) {
                 Orders o = ordFrame.btnMap.get(btn);
-                empFrame.changeToDetailOrder(o);
+                SwingUtilities.invokeLater(() -> {
+                	empFrame.changeToDetailOrder(o);
+	            });
+                
             }
         }
     }

@@ -72,14 +72,12 @@ public class employeeFrame extends JFrame {
 	public EmployeeDAOIMP empDAO;
 	public Map<JButton, Products> mapProduct;
 	public JLabel lbOrder;
-	private orderEmpCtrl ordCtrl;
 
 	public employeeFrame(int employeeID) {
 		super("Nhóm 6 - CoffeeShop");
 		this.employeeID = employeeID;
 		this.empDAO = new EmployeeDAOIMP();
 		this.EmpCtrl = new employeeCtrl(this);
-		this.ordCtrl = new orderEmpCtrl(null, this);
 		this.listProduct = new ArrayList<>();
 		this.mapProduct = new HashMap<JButton, Products>();
 		this.setListProduct(empDAO.getListProductFromDb());
@@ -381,12 +379,13 @@ public class employeeFrame extends JFrame {
 	}
 
 	public void changeToOrder() {
-		orderEmpFrame ord = new orderEmpFrame(employeeID,this);
+		orderEmpFrame ord = new orderEmpFrame(employeeID, this);
 		pnlContent = ord.loadOrder(employeeID);
 		scrollProduct.setViewportView(pnlContent);
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
 	}
+
 	public void changeToDetailOrder(Orders o) {
 		orderDetailFrame ord = new orderDetailFrame(this, o);
 		pnlContent = ord.getOrderPanel();
@@ -395,6 +394,7 @@ public class employeeFrame extends JFrame {
 		scrollProduct.repaint();
 	}
 
+	@SuppressWarnings("serial")
 	public void KeyboardShortcuts() {
 		InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		ActionMap actionMap = getRootPane().getActionMap();
@@ -427,6 +427,17 @@ public class employeeFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				lbMenu.dispatchEvent(new MouseEvent(lbMenu, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0, 0,
 						0, 1, false));
+			}
+		});
+		
+//	 	Ctrl+O mở hóa đơn
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK ),
+				"orderShortcut");
+		actionMap.put("orderShortcut", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lbOrder.dispatchEvent(new MouseEvent(lbOrder, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
+						0, 0, 1, false));
 			}
 		});
 
@@ -486,7 +497,6 @@ public class employeeFrame extends JFrame {
 	public void setEmployeeID(int employeeID) {
 		this.employeeID = employeeID;
 	}
-
 
 	public class RoundedTextField extends JTextField {
 		/**
