@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 
 import Database.DatabaseConnection;
 import Models.Employees;
-import Models.Employees;
 import Models.Orders;
 import Models.ProductType;
 import Models.Products;

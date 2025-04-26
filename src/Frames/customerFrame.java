@@ -92,93 +92,6 @@ public class customerFrame extends JFrame {
 		this.loadCusInfor();
 	}
 
-	public void KeyboardShortcuts() {
-		InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-		ActionMap actionMap = getRootPane().getActionMap();
-
-//	     Ctrl + Shift + H: quay về trang chủ
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-				"home");
-		actionMap.put("home", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				lbCoffee.dispatchEvent(new MouseEvent(lbCoffee, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
-						0, 0, 1, false));
-			}
-		});
-
-//	     Ctrl + F: focus vào ô tìm kiếm
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK), "focusSearch");
-		actionMap.put("focusSearch", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				txtTimKiem.requestFocusInWindow();
-			}
-		});
-
-//	     Ctrl + Shift + M: mở menu
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-				"menu");
-		actionMap.put("menu", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				lbMenu.dispatchEvent(new MouseEvent(lbMenu, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0, 0,
-						0, 1, false));
-			}
-		});
-
-//	 	Ctrl+Shift+I mở thông tin cá nhân
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-				"infoShortcut");
-		actionMap.put("infoShortcut", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				lblInfo.dispatchEvent(new MouseEvent(lblInfo, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
-						0, 0, 1, false));
-			}
-		});
-
-//		Ctrl+Shift+C mở giỏ hàng
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-				"cart");
-		actionMap.put("cart", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				lbCart.dispatchEvent(new MouseEvent(lbCart, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0, 0,
-						0, 1, false));
-			}
-		});
-
-//		Button
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-				"filterAll");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-				"filterDrink");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
-				"filterFood");
-//		Hiển thị tất cả sản phẩm : Ctrl + Shift + A
-		actionMap.put("filterAll", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				btnTatCa.doClick(); 
-			}
-		});
-//		Hiển thị đồ uống : Ctrl + Shift + D
-		actionMap.put("filterDrink", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				btnDrink.doClick(); 
-			}
-		});
-//		Hiển thị đồ ăn : Ctrl + Shift + F
-		actionMap.put("filterFood", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				btnFood.doClick(); 
-			}
-		});
-	}
-
 	public void loadCusInfor() {
 		this.setSize(1200, 800);
 		this.setLocationRelativeTo(null);
@@ -504,6 +417,94 @@ public class customerFrame extends JFrame {
 		scrollProduct.setViewportView(pnlContent);
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
+	}
+	
+	@SuppressWarnings("serial")
+	public void KeyboardShortcuts() {
+		InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		ActionMap actionMap = getRootPane().getActionMap();
+
+//	     Ctrl + Shift + H: quay về trang chủ
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"home");
+		actionMap.put("home", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lbCoffee.dispatchEvent(new MouseEvent(lbCoffee, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
+						0, 0, 1, false));
+			}
+		});
+
+//	     Ctrl + F: focus vào ô tìm kiếm
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK), "focusSearch");
+		actionMap.put("focusSearch", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				txtTimKiem.requestFocusInWindow();
+			}
+		});
+
+//	     Ctrl + Shift + M: mở menu
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"menu");
+		actionMap.put("menu", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lbMenu.dispatchEvent(new MouseEvent(lbMenu, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0, 0,
+						0, 1, false));
+			}
+		});
+
+//	 	Ctrl+Shift+I mở thông tin cá nhân
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"infoShortcut");
+		actionMap.put("infoShortcut", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lblInfo.dispatchEvent(new MouseEvent(lblInfo, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
+						0, 0, 1, false));
+			}
+		});
+
+//		Ctrl+Shift+C mở giỏ hàng
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"cart");
+		actionMap.put("cart", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lbCart.dispatchEvent(new MouseEvent(lbCart, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0, 0,
+						0, 1, false));
+			}
+		});
+
+//		Button
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"filterAll");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"filterDrink");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"filterFood");
+//		Hiển thị tất cả sản phẩm : Ctrl + Shift + A
+		actionMap.put("filterAll", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnTatCa.doClick(); 
+			}
+		});
+//		Hiển thị đồ uống : Ctrl + Shift + D
+		actionMap.put("filterDrink", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnDrink.doClick(); 
+			}
+		});
+//		Hiển thị đồ ăn : Ctrl + Shift + F
+		actionMap.put("filterFood", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnFood.doClick(); 
+			}
+		});
 	}
 
 	public ArrayList<Products> getListProduct() {

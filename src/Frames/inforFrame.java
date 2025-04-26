@@ -10,7 +10,6 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.AbstractAction;
@@ -192,6 +191,7 @@ public class inforFrame {
 		return panel;
 	}
 
+	@SuppressWarnings("unused")
 	public JPanel empInforPanel() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
@@ -312,6 +312,7 @@ public class inforFrame {
 		return panel;
 	}
 	
+	@SuppressWarnings("serial")
 	public void KeyboardShortcuts(JPanel panel) {
         InputMap inputMap = panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = panel.getActionMap();

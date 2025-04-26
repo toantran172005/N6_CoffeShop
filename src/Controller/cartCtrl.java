@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import DAO.CustomerDAOIMP;
 import Frames.cartFrame;
@@ -111,7 +112,12 @@ public class cartCtrl implements ActionListener, ItemListener {
 			        	list.add(item);
 			        }
 			    }
-				this.cusFrame.changToOrder(list);
+				
+				if(list.isEmpty()) 
+					JOptionPane.showMessageDialog(this.cusFrame, "Vui lòng chọn sản phẩm để mua");
+				 else this.cusFrame.changToOrder(list);
+				
+				
 			}
 		}
 	}

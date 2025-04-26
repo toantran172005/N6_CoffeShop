@@ -384,6 +384,7 @@ public class employeeFrame extends JFrame {
 		scrollProduct.repaint();
 	}
 
+	@SuppressWarnings("serial")
 	public void KeyboardShortcuts() {
 		InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		ActionMap actionMap = getRootPane().getActionMap();
@@ -426,6 +427,17 @@ public class employeeFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				lblInfo.dispatchEvent(new MouseEvent(lblInfo, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
+						0, 0, 1, false));
+			}
+		});
+		
+//	 	Ctrl+O mở hóa đơn
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK ),
+				"orderShortcut");
+		actionMap.put("orderShortcut", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lbOrder.dispatchEvent(new MouseEvent(lbOrder, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0,
 						0, 0, 1, false));
 			}
 		});

@@ -1,6 +1,5 @@
 package DAO;
 
-import Models.Customers;
 import Models.Employees;
 import Models.Products;
 import Models.Orders;
