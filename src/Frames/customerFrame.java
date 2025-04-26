@@ -92,6 +92,8 @@ public class customerFrame extends JFrame {
 		this.loadCusInfor();
 	}
 
+
+
 	public void loadCusInfor() {
 		this.setSize(1200, 800);
 		this.setLocationRelativeTo(null);

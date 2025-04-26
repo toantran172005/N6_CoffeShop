@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import DAO.CustomerDAOIMP;
 import Frames.customerFrame;
@@ -108,7 +109,10 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 				this.cusframe.pnlMenu.setVisible(this.cusframe.isMenuAppear);
 //				label thông tin cá nhân
 			} else if (label == this.cusframe.lblInfo) {
-				this.cusframe.changeToInfor();
+				SwingUtilities.invokeLater(() -> {
+					this.cusframe.changeToInfor();
+	            });
+				
 //				label đăng nhâp
 			} else if (label == this.cusframe.lblLogin) {
 				this.cusframe.dispose();
