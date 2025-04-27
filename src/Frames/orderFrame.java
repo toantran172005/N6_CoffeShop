@@ -68,6 +68,10 @@ public class orderFrame {
 		JLabel lblQuantity = new JLabel("Số lượng");
 		lblQuantity.setFont(new Font("Times New Roman", Font.BOLD, 18));
 		lblQuantity.setPreferredSize(new Dimension(100, 30));
+		
+		JLabel lblSize = new JLabel("Size");
+		lblSize.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		lblSize.setPreferredSize(new Dimension(80, 30));
 
 		JLabel lblPrice = new JLabel("Đơn giá");
 		lblPrice.setFont(new Font("Times New Roman", Font.BOLD, 18));
@@ -86,6 +90,8 @@ public class orderFrame {
 		headerPanel.add(lblProductName);
 		headerPanel.add(Box.createHorizontalStrut(10));
 		headerPanel.add(lblQuantity);
+		headerPanel.add(Box.createHorizontalStrut(10));
+		headerPanel.add(lblSize);
 		headerPanel.add(Box.createHorizontalStrut(10));
 		headerPanel.add(lblPrice);
 		headerPanel.add(Box.createHorizontalStrut(10));
@@ -121,6 +127,10 @@ public class orderFrame {
 			JLabel lblItemQuantity = new JLabel(String.valueOf(quantityVal));
 			lblItemQuantity.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 			lblItemQuantity.setPreferredSize(new Dimension(100, 30));
+			
+		    JLabel lblItemSize = new JLabel(item.getProduct().getSize() != null ? item.getProduct().getSize() : "N/A");
+		    lblItemSize.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		    lblItemSize.setPreferredSize(new Dimension(80, 30));
 
 			JLabel lblItemPrice = new JLabel(String.format("₫%,d", (int) price));
 			lblItemPrice.setFont(new Font("Times New Roman", Font.PLAIN, 18));
@@ -135,6 +145,8 @@ public class orderFrame {
 			itemPanel.add(lblItemName);
 			itemPanel.add(Box.createHorizontalStrut(10));
 			itemPanel.add(lblItemQuantity);
+			itemPanel.add(Box.createHorizontalStrut(10));
+		    itemPanel.add(lblItemSize);
 			itemPanel.add(Box.createHorizontalStrut(10));
 			itemPanel.add(lblItemPrice);
 			itemPanel.add(Box.createHorizontalStrut(10));

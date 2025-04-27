@@ -5,7 +5,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
+import DAO.CustomerDAOIMP;
 import DAO.EmployeeDAOIMP;
+import Frames.customerFrame;
 import Frames.employeeFrame;
 import Frames.productDetailFrame;
 import Models.Products;
@@ -14,12 +16,21 @@ public class proDetailCtrl implements ActionListener{
 	public productDetailFrame proFrame;
 	public Products product;
 	public employeeFrame empFrame;
+	public customerFrame cusFrame;
+	private CustomerDAOIMP cusDAO;
 
 	public proDetailCtrl(productDetailFrame proFrame, Products product,employeeFrame empFrame) {
 		super();
 		this.product = product;
 		this.proFrame = proFrame;
 		this.empFrame=empFrame;
+	}
+	
+	public proDetailCtrl(productDetailFrame proFrame, customerFrame cusFrame) {
+		super();
+		this.proFrame = proFrame;
+		this.cusFrame = cusFrame;
+		cusDAO = new CustomerDAOIMP();
 	}
 
 	@Override
@@ -78,6 +89,21 @@ public class proDetailCtrl implements ActionListener{
                         JOptionPane.showMessageDialog(null, "Xóa sản phẩm thất bại!");
                     }
                 }
+//                Tăng quantity
+            } else if (btn == this.proFrame.btnPlus) {
+            	int qty = Integer.parseInt(this.proFrame.lblQuantity.getText());
+            	this.proFrame.lblQuantity.setText(String.valueOf(qty + 1));
+            } else if(btn == this.proFrame.btnMinus) {
+//            	Giảm quantity
+            	int qty = Integer.parseInt(this.proFrame.lblQuantity.getText());
+				if (qty > 1)
+					this.proFrame.lblQuantity.setText(String.valueOf(qty - 1));
+            } else if (btn == this.proFrame.btnAddToCart) {
+            	int quantity = Integer.valueOf(this.proFrame.lblQuantity.getText());
+            	Products p = this.proFrame.getProCus();
+            	String size = this.proFrame.cmbSize.getSelectedItem().toString();
+            	p.setSize(size);
+            	this.cusDAO.addProductToCart(this.cusFrame.getCustomerID(), p, quantity);
             }
 		}
 	}

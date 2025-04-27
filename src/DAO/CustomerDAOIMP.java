@@ -41,8 +41,7 @@ public class CustomerDAOIMP implements CustomerDAO {
 		Statement sta = null;
 		ResultSet rs = null;
 		ArrayList<Products> listProduct = new ArrayList<>();
-		String sql = "SELECT ProductID, ProductName, ProductTypeID, Price, Quantity, Description, Size, ProductIMG FROM Products "
-				+ "WHERE ProductID % 2 = 0" + "OR ProductID IN (17,19)";
+		String sql = "SELECT ProductID, ProductName, ProductTypeID, Price, Quantity, Description, Size, ProductIMG FROM Products ";
 		try {
 			sta = con.createStatement();
 			rs = sta.executeQuery(sql);
@@ -326,7 +325,7 @@ public class CustomerDAOIMP implements CustomerDAO {
 				rsCart.close();
 			}
 
-			String sql = "SELECT p.ProductID, p.ProductName, p.ProductIMG, p.Price, ci.Quantity "
+			String sql = "SELECT p.ProductID, p.ProductName, p.ProductIMG, p.Price, ci.Quantity, p.Size "
 					+ "FROM dbo.CartItems ci JOIN dbo.Products p ON ci.ProductID = p.ProductID "
 					+ "WHERE ci.CartID = ?";
 			PreparedStatement pre = con.prepareStatement(sql);
@@ -338,7 +337,8 @@ public class CustomerDAOIMP implements CustomerDAO {
 				String img = rs.getString(3);
 				double price = rs.getBigDecimal(4).doubleValue();
 				int quantity = rs.getInt(5);
-				Products p = new Products(productID, productName, new ProductType(), price, 0, "", "", img);
+				String size = rs.getString(6);
+				Products p = new Products(productID, productName, new ProductType(), price, 0, "", size, img);
 				CartItems item = new CartItems(0, new Carts(), p, quantity);
 				cartItems.add(item);
 			}

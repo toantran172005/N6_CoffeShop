@@ -137,8 +137,7 @@ public class EmployeeDAOIMP implements EmployeeDAO {
 		Statement sta = null;
 		ResultSet rs = null;
 		ArrayList<Products> listProduct = new ArrayList<>();
-		String sql = "SELECT ProductID, ProductName, ProductTypeID, Price, Quantity, Description, Size, ProductIMG FROM Products "
-				+ "WHERE ProductID % 2 = 0" + "OR ProductID IN (17,19)";
+		String sql = "SELECT ProductID, ProductName, ProductTypeID, Price, Quantity, Description, Size, ProductIMG FROM Products ";
 		try {
 			 sta = con.createStatement();
 			 rs = sta.executeQuery(sql);

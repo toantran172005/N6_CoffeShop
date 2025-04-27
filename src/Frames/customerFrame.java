@@ -34,6 +34,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -65,6 +66,7 @@ public class customerFrame extends JFrame {
 	public JPanel pnlContent;
 	public Map<JButton, Products> mapAddToCart;
 	public Map<JButton, JLabel> mapQuantity;
+	public Map<JPanel, Products> mapDetailProduct;
 	public JScrollPane scrollProduct;
 	public RoundedTextField txtTimKiem;
 	public JPanel pnlMenu;
@@ -84,6 +86,7 @@ public class customerFrame extends JFrame {
 		this.mapMinus = new HashMap<>();
 		this.mapAddToCart = new HashMap<>();
 		this.mapQuantity = new HashMap<>();
+		this.mapDetailProduct = new HashMap<>();
 		this.listProduct = new ArrayList<>();
 		this.setListProduct(cusDAO.getListProductFromDb());
 		this.addWindowListener(cusCtrl);
@@ -91,8 +94,6 @@ public class customerFrame extends JFrame {
 		KeyboardShortcuts();
 		this.loadCusInfor();
 	}
-
-
 
 	public void loadCusInfor() {
 		this.setSize(1200, 800);
@@ -228,39 +229,54 @@ public class customerFrame extends JFrame {
 			pnlTitle.add(proTitle);
 
 			Font btnFont = new Font("Times New Roman", Font.BOLD, 18);
-			JButton btnPlus = new JButton("+");
-			btnPlus.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			btnPlus.setFont(btnFont);
-			JButton btnMinus = new JButton("-");
-			btnMinus.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			btnMinus.setFont(btnFont);
-			JLabel quantity = new JLabel("1");
-			quantity.setFont(btnFont);
-			JButton btnAddtoCart = new JButton("Thêm vào giỏ hàng");
-			btnAddtoCart.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			btnAddtoCart.setFont(btnFont);
-
-			mapPlus.put(btnPlus, quantity);
-			mapMinus.put(btnMinus, quantity);
-			mapAddToCart.put(btnAddtoCart, p);
-			mapQuantity.put(btnAddtoCart, quantity);
-			btnPlus.addActionListener(cusCtrl);
-			btnMinus.addActionListener(cusCtrl);
-			btnAddtoCart.addActionListener(cusCtrl);
-
-			Box box = Box.createHorizontalBox();
-			box.add(btnMinus);
-			box.add(Box.createHorizontalStrut(5));
-			box.add(quantity);
-			box.add(Box.createHorizontalStrut(5));
-			box.add(btnPlus);
-			box.add(Box.createHorizontalStrut(20));
-			box.add(btnAddtoCart);
-
 			Box south = Box.createVerticalBox();
 			south.add(pnlTitle);
 			south.add(Box.createVerticalStrut(10));
-			south.add(box);
+
+//		     Kiểm tra quantity
+			if (p.getQuantity() == 0) {
+//		         label "Bán Hết"
+				JLabel soldOutLabel = new JLabel("Bán Hết", SwingConstants.CENTER);
+				soldOutLabel.setFont(new Font("Times New Roman", Font.BOLD, 18));
+				soldOutLabel.setForeground(Color.WHITE);
+				soldOutLabel.setOpaque(true);
+				soldOutLabel.setBackground(Color.RED);
+
+				JPanel soldOutPanel = new JPanel(new BorderLayout());
+				soldOutPanel.setOpaque(false);
+				soldOutPanel.add(soldOutLabel, BorderLayout.CENTER);
+				south.add(soldOutPanel);
+			} else {
+				JButton btnPlus = new JButton("+");
+				btnPlus.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				btnPlus.setFont(btnFont);
+				JButton btnMinus = new JButton("-");
+				btnMinus.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				btnMinus.setFont(btnFont);
+				JLabel quantity = new JLabel("1");
+				quantity.setFont(btnFont);
+				JButton btnAddtoCart = new JButton("Thêm vào giỏ hàng");
+				btnAddtoCart.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				btnAddtoCart.setFont(btnFont);
+
+				mapPlus.put(btnPlus, quantity);
+				mapMinus.put(btnMinus, quantity);
+				mapAddToCart.put(btnAddtoCart, p);
+				mapQuantity.put(btnAddtoCart, quantity);
+				btnPlus.addActionListener(cusCtrl);
+				btnMinus.addActionListener(cusCtrl);
+				btnAddtoCart.addActionListener(cusCtrl);
+
+				Box box = Box.createHorizontalBox();
+				box.add(btnMinus);
+				box.add(Box.createHorizontalStrut(5));
+				box.add(quantity);
+				box.add(Box.createHorizontalStrut(5));
+				box.add(btnPlus);
+				box.add(Box.createHorizontalStrut(20));
+				box.add(btnAddtoCart);
+				south.add(box);
+			}
 
 			ImageIcon itemIcon = new ImageIcon(getClass().getResource(p.getProductImg()));
 			Image itemImg = itemIcon.getImage();
@@ -273,7 +289,10 @@ public class customerFrame extends JFrame {
 			item.setPreferredSize(new Dimension(330, 250));
 			item.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1),
 					BorderFactory.createEmptyBorder(0, 0, 10, 0)));
+
 			item.addMouseListener(cusCtrl);
+			
+			this.mapDetailProduct.put(item, p);
 
 			gbc.gridx = gridx;
 			gbc.gridy = gridy;
@@ -289,7 +308,6 @@ public class customerFrame extends JFrame {
 				gridy++;
 			}
 		}
-
 		JPanel footerPanel = new JPanel(new GridLayout(1, 3, 0, 0));
 		footerPanel.setPreferredSize(new Dimension(0, 120));
 
@@ -423,6 +441,14 @@ public class customerFrame extends JFrame {
 		scrollProduct.repaint();
 	}
 	
+	public void changToDetail(Products p) {
+		productDetailFrame proDetail = new productDetailFrame(this);
+		pnlContent = proDetail.LoadProDuctForCus(p);
+		scrollProduct.setViewportView(pnlContent);
+		scrollProduct.revalidate();
+		scrollProduct.repaint();
+	}
+
 	@SuppressWarnings("serial")
 	public void KeyboardShortcuts() {
 		InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -494,21 +520,21 @@ public class customerFrame extends JFrame {
 		actionMap.put("filterAll", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				btnTatCa.doClick(); 
+				btnTatCa.doClick();
 			}
 		});
 //		Hiển thị đồ uống : Ctrl + Shift + D
 		actionMap.put("filterDrink", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				btnDrink.doClick(); 
+				btnDrink.doClick();
 			}
 		});
 //		Hiển thị đồ ăn : Ctrl + Shift + F
 		actionMap.put("filterFood", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				btnFood.doClick(); 
+				btnFood.doClick();
 			}
 		});
 	}
@@ -577,5 +603,6 @@ public class customerFrame extends JFrame {
 			g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 		}
 	}
+
 
 }

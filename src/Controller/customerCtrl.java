@@ -13,11 +13,13 @@ import java.util.regex.Pattern;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import DAO.CustomerDAOIMP;
 import Frames.customerFrame;
 import Frames.loginFrame;
+import Frames.productDetailFrame;
 import Models.Products;
 
 public class customerCtrl implements ActionListener, MouseListener, WindowListener {
@@ -127,6 +129,15 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 			} else if(label == this.cusframe.lbCart) {
 				this.cusframe.changToCart();
 			}
+		} else if (obj instanceof JPanel) {
+			
+			JPanel panel = (JPanel) obj;
+			
+			if(this.cusframe.mapDetailProduct.containsKey(panel)) {
+				Products p = this.cusframe.mapDetailProduct.get(panel);
+				this.cusframe.changToDetail(p);
+			}
+			
 		}
 	}
 
