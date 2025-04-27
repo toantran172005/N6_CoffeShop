@@ -194,14 +194,16 @@ public class CustomerDAOIMP implements CustomerDAO {
 	}
 
 	@Override
-	public void addProductToCart(int customerId, Products product, int quantity) {
+	public int addProductToCart(int customerId, Products product, int quantity) {
 		PreparedStatement pre = null;
 		ResultSet rs = null;
 
 		try {
+			if (customerId == 0) {
+				return -1; // Chưa đăng nhập, trả về -1 (không thể thêm vào giỏ hàng)
+			}
 
-			if (customerId == 0)
-				return; // Chưa đăng nhập thì giỏ hàng trống
+			// 1. Lấy CartID của khách hàng
 			int cartId = 0;
 			String getCartQuery = "SELECT CartID FROM Carts WHERE CustomerID = ?";
 			pre = con.prepareStatement(getCartQuery);
@@ -212,7 +214,23 @@ public class CustomerDAOIMP implements CustomerDAO {
 				cartId = rs.getInt("CartID");
 			}
 
-//	         2. Kiểm tra nếu sản phẩm đã có trong CartItem, thì cập nhật số lượng
+			// 2. Kiểm tra số lượng sản phẩm có trong kho
+			String checkProductQuery = "SELECT Quantity FROM Products WHERE ProductID = ?";
+			pre = con.prepareStatement(checkProductQuery);
+			pre.setInt(1, product.getProductID());
+			ResultSet rsProduct = pre.executeQuery();
+
+			int productQuantityInStock = 0;
+			if (rsProduct.next()) {
+				productQuantityInStock = rsProduct.getInt("Quantity");
+			}
+
+			// Nếu số lượng yêu cầu lớn hơn số lượng trong kho
+			if (quantity > productQuantityInStock) {
+				return productQuantityInStock; // Trả về số lượng còn lại trong kho
+			}
+
+			// 3. Kiểm tra nếu sản phẩm đã có trong CartItems, thì cập nhật số lượng
 			String checkItemQuery = "SELECT Quantity FROM CartItems WHERE CartID = ? AND ProductID = ?";
 			pre = con.prepareStatement(checkItemQuery);
 			pre.setInt(1, cartId);
@@ -220,9 +238,14 @@ public class CustomerDAOIMP implements CustomerDAO {
 			rs = pre.executeQuery();
 
 			if (rs.next()) {
-//	             Đã tồn tại thì cập nhật số lượng
+				// Sản phẩm đã có trong giỏ hàng, cập nhật số lượng
 				int existQuantity = rs.getInt("Quantity");
 				int newQuantity = existQuantity + quantity;
+
+				if (newQuantity > productQuantityInStock) {
+					// Kiểm tra nếu số lượng mới cộng thêm vượt quá số lượng có sẵn trong kho
+					return productQuantityInStock; // Trả về số lượng còn lại trong kho
+				}
 
 				String updateQuery = "UPDATE CartItems SET Quantity = ? WHERE CartID = ? AND ProductID = ?";
 				pre = con.prepareStatement(updateQuery);
@@ -230,9 +253,13 @@ public class CustomerDAOIMP implements CustomerDAO {
 				pre.setInt(2, cartId);
 				pre.setInt(3, product.getProductID());
 				pre.executeUpdate();
-
 			} else {
-				// Chưa có thì insert mới
+				// Chưa có sản phẩm trong giỏ hàng, insert mới
+				if (quantity > productQuantityInStock) {
+					// Kiểm tra nếu số lượng yêu cầu lớn hơn số lượng có sẵn trong kho
+					return productQuantityInStock; // Trả về số lượng còn lại trong kho
+				}
+
 				String insertQuery = "INSERT INTO CartItems (CartID, ProductID, Quantity) VALUES (?, ?, ?)";
 				pre = con.prepareStatement(insertQuery);
 				pre.setInt(1, cartId);
@@ -241,11 +268,16 @@ public class CustomerDAOIMP implements CustomerDAO {
 				pre.executeUpdate();
 			}
 
-			pre.close();
+			// Đóng ResultSet và PreparedStatement
 			rs.close();
+			rsProduct.close();
+			pre.close();
+
+			return 0; // Thành công, trả về 0 (không có vấn đề gì)
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return -1; // Trả về -1 nếu có lỗi xảy ra
 		}
 	}
 
@@ -424,31 +456,33 @@ public class CustomerDAOIMP implements CustomerDAO {
 	}
 
 	@Override
-	public void createOrder(Orders order, ArrayList<CartItems> list) {
+	public void createOrder(Orders order, ArrayList<CartItems> list, String paymentMethod) {
 		PreparedStatement pre = null;
 		PreparedStatement preDetail = null;
+		PreparedStatement updateProduct = null;
+		PreparedStatement prePayment = null;
 		ResultSet getKey = null;
 		try {
-//			Tạo order
-			String createOrder = "INSERT INTO Orders(CustomerID, TotalPrice) " + "VALUES (?,?)";
+
+			String createOrder = "INSERT INTO Orders(CustomerID, TotalPrice) VALUES (?, ?)";
 			pre = con.prepareStatement(createOrder, Statement.RETURN_GENERATED_KEYS);
 			pre.setInt(1, order.getCustomerID().getCustomerID());
 			pre.setDouble(2, order.getTotalPrice());
-
 			pre.executeUpdate();
 
 			getKey = pre.getGeneratedKeys();
-
 			int orderId = -1;
 			if (getKey.next()) {
-			    orderId = getKey.getInt(1);
+				orderId = getKey.getInt(1);
 			}
 
 			pre.close();
 
-//			Tạo orderDetail
-			String createOrderDetail = "INSERT INTO OrderDetails(OrderID, ProductID, Quantity, Price) VALUES (?,?,?,?)";
+			String createOrderDetail = "INSERT INTO OrderDetails(OrderID, ProductID, Quantity, Price) VALUES (?, ?, ?, ?)";
 			preDetail = con.prepareStatement(createOrderDetail);
+
+			String updateProductSQL = "UPDATE Products SET Quantity = Quantity - ? WHERE ProductID = ?";
+			updateProduct = con.prepareStatement(updateProductSQL);
 
 			for (CartItems item : list) {
 				preDetail.setInt(1, orderId);
@@ -456,15 +490,36 @@ public class CustomerDAOIMP implements CustomerDAO {
 				preDetail.setInt(3, item.getQuantity());
 				preDetail.setDouble(4, item.getProduct().getPrice());
 				preDetail.addBatch();
+
+				updateProduct.setInt(1, item.getQuantity());
+				updateProduct.setInt(2, item.getProduct().getProductID());
+				updateProduct.addBatch();
 			}
 
 			preDetail.executeBatch();
+			updateProduct.executeBatch();
+
+			String createPayment = "INSERT INTO Payments(OrderID, PaymentTotal, PaymentMethod) VALUES (?, ?, ?)";
+			prePayment = con.prepareStatement(createPayment);
+			prePayment.setInt(1, orderId);
+			prePayment.setDouble(2, order.getTotalPrice());
+			prePayment.setString(3, paymentMethod);
+			prePayment.executeUpdate();
+
 			preDetail.close();
+			updateProduct.close();
+			prePayment.close();
 
 		} catch (SQLException e) {
-			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			try {
+				if (getKey != null)
+					getKey.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-
 	}
 
 	@Override
@@ -506,20 +561,18 @@ public class CustomerDAOIMP implements CustomerDAO {
 
 	@Override
 	public Customers getByID(int id) {
-        Customers customer = null;
-        String sql = "SELECT * FROM Customers WHERE CustomerID = ?";
+		Customers customer = null;
+		String sql = "SELECT * FROM Customers WHERE CustomerID = ?";
 
-        try(PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                customer = new Customers(
-                    rs.getInt("CustomerID")
-                );
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return customer;
-    }
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				customer = new Customers(rs.getInt("CustomerID"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return customer;
+	}
 }

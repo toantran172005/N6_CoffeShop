@@ -41,7 +41,7 @@ public class productAddFrame extends JFrame {
 		// Tiêu đề
 		JPanel pnlTitle = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		lblAdd = new JLabel("Thêm sản phẩm mới");
-		lblAdd.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		lblAdd.setFont(new Font("Times New Roman", Font.BOLD, 40));
 		pnlTitle.add(lblAdd);
 		pnlMain.add(pnlTitle, BorderLayout.NORTH);
 
@@ -56,7 +56,7 @@ public class productAddFrame extends JFrame {
 
 		// Ảnh mặc định
 		ImageIcon defaultIcon = new ImageIcon(getClass().getResource(selectedImagePath));
-		Image scaledImage = defaultIcon.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
+		Image scaledImage = defaultIcon.getImage().getScaledInstance(350, 350, Image.SCALE_SMOOTH);
 		imgLabel = new JLabel(new ImageIcon(scaledImage));
 		imgLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
@@ -66,25 +66,26 @@ public class productAddFrame extends JFrame {
 		lblDefault.setFont(new Font("Times New Roman", Font.BOLD, 22));
 		lblDefault.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblDefault.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
-		
-
-		squareCard.add(imgLabel);
-		squareCard.add(lblDefault);
-		squareCard.add(Box.createVerticalStrut(5));
 		leftPanel.add(Box.createVerticalStrut(5));
 		leftPanel.add(Box.createHorizontalStrut(5));
 		leftPanel.add(squareCard);
 		//Chọn ảnh
 		btnChooseImg = new JButton("Chọn ảnh");
-		btnChooseImg.setFont(new Font("Time New Roman", Font.BOLD, 15));
+		btnChooseImg.setFont(new Font("Time New Roman", Font.BOLD, 22));
+		btnChooseImg.setBackground(new Color(0,102,102));
+		btnChooseImg.setForeground(Color.WHITE);
+		btnChooseImg.setBorderPainted(false);
 		btnChooseImg.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnChooseImg.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnChooseImg.addActionListener(addCtrl);
+		squareCard.add(imgLabel);
+		squareCard.add(lblDefault);
+		squareCard.add(Box.createVerticalStrut(10));
 		squareCard.add(btnChooseImg);
 		// Panel phải: Form
 		JPanel rightPanel = new JPanel();
 		Box formBox = Box.createVerticalBox();
-		Font font = new Font("Arial", Font.BOLD, 17);
+		Font font = new Font("Arial", Font.BOLD, 25);
 		formBox.add(Box.createVerticalStrut(50));
 		Box nameBox = Box.createHorizontalBox();
 		JLabel lblName = new JLabel("Tên sản phẩm: ");
@@ -152,19 +153,27 @@ public class productAddFrame extends JFrame {
 		lblSize.setPreferredSize(lblName.getPreferredSize());
 		lblQuantity.setPreferredSize(lblName.getPreferredSize());
 		
+		//footer
 		JPanel footer = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
 		footer.setPreferredSize(new Dimension(0, 60));
+		//Nút thêm
 		btnSave = new JButton("Thêm");
 		btnSave.setFont(font);
+		btnSave.setPreferredSize(new Dimension(150, 40));
+		btnSave.setBackground(new Color(0,102,51));
+		btnSave.setForeground(Color.WHITE);
+		btnSave.setBorderPainted(false);
 		btnSave.addActionListener(addCtrl);
-
-		btnCancel = new JButton("Hủy");
+		//Quay lại
+		btnCancel = new JButton("Quay lại");
 		btnCancel.setFont(font);
+		btnCancel.setPreferredSize(new Dimension(150, 40));
+		btnCancel.setBackground(new Color(200, 200, 200));
+		btnCancel.setBorderPainted(false);
 		btnCancel.addActionListener(addCtrl);
 		footer.add(btnSave);
 		footer.add(btnCancel);
 		formBox.add(footer);
-
 		rightPanel.add(formBox);
 
 		// Chia panel

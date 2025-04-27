@@ -9,7 +9,6 @@ import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,7 +18,6 @@ import javax.swing.SwingUtilities;
 import DAO.CustomerDAOIMP;
 import Frames.customerFrame;
 import Frames.loginFrame;
-import Frames.productDetailFrame;
 import Models.Products;
 
 public class customerCtrl implements ActionListener, MouseListener, WindowListener {
@@ -53,7 +51,9 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 			} else if (this.cusframe.mapAddToCart.containsKey(btn)) {
 				int quantity = Integer.valueOf(this.cusframe.mapQuantity.get(btn).getText());
 				Products p = this.cusframe.mapAddToCart.get(btn);
-				this.cusDAO.addProductToCart(this.cusframe.getCustomerID(), p, quantity);
+				int check = this.cusDAO.addProductToCart(this.cusframe.getCustomerID(), p, quantity);
+				if(check !=0)
+					JOptionPane.showMessageDialog(this.cusframe, "Sản phẩm chỉ còn " + check + " sản phẩm");
 			} else if (btn == this.cusframe.btnTatCa) {
 				this.cusframe.updateProductPanel(this.cusframe.listProduct); // Hiện tất cả sản phẩm
 			} else if (btn == this.cusframe.btnDrink) {
@@ -114,6 +114,8 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 				SwingUtilities.invokeLater(() -> {
 					this.cusframe.changeToInfor();
 	            });
+				this.cusframe.isMenuAppear = !this.cusframe.isMenuAppear;
+				this.cusframe.pnlMenu.setVisible(this.cusframe.isMenuAppear);
 				
 //				label đăng nhâp
 			} else if (label == this.cusframe.lblLogin) {
@@ -129,6 +131,7 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 			} else if(label == this.cusframe.lbCart) {
 				this.cusframe.changToCart();
 			}
+//			Chi tiết sản phẩm
 		} else if (obj instanceof JPanel) {
 			
 			JPanel panel = (JPanel) obj;
