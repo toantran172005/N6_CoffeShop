@@ -8,8 +8,8 @@ public class DatabaseConnection {
 
 	public static Connection getConnection() {
 		String url = "jdbc:sqlserver://localhost:1433;databaseName=N6_COFFEESHOP;encrypt=true;trustServerCertificate=true";
-		String username = "sa";
-		String password = "T111375t";
+		String username = "lynn";
+		String password = "12345";
 		try {
 			return DriverManager.getConnection(url, username, password);
 		} catch (SQLException e) {
