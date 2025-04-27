@@ -77,8 +77,9 @@ public class orderEmpFrame {
 
                 JButton btnDetail = new JButton("Chi tiết");
                 btnDetail.setFont(new Font("Times New Roman", Font.BOLD, 23));
-                btnDetail.setFocusPainted(false);
-                btnDetail.setBackground(new Color(220, 220, 220));
+                btnDetail.setForeground(Color.WHITE);
+                btnDetail.setBorderPainted(false);
+                btnDetail.setBackground(new Color(0, 102, 102));
                 btnMap.put(btnDetail, o);
                 btnDetail.addActionListener(orCtrl);
                 btnDetail.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

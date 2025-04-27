@@ -540,6 +540,7 @@ public class customerFrame extends JFrame {
 	}
 
 	public ArrayList<Products> getListProduct() {
+		this.setListProduct(cusDAO.getListProductFromDb());
 		return listProduct;
 	}
 

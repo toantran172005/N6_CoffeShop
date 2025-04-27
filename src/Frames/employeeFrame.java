@@ -222,8 +222,11 @@ public class employeeFrame extends JFrame {
 			JPanel pnlTitle = new JPanel(new FlowLayout(FlowLayout.CENTER));
 			pnlTitle.add(proTitle);
 
-			Font btnFont = new Font("Times New Roman", Font.BOLD, 18);
+			Font btnFont = new Font("Times New Roman", Font.BOLD, 20);
 			JButton btnEdit = new JButton("Chỉnh sửa sản phẩm");
+			btnEdit.setBackground(new Color(224, 224, 224));
+			btnEdit.setForeground(Color.BLACK);
+			btnEdit.setBorderPainted(false);
 			btnEdit.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			btnEdit.setFont(btnFont);
 			btnEdit.addActionListener(EmpCtrl);

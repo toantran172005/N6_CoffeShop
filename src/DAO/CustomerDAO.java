@@ -8,7 +8,7 @@ import Models.Orders;
 import Models.Products;
 
 public interface CustomerDAO {
-	void addProductToCart(int customerId, Products product, int quantity); // Thêm sản phẩm vào giỏ hàng
+	int addProductToCart(int customerId, Products product, int quantity); // Thêm sản phẩm vào giỏ hàng
 
 	int registerCustomer(String cusName, String email, String pwd, String phone, String address); // Đăng ký tài khoản
 
@@ -30,7 +30,7 @@ public interface CustomerDAO {
 	
 	void deleteCartItem(int customerID, Products product); // Xóa sản phẩm
 	
-	void createOrder(Orders orderm, ArrayList<CartItems> list); // Tạo hóa đơn
+	void createOrder(Orders orderm, ArrayList<CartItems> list, String paymentMethod); // Tạo hóa đơn
 	
 	void clearCart(int customerID, ArrayList<CartItems> list); // Xóa hết sản phẩm trong giỏ hàng
 	

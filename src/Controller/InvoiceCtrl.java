@@ -3,6 +3,7 @@ package Controller;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -33,7 +34,8 @@ public class InvoiceCtrl {
 
 			Employees empl = empDAO.getByID(Name);
 			String empName = empl.getEmployeeName();
-			writer.write("Date: " + order.getOrderDate() + "\n");
+			String date = order.getOrderDate().toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+			writer.write("Date: " + date + "\n");
 			writer.write("EmployeeName: " + empName + "\n");
 			writer.write("Sản phẩm              Số lượng           Đơn giá\n");
 			writer.write("-------------------------------------------------\n");
