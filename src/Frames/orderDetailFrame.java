@@ -32,6 +32,8 @@ public class orderDetailFrame {
 	public Orders o;
 	public orderDAOIMP ordDAO;
 	public employeeFrame emp;
+	public statisticFrame staFrame;
+	public int a;
 
 	public Orders getO() {
 		return o;
@@ -43,8 +45,9 @@ public class orderDetailFrame {
 	}
 
 
-	public orderDetailFrame(employeeFrame emp, Orders o) {
+	public orderDetailFrame(employeeFrame emp, Orders o, int a) {
 	    this.o = o;
+	    this.a=a;
 	    this.ordDAO = new orderDAOIMP();
 	    this.emp=emp;
 	    this.ordCtrl=new orderDetailCtrl(this, emp);
@@ -53,6 +56,8 @@ public class orderDetailFrame {
 
 
 	public JPanel getOrderPanel() {
+		
+		System.out.println(a);
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		mainPanel.setBackground(Color.WHITE);
 
@@ -206,7 +211,10 @@ public class orderDetailFrame {
 		footer.add(btnBack);
 		footer.add(btnAccept);
 		footer.add(btnPrint);
-
+		if (a==1) {
+			btnPrint.setEnabled(false);
+			btnAccept.setEnabled(false);
+		}
 		mainPanel.add(footer, BorderLayout.SOUTH);
 
 		return mainPanel;

@@ -23,6 +23,7 @@ public class orderDetailCtrl implements ActionListener {
 		this.ordeFrame = ordeFrame;
 		this.ordDao = new orderDAOIMP();
 		this.Invoice = new InvoiceCtrl();
+		
 	}
 
 	@Override

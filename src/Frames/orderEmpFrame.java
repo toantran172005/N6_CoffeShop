@@ -36,7 +36,7 @@ public class orderEmpFrame {
 	NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
     public orderEmpFrame(int employeeID, employeeFrame empFrame) {
         this.employeeID = employeeID;
-        this.orCtrl = new orderEmpCtrl(this, empFrame); // Khởi tạo controller trước
+        this.orCtrl = new orderEmpCtrl(this, empFrame,null); // Khởi tạo controller trước
     }
 
     public JPanel loadOrder(int employeeID) {
