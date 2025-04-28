@@ -48,6 +48,9 @@ public class inforFrame {
 	public JTextField txtDate;
 	public inforEmpCtrl infempctrl;
 	public customerFrame cusFrame;
+	public JButton btnImg;
+	public String selectedImagePath = "";
+	public JLabel lbImg;
 
 	public inforFrame(int id, customerFrame cusFrame) {
 		this.id = id;
@@ -78,8 +81,8 @@ public class inforFrame {
 		Box bImg = Box.createVerticalBox();
 		ImageIcon inforIcon = new ImageIcon(getClass().getResource("/Img/login.png"));
 		Image inforImg = inforIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-		JLabel lbImg = new JLabel(new ImageIcon(inforImg));
-		JButton btnImg = new JButton("Chọn ảnh");
+		lbImg = new JLabel(new ImageIcon(inforImg));
+		btnImg = new JButton("Chọn ảnh");
 		lbImg.setAlignmentX(Component.CENTER_ALIGNMENT);
 		bImg.add(lbImg);
 		bImg.add(Box.createVerticalStrut(10));
@@ -135,9 +138,17 @@ public class inforFrame {
 
 		Box bBtn = Box.createHorizontalBox();
 		btnBack = new JButton("Quay lại");
+		btnBack.setBackground(new Color(200, 200, 200));
 		btnChange = new JButton("Chỉnh sửa");
+		btnChange.setBackground(new Color(79, 195, 247)); // Xanh dương nhạt
 		btnSave = new JButton("Lưu");
+		btnSave.setBackground(new Color(102, 187, 106));
 		btnSave.setEnabled(false);
+		
+		btnSave.setBorderPainted(false);
+		btnChange.setBorderPainted(false);
+		btnBack.setBorderPainted(false);
+		
 		bBtn.add(btnChange);
 		bBtn.add(Box.createHorizontalStrut(10));
 		bBtn.add(btnSave);
@@ -198,8 +209,8 @@ public class inforFrame {
 		Box bImg = Box.createVerticalBox();
 		ImageIcon inforIcon = new ImageIcon(getClass().getResource("/Img/login.png"));
 		Image inforImg = inforIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-		JLabel lbImg = new JLabel(new ImageIcon(inforImg));
-		JButton btnImg = new JButton("Chọn ảnh");
+		lbImg = new JLabel(new ImageIcon(inforImg));
+		btnImg = new JButton("Chọn ảnh");
 		lbImg.setAlignmentX(Component.CENTER_ALIGNMENT);
 		bImg.add(lbImg);
 		bImg.add(Box.createVerticalStrut(10));
@@ -255,14 +266,23 @@ public class inforFrame {
 
 		Box bBtn = Box.createHorizontalBox();
 		btnBack = new JButton("Quay lại");
+		btnBack.setBackground(new Color(200, 200, 200));
 		btnChange = new JButton("Chỉnh sửa");
+		btnChange.setBackground(new Color(79, 195, 247)); // Xanh dương nhạt
 		btnSave = new JButton("Lưu");
+		btnSave.setBackground(new Color(102, 187, 106));
 		btnSave.setEnabled(false);
+		
+		btnSave.setBorderPainted(false);
+		btnChange.setBorderPainted(false);
+		btnBack.setBorderPainted(false);
+		
 		bBtn.add(btnChange);
 		bBtn.add(Box.createHorizontalStrut(10));
 		bBtn.add(btnSave);
 		bBtn.add(Box.createHorizontalStrut(10));
 		bBtn.add(btnBack);
+		
 		
 		txtName.addActionListener(e -> txtPhone.requestFocus());
 		txtPhone.addActionListener(e -> txtEmail.requestFocus());
