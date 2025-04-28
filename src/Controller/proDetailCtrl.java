@@ -54,7 +54,9 @@ public class proDetailCtrl implements ActionListener {
 			} else if (btn == this.proFrame.btnSave) {
 				try {
 					product.setProductName(this.proFrame.txtName.getText().trim());
-					product.setPrice(Double.parseDouble(this.proFrame.txtPrice.getText().trim()));
+					String rawPrice = this.proFrame.txtPrice.getText().trim();
+					String cleanPrice = rawPrice.replace(",", "").replace("đ", "").trim();
+					product.setPrice(Double.parseDouble(cleanPrice));
 					product.setDescription(this.proFrame.txtDesc.getText().trim());
 					product.setSize(this.proFrame.cmbSize.getSelectedItem().toString());
 					product.setQuantity(Integer.parseInt(this.proFrame.txtQuantity.getText().trim()));
