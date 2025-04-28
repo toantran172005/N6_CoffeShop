@@ -16,5 +16,8 @@ public interface orderDAO {
 	public boolean updateOrderState(int orderID, int employeeID, String newState);
 
 	public boolean createStatistic(int employeeID, double totalPrice, int orderCount);
+	
+	boolean deleteOrder(int orderID); 
+
 
 }

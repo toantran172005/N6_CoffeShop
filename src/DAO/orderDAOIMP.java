@@ -30,6 +30,21 @@ public class orderDAOIMP implements orderDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public boolean deleteOrder(int orderID) {
+	    try {
+	        String sql = "DELETE FROM Orders WHERE OrderID = ?";
+	        PreparedStatement pre = con.prepareStatement(sql);
+	        pre.setInt(1, orderID);
+	        int rowsAffected = pre.executeUpdate();
+	        return rowsAffected > 0;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+
 
 	@Override
 	public ArrayList<Orders> getAllOrderToday() {

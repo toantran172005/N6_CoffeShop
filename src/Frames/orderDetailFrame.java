@@ -34,6 +34,7 @@ public class orderDetailFrame {
 	public employeeFrame emp;
 	public statisticFrame staFrame;
 	public int a;
+	public JButton btnDeleteInvoice;
 
 	public Orders getO() {
 		return o;
@@ -175,7 +176,7 @@ public class orderDetailFrame {
 		contentPanel.add(totalPanel, BorderLayout.SOUTH);
 		mainPanel.add(contentPanel, BorderLayout.CENTER);
 
-//         Footer
+		// Footer
 		JPanel footer = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
 		footer.setPreferredSize(new Dimension(0, 60));
 		footer.setBackground(Color.WHITE);
@@ -192,26 +193,41 @@ public class orderDetailFrame {
 		btnAccept.setForeground(Color.WHITE);
 		btnAccept.setBorderPainted(false);
 
+		// nút "Xóa hóa đơn"
+		btnDeleteInvoice = new JButton("Xóa hóa đơn");
+		btnDeleteInvoice.setPreferredSize(new Dimension(150, 40));
+		btnDeleteInvoice.setBackground(new Color(255, 85, 85)); // Màu đỏ
+		btnDeleteInvoice.setForeground(Color.WHITE);
+		btnDeleteInvoice.setBorderPainted(false);
+
+		// Nút "In hóa đơn"
 		btnPrint = new JButton("In hóa đơn");
 		btnPrint.setPreferredSize(new Dimension(150, 40));
 		btnPrint.setBackground(new Color(102, 102, 255));
 		btnPrint.setForeground(Color.WHITE);
 		btnPrint.setBorderPainted(false);
 
-		for (JButton btn : new JButton[] { btnBack, btnAccept, btnPrint }) {
-			btn.addActionListener(ordCtrl);
-			btn.setFont(new Font("Times New Roman", Font.BOLD, 18));
-			btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		// Thêm tất cả các nút vào footer
+		for (JButton btn : new JButton[] { btnBack, btnAccept, btnDeleteInvoice, btnPrint }) {
+		    btn.addActionListener(ordCtrl);
+		    btn.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		    btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
 
 		footer.add(btnBack);
 		footer.add(btnAccept);
+		footer.add(btnDeleteInvoice);
 		footer.add(btnPrint);
+
+		// Ẩn nút Xóa hóa đơn và In hóa đơn nếu điều kiện a == 1
 		if (a == 1) {
-			btnPrint.setVisible(false);
-			btnAccept.setVisible(false);
+		    btnPrint.setVisible(false);
+		    btnAccept.setVisible(false);
+		    btnDeleteInvoice.setVisible(false); // Ẩn nút "Xóa hóa đơn" khi a == 1
 		}
+
 		mainPanel.add(footer, BorderLayout.SOUTH);
+
 
 		return mainPanel;
 	}

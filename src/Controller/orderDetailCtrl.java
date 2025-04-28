@@ -65,7 +65,20 @@ public class orderDetailCtrl implements ActionListener {
 				SwingUtilities.invokeLater(() -> {
 					this.emp.changeToOrder();
 	            });
-			}
+			} else if (btn.equals(ordeFrame.btnDeleteInvoice)) {
+	            int confirm = JOptionPane.showConfirmDialog(this.emp, "Bạn có chắc chắn muốn xóa hóa đơn này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+	            if (confirm == JOptionPane.YES_OPTION) {
+	                boolean checkDelete = this.ordDao.deleteOrder(this.ordeFrame.o.getOrderID());
+	                if (checkDelete) {
+	                    JOptionPane.showMessageDialog(this.emp, "Hóa đơn đã được xóa");
+	                    SwingUtilities.invokeLater(() -> {
+	                        this.emp.changeToOrder();
+	                    });
+	                } else {
+	                    JOptionPane.showMessageDialog(this.emp, "Lỗi khi xóa hóa đơn");
+	                }
+	            }
+	        }
 
 		}
 
