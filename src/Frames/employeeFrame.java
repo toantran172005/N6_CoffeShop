@@ -418,13 +418,19 @@ public class employeeFrame extends JFrame {
 	}
 
 	public void changeToDetailOrder(Orders o) {
-		orderDetailFrame ord = new orderDetailFrame(this, o);
+		orderDetailFrame ord = new orderDetailFrame(this, o,0);
 		pnlContent = ord.getOrderPanel();
 		scrollProduct.setViewportView(pnlContent);
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
 	}
-	
+	public void changeToDetailOrderStatics(Orders o) {
+		orderDetailFrame ord = new orderDetailFrame(this, o ,1);
+		pnlContent = ord.getOrderPanel();
+		scrollProduct.setViewportView(pnlContent);
+		scrollProduct.revalidate();
+		scrollProduct.repaint();
+	}
 	public void reloadEmployeePage() {
 	    this.setListProduct(empDAO.getListProductFromDb());
 	    pnlContent = loadProduct(listProduct);

@@ -2,13 +2,18 @@ package Frames;
 
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.*;
 
+import Controller.orderEmpCtrl;
 import Controller.statisCtrl;
 import Models.Orders;
 
 public class statisticFrame {
+	public orderEmpCtrl orCtrl;
+	public Map<JButton, Orders> btnMap = new HashMap<>();
     public statisCtrl ctrl;
     public JButton btnBack;
     public JButton btnReport;
@@ -16,6 +21,7 @@ public class statisticFrame {
 	public int stt;
 
     public statisticFrame(employeeFrame empFrame) {
+    	this.orCtrl= new orderEmpCtrl(null, empFrame, this);
         this.ctrl = new statisCtrl(this, empFrame);
     }
 
@@ -109,6 +115,15 @@ public class statisticFrame {
             lblItemPrice.setFont(new Font("Times New Roman", Font.PLAIN, 18));
             lblItemPrice.setPreferredSize(new Dimension(150, 30));
 
+            JButton btnDetail = new JButton("Chi tiết");
+            btnDetail.setFont(new Font("Times New Roman", Font.BOLD, 18));
+            btnDetail.setForeground(Color.WHITE);
+            btnDetail.setBorderPainted(false);
+            btnDetail.setBackground(new Color(0, 102, 102));
+            btnMap.put(btnDetail, order);
+            btnDetail.addActionListener(orCtrl);
+            btnDetail.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            
             itemPanel.add(lblItemSTT);
 			itemPanel.add(Box.createHorizontalStrut(10));
             itemPanel.add(lblItemOrderID);
@@ -118,6 +133,8 @@ public class statisticFrame {
             itemPanel.add(lblItemEmployeeName);
             itemPanel.add(Box.createHorizontalStrut(10));
             itemPanel.add(lblItemPrice);
+            itemPanel.add(Box.createHorizontalStrut(300));
+            itemPanel.add(btnDetail);
 
             pnlItems.add(itemPanel);
         }
