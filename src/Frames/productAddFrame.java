@@ -4,9 +4,7 @@ import java.awt.*;
 import javax.swing.*;
 import Controller.proAddCtrl;
 
-public class productAddFrame extends JFrame {
-	private static final long serialVersionUID = 1L;
-
+public class productAddFrame{
 	public JPanel pnlMain;
 	public JLabel lblAdd;
 	public JButton btnSave;
@@ -26,7 +24,6 @@ public class productAddFrame extends JFrame {
 
 
 	public productAddFrame(int employeeID, employeeFrame empFrame, int productTypeID) {
-	    super("Nhóm 6 - Thêm sản phẩm mới");
 	    this.empFrame = empFrame;
 	    this.employeeID = employeeID;
 	    this.productTypeID = productTypeID;

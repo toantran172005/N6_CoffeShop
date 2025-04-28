@@ -16,14 +16,15 @@ public class orderDetailCtrl implements ActionListener {
 	private orderDAOIMP ordDao;
 	private employeeFrame emp;
 	private InvoiceCtrl Invoice;
+	private int a;
 
-	public orderDetailCtrl(orderDetailFrame ordeFrame, employeeFrame emp) {
+	public orderDetailCtrl(orderDetailFrame ordeFrame, employeeFrame emp, int a) {
 		super();
 		this.emp = emp;
 		this.ordeFrame = ordeFrame;
 		this.ordDao = new orderDAOIMP();
 		this.Invoice = new InvoiceCtrl();
-		
+		this.a = a;
 	}
 
 	@Override
@@ -35,7 +36,16 @@ public class orderDetailCtrl implements ActionListener {
 			JButton btn = (JButton) obj;
 //			Quay lại
 			if (btn.equals(ordeFrame.btnBack)) {
-				this.emp.changeToOrder();
+				if(a!=0) {
+					SwingUtilities.invokeLater(() -> {
+						this.emp.changeToStatistic();
+		            });
+					
+				} else {
+					SwingUtilities.invokeLater(() -> {
+						this.emp.changeToOrder();
+		            });
+				}
 //			Xác nhận thanh toán
 			} else if (btn.equals(ordeFrame.btnAccept)) {
 				boolean check = this.updateOrder();

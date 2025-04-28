@@ -64,7 +64,23 @@ public class inforEmpCtrl implements ActionListener {
 				} else { // Lỗi không thể cập nhập
 					JOptionPane.showMessageDialog(this.empFrame, "Lỗi!");
 				}
-			}
+			} else if (obj == this.infor.btnImg) {
+
+	            javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+	            fileChooser.setDialogTitle("Chọn ảnh đại diện");
+	            int result = fileChooser.showOpenDialog(null);
+	            if (result == javax.swing.JFileChooser.APPROVE_OPTION) {
+	                String imagePath = fileChooser.getSelectedFile().getAbsolutePath();
+	                this.infor.selectedImagePath = imagePath; 
+
+	                String relativePath = "/Img/" + new java.io.File(imagePath).getName();
+	                this.infor.selectedImagePath = relativePath;
+
+	                javax.swing.ImageIcon selectedIcon = new javax.swing.ImageIcon(imagePath);
+	                java.awt.Image scaledImage = selectedIcon.getImage().getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
+	                this.infor.lbImg.setIcon(new javax.swing.ImageIcon(scaledImage));
+	            }
+	        }
 
 		}
 
