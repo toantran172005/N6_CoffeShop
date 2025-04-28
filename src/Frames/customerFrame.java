@@ -75,6 +75,7 @@ public class customerFrame extends JFrame {
 	public Component lbN6;
 	public JLabel lblLogin;
 	public JLabel lblHome;
+	public JLabel lblChangePage;
 
 	public customerFrame(int customerID) {
 		super("Nhóm 6 - CoffeeShop");
@@ -393,10 +394,14 @@ public class customerFrame extends JFrame {
 //	     Các mục menu
 		lblHome = new JLabel("Trang chủ");
 		lblInfo = new JLabel("Thông tin cá nhân");
+		lblChangePage = new JLabel("Chuyển trang");
 		lblLogout = new JLabel("Đăng xuất");
 		lblLogin = new JLabel("Đăng nhập");
+		
+		lblChangePage.setVisible(false);
 
-		for (JLabel label : new JLabel[] { lblHome, lblInfo, lblLogout, lblLogin }) {
+
+		for (JLabel label : new JLabel[] { lblHome, lblInfo,lblChangePage, lblLogout, lblLogin }) {
 			label.setFont(new Font("Times New Roman", Font.BOLD, 18));
 			label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
 			label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -470,6 +475,17 @@ public class customerFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				txtTimKiem.requestFocusInWindow();
+			}
+		});
+		
+//	     Ctrl + Shift + tab: chuyển trang
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"page");
+		actionMap.put("page", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lblChangePage.dispatchEvent(new MouseEvent(lblChangePage, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0, 0,
+						0, 1, false));
 			}
 		});
 

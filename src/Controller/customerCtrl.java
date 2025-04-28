@@ -17,6 +17,7 @@ import javax.swing.SwingUtilities;
 
 import DAO.CustomerDAOIMP;
 import Frames.customerFrame;
+import Frames.employeeFrame;
 import Frames.loginFrame;
 import Models.Products;
 
@@ -130,7 +131,13 @@ public class customerCtrl implements ActionListener, MouseListener, WindowListen
 //				label giỏ hàng
 			} else if(label == this.cusframe.lbCart) {
 				this.cusframe.changToCart();
-			}
+			} else if (label == this.cusframe.lblChangePage) {
+	            this.cusframe.dispose();
+	            SwingUtilities.invokeLater(() -> {
+	            	new employeeFrame(1);
+				});
+	            
+	        }
 //			Chi tiết sản phẩm
 		} else if (obj instanceof JPanel) {
 			

@@ -75,6 +75,7 @@ public class employeeFrame extends JFrame {
 	public JLabel lblStatisticDay;
 	public JLabel lblStatisticMonth;
 	public JLabel lblAdd;
+	public JLabel lblChangePage;
 
 	public employeeFrame(int employeeID) {
 		super("Nhóm 6 - CoffeeShop");
@@ -354,11 +355,15 @@ public class employeeFrame extends JFrame {
 		lblHome = new JLabel("Trang chủ");
 		lblInfo = new JLabel("Thông tin cá nhân");
 		lblStatisticDay = new JLabel("Thống kê");
-		lblAdd= new JLabel("Thêm sản phẩm");
+		lblAdd = new JLabel("Thêm sản phẩm");
+		lblChangePage = new JLabel("Chuyển trang");
 		lblLogout = new JLabel("Đăng xuất");
 		lblLogin = new JLabel("Đăng nhập");
+		
+		lblChangePage.setVisible(false);
 
-		for (JLabel label : new JLabel[] { lblHome, lblStatisticDay, lblAdd,  lblInfo, lblLogout, lblLogin}) {
+		for (JLabel label : new JLabel[] { lblHome, lblStatisticDay, lblAdd, lblChangePage, lblInfo, lblLogout,
+				lblLogin }) {
 			label.setFont(new Font("Times New Roman", Font.BOLD, 18));
 			label.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 10));
 			label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -379,35 +384,26 @@ public class employeeFrame extends JFrame {
 	}
 
 	public void changeToDetail(Products p) {
-		productDetailFrame proDetailFrame = new productDetailFrame(p, employeeID,this);
+		productDetailFrame proDetailFrame = new productDetailFrame(p, employeeID, this);
 		pnlContent = proDetailFrame.LoadProDuct(p);
 		scrollProduct.setViewportView(pnlContent);
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
 	}
-	
+
 	public void changeToAdd() {
-	    String[] options = {"Đồ ăn", "Nước uống"};
-	    int choice = JOptionPane.showOptionDialog(
-	        null,
-	        "Bạn muốn thêm sản phẩm nào?",
-	        "Chọn loại sản phẩm",
-	        JOptionPane.DEFAULT_OPTION,
-	        JOptionPane.QUESTION_MESSAGE,
-	        null,
-	        options,
-	        options[0]
-	    );
+		String[] options = { "Đồ ăn", "Nước uống" };
+		int choice = JOptionPane.showOptionDialog(null, "Bạn muốn thêm sản phẩm nào?", "Chọn loại sản phẩm",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
-	    if (choice == 0 || choice == 1) {
-	        productAddFrame proAddFrame = new productAddFrame(employeeID, this, choice == 0 ? 1 : 2);
-	        pnlContent = proAddFrame.loadAddProductPanel();
-	        scrollProduct.setViewportView(pnlContent);
-	        scrollProduct.revalidate();
-	        scrollProduct.repaint();
-	    }
+		if (choice == 0 || choice == 1) {
+			productAddFrame proAddFrame = new productAddFrame(employeeID, this, choice == 0 ? 1 : 2);
+			pnlContent = proAddFrame.loadAddProductPanel();
+			scrollProduct.setViewportView(pnlContent);
+			scrollProduct.revalidate();
+			scrollProduct.repaint();
+		}
 	}
-
 
 	public void changeToOrder() {
 		orderEmpFrame ord = new orderEmpFrame(employeeID, this);
@@ -418,34 +414,36 @@ public class employeeFrame extends JFrame {
 	}
 
 	public void changeToDetailOrder(Orders o) {
-		orderDetailFrame ord = new orderDetailFrame(this, o,0);
+		orderDetailFrame ord = new orderDetailFrame(this, o, 0);
 		pnlContent = ord.getOrderPanel();
 		scrollProduct.setViewportView(pnlContent);
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
 	}
+
 	public void changeToDetailOrderStatics(Orders o) {
-		orderDetailFrame ord = new orderDetailFrame(this, o ,1);
+		orderDetailFrame ord = new orderDetailFrame(this, o, 1);
 		pnlContent = ord.getOrderPanel();
 		scrollProduct.setViewportView(pnlContent);
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
 	}
+
 	public void reloadEmployeePage() {
-	    this.setListProduct(empDAO.getListProductFromDb());
-	    pnlContent = loadProduct(listProduct);
-	    scrollProduct.setViewportView(pnlContent);
-	    scrollProduct.revalidate();
-	    scrollProduct.repaint();
+		this.setListProduct(empDAO.getListProductFromDb());
+		pnlContent = loadProduct(listProduct);
+		scrollProduct.setViewportView(pnlContent);
+		scrollProduct.revalidate();
+		scrollProduct.repaint();
 	}
-	
+
 	public void changeToStatistic() {
 		statisticFrame staFrame = new statisticFrame(this);
 		pnlContent = staFrame.getStatisticPanel();
 		scrollProduct.setViewportView(pnlContent);
 		scrollProduct.revalidate();
 		scrollProduct.repaint();
-		
+
 	}
 
 	@SuppressWarnings("serial")
@@ -484,19 +482,30 @@ public class employeeFrame extends JFrame {
 			}
 		});
 		
+//	     Ctrl + Shift + tab: chuyển trang
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
+				"page");
+		actionMap.put("page", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lblChangePage.dispatchEvent(new MouseEvent(lblChangePage, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0, 0,
+						0, 1, false));
+			}
+		});
+
 //	     Ctrl + Shift + T: mở thống kê
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
 				"statistic");
 		actionMap.put("statistic", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				lblStatisticDay.dispatchEvent(new MouseEvent(lblStatisticDay, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0, 0,
-						0, 1, false));
+				lblStatisticDay.dispatchEvent(new MouseEvent(lblStatisticDay, MouseEvent.MOUSE_CLICKED,
+						System.currentTimeMillis(), 0, 0, 0, 1, false));
 				isMenuAppear = !isMenuAppear;
 				pnlMenu.setVisible(isMenuAppear);
 			}
 		});
-		
+
 //	     Ctrl + Shift + P: thêm sản phẩm
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
 				"addProduct");
@@ -509,10 +518,9 @@ public class employeeFrame extends JFrame {
 				pnlMenu.setVisible(isMenuAppear);
 			}
 		});
-		
+
 //	 	Ctrl+O mở hóa đơn
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK ),
-				"orderShortcut");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK), "orderShortcut");
 		actionMap.put("orderShortcut", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -628,6 +636,5 @@ public class employeeFrame extends JFrame {
 			g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 		}
 	}
-
 
 }

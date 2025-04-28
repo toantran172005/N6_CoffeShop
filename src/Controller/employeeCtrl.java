@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import DAO.EmployeeDAOIMP;
+import Frames.customerFrame;
 import Frames.employeeFrame;
 import Frames.loginFrame;
 import Models.Products;
@@ -133,7 +134,13 @@ public class employeeCtrl implements ActionListener, MouseListener, WindowListen
 				this.empFrame.changeToAdd();
 				this.empFrame.isMenuAppear = !this.empFrame.isMenuAppear;
 				this.empFrame.pnlMenu.setVisible(this.empFrame.isMenuAppear);
-			}
+			} else if (label == this.empFrame.lblChangePage) {
+	            this.empFrame.dispose();
+	            SwingUtilities.invokeLater(() -> {
+	            	new customerFrame(6);
+				});
+	            
+	        }
 		}
 
 	}
