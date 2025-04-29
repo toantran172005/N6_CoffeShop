@@ -140,9 +140,10 @@ public class inforFrame {
 		btnBack = new JButton("Quay lại");
 		btnBack.setBackground(new Color(200, 200, 200));
 		btnChange = new JButton("Chỉnh sửa");
-		btnChange.setBackground(new Color(79, 195, 247)); // Xanh dương nhạt
+		btnChange.setBackground(new Color(79, 195, 247)); 
 		btnSave = new JButton("Lưu");
-		btnSave.setBackground(new Color(102, 187, 106));
+		btnSave.setBackground(new Color(0, 102, 102));
+		btnSave.setForeground(Color.white);
 		btnSave.setEnabled(false);
 		
 		btnSave.setBorderPainted(false);
@@ -270,7 +271,8 @@ public class inforFrame {
 		btnChange = new JButton("Chỉnh sửa");
 		btnChange.setBackground(new Color(79, 195, 247)); // Xanh dương nhạt
 		btnSave = new JButton("Lưu");
-		btnSave.setBackground(new Color(102, 187, 106));
+		btnSave.setBackground(new Color(0, 102, 102));
+		btnSave.setForeground(Color.white);
 		btnSave.setEnabled(false);
 		
 		btnSave.setBorderPainted(false);

@@ -6,6 +6,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.text.NumberFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -67,7 +68,8 @@ public class orderEmpFrame {
                 card.setBorder(new EmptyBorder(10, 15, 10, 15));
                 String formattedPrice = currencyFormat.format(o.getTotalPrice()) + " VNĐ";
                 JLabel lblID = new JLabel("Mã HĐ: " + o.getOrderID());
-                JLabel lblDate = new JLabel("Ngày: " + o.getOrderDate());
+                String date = o.getOrderDate().toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                JLabel lblDate = new JLabel("Ngày: " + date);
                 JLabel lblTotal = new JLabel("Tổng: " + formattedPrice);
                 JLabel lblState = new JLabel("Trạng thái: " + o.getState());
                 

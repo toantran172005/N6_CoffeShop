@@ -88,10 +88,10 @@ public class employeeCtrl implements ActionListener, MouseListener, WindowListen
 			JLabel label = (JLabel) obj;
 //			Label cà phê
 			if (label == this.empFrame.lbCoffee || label == this.empFrame.lbN6) {
-				this.empFrame.updateProductPanel(this.empFrame.getListProduct());
+				this.empFrame.reloadEmployeePage();
 //				label trang chủ
 			} else if (label == this.empFrame.lblHome) {
-				this.empFrame.updateProductPanel(this.empFrame.getListProduct());
+				this.empFrame.reloadEmployeePage();
 				this.empFrame.isMenuAppear = !this.empFrame.isMenuAppear;
 				this.empFrame.pnlMenu.setVisible(this.empFrame.isMenuAppear);
 //				label menu

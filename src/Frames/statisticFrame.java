@@ -25,7 +25,6 @@ public class statisticFrame {
         this.ctrl = new statisCtrl(this, empFrame);
     }
 
-	@SuppressWarnings("unused")
 	public JPanel getStatisticPanel() {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(Color.WHITE);

@@ -482,7 +482,7 @@ public class employeeFrame extends JFrame {
 			}
 		});
 		
-//	     Ctrl + Shift + tab: chuyển trang
+//	     Ctrl + Shift + 1: chuyển trang
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK),
 				"page");
 		actionMap.put("page", new AbstractAction() {
